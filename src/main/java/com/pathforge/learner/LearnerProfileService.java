@@ -43,7 +43,7 @@ public class LearnerProfileService {
                 .portfolioUrl(request.portfolioUrl())
                 .build();
 
-        profile = learnerProfileRepository.save(profile);
+        profile = learnerProfileRepository.saveAndFlush(profile);
 
         return toResponse(profile, user);
     }
@@ -73,7 +73,7 @@ public class LearnerProfileService {
         profile.setInterests(request.interests());
         profile.setPortfolioUrl(request.portfolioUrl());
 
-        profile = learnerProfileRepository.save(profile);
+        profile = learnerProfileRepository.saveAndFlush(profile);
 
         return toResponse(profile, profile.getUser());
     }
