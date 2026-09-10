@@ -1,7 +1,7 @@
 package com.pathforge.security;
 
-import com.pathforge.user.User;
-import com.pathforge.user.UserRepository;
+import com.pathforge.user.model.User;
+import com.pathforge.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

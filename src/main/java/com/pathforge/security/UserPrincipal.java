@@ -1,7 +1,7 @@
 package com.pathforge.security;
 
-import com.pathforge.user.User;
-import com.pathforge.user.UserStatus;
+import com.pathforge.user.model.User;
+import com.pathforge.user.model.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
