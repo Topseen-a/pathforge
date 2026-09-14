@@ -14,6 +14,7 @@ import com.pathforge.experience.model.ExperienceStatus;
 import com.pathforge.experience.repository.ExperienceRepository;
 import com.pathforge.learner.model.LearnerProfile;
 import com.pathforge.learner.repository.LearnerProfileRepository;
+import com.pathforge.workspace.service.WorkspaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,7 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final ExperienceRepository experienceRepository;
     private final LearnerProfileRepository learnerProfileRepository;
+    private final WorkspaceService workspaceService;
 
     @Transactional
     public ApplicationResponse apply(UUID userId, UUID experienceId, ApplicationRequest request) {
@@ -109,6 +111,10 @@ public class ApplicationService {
 
         application.setStatus(request.status());
         application = applicationRepository.saveAndFlush(application);
+
+        if (request.status() == ApplicationStatus.ACCEPTED) {
+            workspaceService.createForApplication(application);
+        }
 
         return toResponse(application);
     }
