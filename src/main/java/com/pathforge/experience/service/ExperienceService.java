@@ -114,6 +114,24 @@ public class ExperienceService {
         return toResponse(experience);
     }
 
+    /**
+     * Admin-only action: force-closes an experience regardless of who owns it,
+     * bypassing the normal ownership check (an admin isn't the company). Reuses
+     * the existing CLOSED status rather than introducing a separate "removed by
+     * admin" state — the status alone won't distinguish a company's own
+     * decision to close from an admin moderation action after the fact.
+     */
+    @Transactional
+    public ExperienceResponse moderateExperience(UUID experienceId) {
+        Experience experience = experienceRepository.findById(experienceId)
+                .orElseThrow(() -> new ResourceNotFoundException("Experience not found"));
+
+        experience.setStatus(ExperienceStatus.CLOSED);
+        experience = experienceRepository.saveAndFlush(experience);
+
+        return toResponse(experience);
+    }
+
     public List<ExperienceResponse> listPublished() {
         return experienceRepository.findByStatus(ExperienceStatus.PUBLISHED).stream()
                 .map(this::toResponse)

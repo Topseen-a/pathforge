@@ -68,6 +68,34 @@ public class ReportService {
                 .toList();
     }
 
+    /**
+     * Admin-only action: the moderation queue, oldest first.
+     */
+    public List<ReportResponse> listOpenReports() {
+        return reportRepository.findByStatusOrderByCreatedAtAsc(ReportStatus.OPEN).stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    /**
+     * Admin-only action: moves a report to RESOLVED or DISMISSED. Moving a
+     * report back to OPEN doesn't make sense once acted on, so it's blocked.
+     */
+    @Transactional
+    public ReportResponse resolveReport(UUID reportId, ReportStatus status) {
+        Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new ResourceNotFoundException("Report not found"));
+
+        if (status == ReportStatus.OPEN) {
+            throw new BadRequestException("Cannot set a report back to OPEN");
+        }
+
+        report.setStatus(status);
+        report = reportRepository.saveAndFlush(report);
+
+        return toResponse(report);
+    }
+
     private ReportResponse toResponse(Report report) {
         return new ReportResponse(
                 report.getId(),

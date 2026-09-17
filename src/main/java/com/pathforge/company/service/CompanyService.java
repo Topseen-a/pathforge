@@ -1,6 +1,7 @@
 package com.pathforge.company.service;
 
 import com.pathforge.common.Role;
+import com.pathforge.common.VerificationStatus;
 import com.pathforge.common.exception.BadRequestException;
 import com.pathforge.common.exception.ResourceNotFoundException;
 import com.pathforge.company.dto.request.CompanyRequest;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Service
@@ -72,6 +74,29 @@ public class CompanyService {
         company.setDescription(request.description());
         company.setWebsite(request.website());
         company.setBusinessRegistrationNo(request.businessRegistrationNo());
+
+        company = companyRepository.saveAndFlush(company);
+
+        return toResponse(company, company.getUser());
+    }
+
+    /**
+     * Admin-only action: sets a company's verification status. Setting a
+     * company back to PENDING doesn't make sense once reviewed, so that
+     * transition is blocked. verifiedAt is stamped on VERIFIED and cleared
+     * otherwise.
+     */
+    @Transactional
+    public CompanyResponse verifyCompany(UUID companyId, VerificationStatus status) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+
+        if (status == VerificationStatus.PENDING) {
+            throw new BadRequestException("Cannot set a company's verification status back to PENDING");
+        }
+
+        company.setVerificationStatus(status);
+        company.setVerifiedAt(status == VerificationStatus.VERIFIED ? OffsetDateTime.now() : null);
 
         company = companyRepository.saveAndFlush(company);
 

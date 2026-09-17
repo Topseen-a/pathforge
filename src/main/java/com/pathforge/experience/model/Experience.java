@@ -2,6 +2,7 @@ package com.pathforge.experience.model;
 
 import com.pathforge.common.BaseEntity;
 import com.pathforge.company.model.Company;
+import com.pathforge.sponsorship.model.Sponsorship;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -34,6 +35,10 @@ public class Experience extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sponsorship_id")
+    private Sponsorship sponsorship;
 
     @Column(nullable = false, length = 150)
     private String title;
