@@ -14,6 +14,7 @@ import com.pathforge.experience.model.ExperienceStatus;
 import com.pathforge.experience.repository.ExperienceRepository;
 import com.pathforge.learner.model.LearnerProfile;
 import com.pathforge.learner.repository.LearnerProfileRepository;
+import com.pathforge.notification.service.NotificationService;
 import com.pathforge.workspace.service.WorkspaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class ApplicationService {
     private final ExperienceRepository experienceRepository;
     private final LearnerProfileRepository learnerProfileRepository;
     private final WorkspaceService workspaceService;
+    private final NotificationService notificationService;
 
     @Transactional
     public ApplicationResponse apply(UUID userId, UUID experienceId, ApplicationRequest request) {
@@ -114,6 +116,17 @@ public class ApplicationService {
 
         if (request.status() == ApplicationStatus.ACCEPTED) {
             workspaceService.createForApplication(application);
+            notificationService.notify(
+                    application.getLearner().getUser().getId(),
+                    "APPLICATION_ACCEPTED",
+                    "Your application to \"" + application.getExperience().getTitle() + "\" has been accepted!"
+            );
+        } else if (request.status() == ApplicationStatus.REJECTED) {
+            notificationService.notify(
+                    application.getLearner().getUser().getId(),
+                    "APPLICATION_REJECTED",
+                    "Your application to \"" + application.getExperience().getTitle() + "\" was not selected this time."
+            );
         }
 
         return toResponse(application);

@@ -5,6 +5,7 @@ import com.pathforge.common.exception.ResourceNotFoundException;
 import com.pathforge.common.exception.UnauthorizedActionException;
 import com.pathforge.learner.model.LearnerProfile;
 import com.pathforge.learner.repository.LearnerProfileRepository;
+import com.pathforge.notification.service.NotificationService;
 import com.pathforge.submission.dto.request.SubmissionRequest;
 import com.pathforge.submission.dto.response.SubmissionResponse;
 import com.pathforge.submission.model.Submission;
@@ -32,6 +33,7 @@ public class SubmissionService {
     private final LearnerProfileRepository learnerProfileRepository;
     private final WorkspaceRepository workspaceRepository;
     private final TaskService taskService;
+    private final NotificationService notificationService;
 
     @Transactional
     public SubmissionResponse submitWork(UUID userId, UUID taskId, SubmissionRequest request) {
@@ -68,6 +70,12 @@ public class SubmissionService {
         submission = submissionRepository.saveAndFlush(submission);
 
         taskService.markSubmitted(taskId);
+
+        notificationService.notify(
+                task.getExperience().getCompany().getUser().getId(),
+                "NEW_SUBMISSION",
+                learner.getUser().getFullName() + " submitted work for \"" + task.getTitle() + "\""
+        );
 
         return toResponse(submission);
     }
