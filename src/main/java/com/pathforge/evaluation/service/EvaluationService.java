@@ -11,6 +11,7 @@ import com.pathforge.experience.model.Experience;
 import com.pathforge.experience.repository.ExperienceRepository;
 import com.pathforge.learner.model.LearnerProfile;
 import com.pathforge.learner.repository.LearnerProfileRepository;
+import com.pathforge.passport.service.ExperienceRecordService;
 import com.pathforge.user.model.User;
 import com.pathforge.user.repository.UserRepository;
 import com.pathforge.workspace.repository.WorkspaceRepository;
@@ -31,6 +32,7 @@ public class EvaluationService {
     private final LearnerProfileRepository learnerProfileRepository;
     private final UserRepository userRepository;
     private final WorkspaceRepository workspaceRepository;
+    private final ExperienceRecordService experienceRecordService;
 
     @Transactional
     public EvaluationResponse createEvaluation(
@@ -70,6 +72,8 @@ public class EvaluationService {
                 .build();
 
         evaluation = evaluationRepository.saveAndFlush(evaluation);
+
+        experienceRecordService.createFromEvaluation(evaluation);
 
         return toResponse(evaluation);
     }
