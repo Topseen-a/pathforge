@@ -1,6 +1,7 @@
 -- V1__init_schema.sql
 -- PathForge initial schema, generated from the agreed ERD.
 
+
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- ============================================================
