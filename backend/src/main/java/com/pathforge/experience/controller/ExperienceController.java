@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,6 +60,15 @@ public class ExperienceController {
             @PathVariable UUID experienceId
     ) {
         return ResponseEntity.ok(experienceService.close(principal.getId(), experienceId));
+    }
+
+    @DeleteMapping("/{experienceId}")
+    public ResponseEntity<Void> deleteExperience(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @PathVariable UUID experienceId
+    ) {
+        experienceService.deleteExperience(principal.getId(), experienceId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{experienceId}")

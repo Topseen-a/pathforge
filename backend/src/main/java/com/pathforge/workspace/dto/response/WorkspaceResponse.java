@@ -7,6 +7,8 @@ public record WorkspaceResponse(
         UUID id,
         UUID experienceId,
         String experienceTitle,
+        UUID companyId,
+        String companyName,
         UUID learnerId,
         String learnerName,
         UUID applicationId,

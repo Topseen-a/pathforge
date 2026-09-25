@@ -69,6 +69,8 @@ public class WorkspaceService {
                 workspace.getId(),
                 workspace.getExperience().getId(),
                 workspace.getExperience().getTitle(),
+                workspace.getExperience().getCompany().getId(),
+                workspace.getExperience().getCompany().getName(),
                 workspace.getLearner().getId(),
                 workspace.getLearner().getUser().getFullName(),
                 workspace.getApplication().getId(),

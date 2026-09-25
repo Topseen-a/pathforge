@@ -13,4 +13,6 @@ public interface ApplicationRepository extends JpaRepository<Application, UUID> 
     List<Application> findByLearner_Id(UUID learnerId);
 
     boolean existsByExperience_IdAndLearner_Id(UUID experienceId, UUID learnerId);
+
+    boolean existsByExperience_Id(UUID experienceId);
 }

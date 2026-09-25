@@ -1,5 +1,6 @@
 package com.pathforge.experience.service;
 
+import com.pathforge.application.repository.ApplicationRepository;
 import com.pathforge.common.VerificationStatus;
 import com.pathforge.common.exception.BadRequestException;
 import com.pathforge.common.exception.ResourceNotFoundException;
@@ -25,6 +26,7 @@ public class ExperienceService {
 
     private final ExperienceRepository experienceRepository;
     private final CompanyRepository companyRepository;
+    private final ApplicationRepository applicationRepository;
 
     @Transactional
     public ExperienceResponse createExperience(UUID userId, ExperienceRequest request) {
@@ -105,6 +107,21 @@ public class ExperienceService {
         experience = experienceRepository.saveAndFlush(experience);
 
         return toResponse(experience);
+    }
+
+    @Transactional
+    public void deleteExperience(UUID userId, UUID experienceId) {
+        Experience experience = getOwnedExperience(userId, experienceId);
+
+        if (experience.getStatus() != ExperienceStatus.DRAFT) {
+            throw new BadRequestException("Only a draft experience can be deleted");
+        }
+
+        if (applicationRepository.existsByExperience_Id(experienceId)) {
+            throw new BadRequestException("Cannot delete an experience that already has applications");
+        }
+
+        experienceRepository.delete(experience);
     }
 
     public ExperienceResponse getById(UUID experienceId) {

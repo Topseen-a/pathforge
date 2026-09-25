@@ -1,0 +1,60 @@
+import { type InputHTMLAttributes, type TextareaHTMLAttributes, type SelectHTMLAttributes, forwardRef } from "react";
+import { clsx } from "clsx";
+
+interface FieldWrapProps {
+  label?: string;
+  error?: string;
+  hint?: string;
+}
+
+const baseFieldClass =
+  "w-full rounded-2xl border border-surface-border bg-surface-2 px-3.5 py-2.5 text-sm text-ink-0 placeholder:text-ink-3 outline-none transition-colors focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20";
+
+export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement> & FieldWrapProps>(
+  ({ label, error, hint, className, id, ...rest }, ref) => {
+    const inputId = id || rest.name;
+    return (
+      <label className="block space-y-1.5" htmlFor={inputId}>
+        {label && <span className="text-xs font-medium text-ink-1">{label}</span>}
+        <input ref={ref} id={inputId} className={clsx(baseFieldClass, error && "border-red-500/60", className)} {...rest} />
+        {hint && !error && <span className="text-xs text-ink-3">{hint}</span>}
+        {error && <span className="text-xs text-red-400">{error}</span>}
+      </label>
+    );
+  }
+);
+Input.displayName = "Input";
+
+export const Textarea = forwardRef<
+  HTMLTextAreaElement,
+  TextareaHTMLAttributes<HTMLTextAreaElement> & FieldWrapProps
+>(({ label, error, hint, className, id, ...rest }, ref) => {
+  const inputId = id || rest.name;
+  return (
+    <label className="block space-y-1.5" htmlFor={inputId}>
+      {label && <span className="text-xs font-medium text-ink-1">{label}</span>}
+      <textarea ref={ref} id={inputId} className={clsx(baseFieldClass, "min-h-[100px] resize-y", error && "border-red-500/60", className)} {...rest} />
+      {hint && !error && <span className="text-xs text-ink-3">{hint}</span>}
+      {error && <span className="text-xs text-red-400">{error}</span>}
+    </label>
+  );
+});
+Textarea.displayName = "Textarea";
+
+export const Select = forwardRef<
+  HTMLSelectElement,
+  SelectHTMLAttributes<HTMLSelectElement> & FieldWrapProps
+>(({ label, error, hint, className, id, children, ...rest }, ref) => {
+  const inputId = id || rest.name;
+  return (
+    <label className="block space-y-1.5" htmlFor={inputId}>
+      {label && <span className="text-xs font-medium text-ink-1">{label}</span>}
+      <select ref={ref} id={inputId} className={clsx(baseFieldClass, error && "border-red-500/60", className)} {...rest}>
+        {children}
+      </select>
+      {hint && !error && <span className="text-xs text-ink-3">{hint}</span>}
+      {error && <span className="text-xs text-red-400">{error}</span>}
+    </label>
+  );
+});
+Select.displayName = "Select";
