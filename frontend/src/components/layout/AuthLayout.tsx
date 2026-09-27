@@ -6,7 +6,7 @@ export function AuthLayout({ children, title, subtitle }: { children: ReactNode;
       <div className="flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-20">
         <div className="mx-auto w-full max-w-sm">
           <div className="mb-10 flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-accent-500 shadow-[0_0_20px_-2px_rgba(209,41,58,0.6)]" />
+            <div className="h-8 w-8 rounded-full bg-accent-500" />
             <span className="text-lg font-semibold">PathForge</span>
           </div>
           <h1 className="text-2xl font-semibold">{title}</h1>
@@ -15,21 +15,20 @@ export function AuthLayout({ children, title, subtitle }: { children: ReactNode;
         </div>
       </div>
 
-      <div className="relative hidden overflow-hidden bg-surface-1 lg:block">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(209,41,58,0.28),transparent_45%),radial-gradient(circle_at_80%_70%,rgba(209,41,58,0.16),transparent_40%)]" />
+      <div className="relative hidden overflow-hidden bg-forest-bg lg:block">
         <div className="relative flex h-full flex-col justify-between p-12">
           <div />
           <div className="space-y-6">
-            <div className="card glow-accent max-w-sm space-y-4 p-6">
+            <div className="max-w-sm space-y-4 rounded-3xl border border-forest-border bg-forest-card p-6">
               <p className="text-xs font-medium uppercase tracking-wide text-accent-400">Verified passport</p>
-              <p className="text-lg font-medium text-ink-0">
+              <p className="text-lg font-medium text-forest-ink">
                 "PathForge turned my first real project into proof employers actually trust."
               </p>
               <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-accent-500/20" />
+                <div className="h-9 w-9 rounded-full bg-accent-500/25" />
                 <div>
-                  <p className="text-sm font-medium text-ink-0">Chidinma A.</p>
-                  <p className="text-xs text-ink-3">Product Design Experience Record</p>
+                  <p className="text-sm font-medium text-forest-ink">Chidinma A.</p>
+                  <p className="text-xs text-forest-ink-dim">Product Design Experience Record</p>
                 </div>
               </div>
             </div>
@@ -39,9 +38,9 @@ export function AuthLayout({ children, title, subtitle }: { children: ReactNode;
                 ["300+", "Companies"],
                 ["4,800+", "Experiences"],
               ].map(([num, label]) => (
-                <div key={label} className="card p-4">
+                <div key={label} className="rounded-2xl border border-forest-border bg-forest-card p-4">
                   <p className="text-xl font-semibold text-accent-400">{num}</p>
-                  <p className="text-xs text-ink-3">{label}</p>
+                  <p className="text-xs text-forest-ink-dim">{label}</p>
                 </div>
               ))}
             </div>

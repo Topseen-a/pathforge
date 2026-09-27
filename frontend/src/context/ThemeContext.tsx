@@ -10,7 +10,7 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 const KEY = "pathforge_theme";
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem(KEY) as Theme) || "dark");
+  const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem(KEY) as Theme) || "light");
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);

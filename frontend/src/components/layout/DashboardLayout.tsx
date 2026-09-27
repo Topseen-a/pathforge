@@ -88,7 +88,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div className="bg-glow min-h-screen bg-surface-0 text-ink-0 lg:flex">
+    <div className="min-h-screen bg-surface-0 text-ink-0 lg:flex">
       {/* Mobile top bar */}
       <div className="flex items-center justify-between border-b border-surface-border px-4 py-3 lg:hidden">
         <div className="flex items-center gap-2">
@@ -108,7 +108,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         )}
       >
         <div className="hidden items-center gap-2 px-6 py-6 lg:flex">
-          <div className="h-8 w-8 rounded-full bg-accent-500 shadow-[0_0_20px_-2px_rgba(209,41,58,0.6)]" />
+          <div className="h-8 w-8 rounded-full bg-accent-500" />
           <span className="text-lg font-semibold">PathForge</span>
         </div>
 

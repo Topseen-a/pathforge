@@ -1,38 +1,46 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
 
-  --tracking-tightest: -0.06em;
+  --tracking-tightest: -0.02em;
 
-  /* Brand accent — deep crimson, matches the GradientPro mockups */
-  --color-accent-50: #fdf1f2;
-  --color-accent-100: #fbdfe1;
-  --color-accent-200: #f5b8bd;
-  --color-accent-300: #ee8d95;
-  --color-accent-400: #e35863;
-  --color-accent-500: #d1293a;
-  --color-accent-600: #ab1c2b;
-  --color-accent-700: #82141f;
-  --color-accent-800: #5c0f17;
-  --color-accent-900: #3d0a0f;
+  /* Brand accent — lime/chartreuse green, matches the reference template */
+  --color-accent-50: #f7fce6;
+  --color-accent-100: #ecf8c2;
+  --color-accent-200: #ddf194;
+  --color-accent-300: #c9e661;
+  --color-accent-400: #b4d631;
+  --color-accent-500: #9ac21e;
+  --color-accent-600: #7ea118;
+  --color-accent-700: #5f7a15;
+  --color-accent-800: #475c16;
+  --color-accent-900: #364613;
 
-  /* Dark surface palette — neutral black so the accent glow reads clean */
-  --color-surface-0: #050505;
-  --color-surface-1: #0c0c0e;
-  --color-surface-2: #131316;
-  --color-surface-3: #1b1b1f;
-  --color-surface-4: #26262b;
-  --color-surface-border: #232327;
+  /* Light surface palette — warm cream, matches the reference template */
+  --color-surface-0: #f7f1e2;
+  --color-surface-1: #ffffff;
+  --color-surface-2: #f1e9d6;
+  --color-surface-3: #e7ddc3;
+  --color-surface-4: #d9cca8;
+  --color-surface-border: #e6dcc5;
 
-  --color-ink-0: #fafafa;
-  --color-ink-1: #cbcbd1;
-  --color-ink-2: #94949c;
-  --color-ink-3: #616168;
+  --color-ink-0: #12241a;
+  --color-ink-1: #3d4e41;
+  --color-ink-2: #67766a;
+  --color-ink-3: #94a192;
+
+  /* Deep forest green — used for dark landing-page sections (hero, CTA bands,
+     testimonials), independent of the light/dark app theme toggle below. */
+  --color-forest-bg: #0f2419;
+  --color-forest-card: #17301f;
+  --color-forest-border: #ffffff1a;
+  --color-forest-ink: #f6f1e2;
+  --color-forest-ink-dim: #aab6ac;
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html,
@@ -48,20 +56,21 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Light mode variant, toggled via [data-theme="light"] on <html> */
-:root[data-theme="light"] {
-  color-scheme: light;
-  --color-surface-0: #f7f7f8;
-  --color-surface-1: #ffffff;
-  --color-surface-2: #f1f1f3;
-  --color-surface-3: #e6e6e9;
-  --color-surface-4: #dadadf;
-  --color-surface-border: #e4e4e8;
+/* Dark mode variant, toggled via [data-theme="dark"] on <html> — reuses the
+   same forest/cream brand hues, just inverted, rather than an unrelated palette. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-surface-0: #0f2419;
+  --color-surface-1: #17301f;
+  --color-surface-2: #1c3825;
+  --color-surface-3: #24432c;
+  --color-surface-4: #305536;
+  --color-surface-border: #ffffff1a;
 
-  --color-ink-0: #131316;
-  --color-ink-1: #3a3a40;
-  --color-ink-2: #68686f;
-  --color-ink-3: #97979e;
+  --color-ink-0: #f6f1e2;
+  --color-ink-1: #d7d3c2;
+  --color-ink-2: #a9b3a7;
+  --color-ink-3: #798579;
 }
 
 ::-webkit-scrollbar {
@@ -79,32 +88,5 @@ body {
 .card {
   background-color: var(--color-surface-1);
   border: 1px solid var(--color-surface-border);
-  border-radius: 1.25rem;
-}
-
-.glow-accent {
-  box-shadow: 0 0 0 1px rgba(209, 41, 58, 0.18), 0 8px 30px -10px rgba(209, 41, 58, 0.45);
-}
-
-/* Ambient radial glow used behind auth/dashboard shells, à la GradientPro */
-.bg-glow {
-  position: relative;
-  isolation: isolate;
-}
-
-.bg-glow::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 50% -10%, rgba(209, 41, 58, 0.35), transparent 45%),
-    radial-gradient(circle at 90% 20%, rgba(209, 41, 58, 0.12), transparent 40%);
-}
-
-:root[data-theme="light"] .bg-glow::before {
-  background:
-    radial-gradient(circle at 50% -10%, rgba(209, 41, 58, 0.12), transparent 45%),
-    radial-gradient(circle at 90% 20%, rgba(209, 41, 58, 0.06), transparent 40%);
+  border-radius: 1.5rem;
 }

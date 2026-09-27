@@ -33,7 +33,7 @@ export default function VerifyPassport() {
     <div className="min-h-screen bg-surface-0 px-6 py-16 text-ink-0">
       <div className="mx-auto max-w-lg">
         <div className="mb-10 flex items-center gap-2">
-          <div className="h-8 w-8 rounded-full bg-accent-500 shadow-[0_0_20px_-2px_rgba(209,41,58,0.6)]" />
+          <div className="h-8 w-8 rounded-full bg-accent-500" />
           <span className="text-lg font-semibold">PathForge</span>
         </div>
         <div className="mb-2 flex items-center gap-2 text-accent-400">

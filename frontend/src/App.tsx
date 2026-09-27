@@ -5,6 +5,7 @@ import { PageLoader } from "@/components/ui/Misc";
 
 import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
+import Landing from "@/pages/public/Landing";
 import VerifyPassport from "@/pages/public/VerifyPassport";
 
 import LearnerDashboard from "@/pages/learner/Dashboard";
@@ -34,7 +35,7 @@ import Notifications from "@/pages/shared/Notifications";
 function HomeRedirect() {
   const { user, loading } = useAuth();
   if (loading) return <PageLoader />;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Landing />;
   const home = user.role === "COMPANY" ? "/app/company" : user.role === "ADMIN" ? "/app/admin" : "/app/learner";
   return <Navigate to={home} replace />;
 }
