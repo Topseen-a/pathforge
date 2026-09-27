@@ -36,7 +36,7 @@ export default function AdminReports() {
 
   return (
     <div>
-      <PageHeader title="Reports" description="Open reports filed by learners and companies." />
+      <PageHeader title="Reports" description="Open reports filed by talents and companies." />
       {reports.length === 0 ? (
         <EmptyState title="No open reports" description="You're all caught up." />
       ) : (

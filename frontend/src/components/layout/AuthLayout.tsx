@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 export function AuthLayout({ children, title, subtitle }: { children: ReactNode; title: string; subtitle: string }) {
@@ -6,6 +8,9 @@ export function AuthLayout({ children, title, subtitle }: { children: ReactNode;
     <div className="grid min-h-screen bg-surface-0 text-ink-0 lg:grid-cols-2">
       <div className="flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-20">
         <div className="mx-auto w-full max-w-sm">
+          <Link to="/" className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-ink-2 hover:text-ink-0">
+            <ArrowLeft size={16} /> Back to home
+          </Link>
           <div className="mb-10 flex items-center gap-2">
             <Logo className="h-8 w-8" />
             <span className="text-lg font-semibold">PathForge</span>
@@ -35,9 +40,9 @@ export function AuthLayout({ children, title, subtitle }: { children: ReactNode;
             </div>
             <div className="grid grid-cols-3 gap-4">
               {[
-                ["1,200+", "Learners"],
+                ["1,200+", "Talents"],
                 ["300+", "Companies"],
-                ["4,800+", "Experiences"],
+                ["4,800+", "Projects"],
               ].map(([num, label]) => (
                 <div key={label} className="rounded-2xl border border-forest-border bg-forest-card p-4">
                   <p className="text-xl font-semibold text-accent-400">{num}</p>

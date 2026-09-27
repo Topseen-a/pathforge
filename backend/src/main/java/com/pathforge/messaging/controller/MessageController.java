@@ -43,11 +43,11 @@ public class MessageController {
         return ResponseEntity.ok(messageService.listConversation(principal.getId(), otherUserId));
     }
 
-    @GetMapping("/experience/{experienceId}")
-    public ResponseEntity<List<MessageResponse>> listForExperience(
+    @GetMapping("/project/{projectId}")
+    public ResponseEntity<List<MessageResponse>> listForProject(
             @AuthenticationPrincipal UserPrincipal principal,
-            @PathVariable UUID experienceId
+            @PathVariable UUID projectId
     ) {
-        return ResponseEntity.ok(messageService.listForExperience(principal.getId(), experienceId));
+        return ResponseEntity.ok(messageService.listForProject(principal.getId(), projectId));
     }
 }

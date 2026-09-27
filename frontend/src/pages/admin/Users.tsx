@@ -49,7 +49,7 @@ export default function AdminUsers() {
 
   return (
     <div>
-      <PageHeader title="Users" description="Suspend or reactivate learner, company, and admin accounts." />
+      <PageHeader title="Users" description="Suspend or reactivate talent, company, and admin accounts." />
       <div className="relative mb-4 max-w-sm">
         <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-3" size={16} />
         <Input placeholder="Search by name or email" value={query} onChange={(e) => setQuery(e.target.value)} className="pl-9" />

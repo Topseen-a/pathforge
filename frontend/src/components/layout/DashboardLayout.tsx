@@ -28,19 +28,19 @@ interface NavItem {
   icon: ReactNode;
 }
 
-const learnerNav: NavItem[] = [
-  { to: "/app/learner", label: "Overview", icon: <LayoutDashboard size={18} /> },
-  { to: "/app/learner/experiences", label: "Browse Experiences", icon: <Briefcase size={18} /> },
-  { to: "/app/learner/applications", label: "My Applications", icon: <ClipboardList size={18} /> },
-  { to: "/app/learner/workspaces", label: "Workspaces", icon: <FolderKanban size={18} /> },
-  { to: "/app/learner/passport", label: "Passport", icon: <Award size={18} /> },
-  { to: "/app/learner/messages", label: "Messages", icon: <MessageSquare size={18} /> },
-  { to: "/app/learner/profile", label: "Profile", icon: <UserRound size={18} /> },
+const talentNav: NavItem[] = [
+  { to: "/app/talent", label: "Overview", icon: <LayoutDashboard size={18} /> },
+  { to: "/app/talent/projects", label: "Browse Projects", icon: <Briefcase size={18} /> },
+  { to: "/app/talent/applications", label: "My Applications", icon: <ClipboardList size={18} /> },
+  { to: "/app/talent/workspaces", label: "Workspaces", icon: <FolderKanban size={18} /> },
+  { to: "/app/talent/passport", label: "Passport", icon: <Award size={18} /> },
+  { to: "/app/talent/messages", label: "Messages", icon: <MessageSquare size={18} /> },
+  { to: "/app/talent/profile", label: "Profile", icon: <UserRound size={18} /> },
 ];
 
 const companyNav: NavItem[] = [
   { to: "/app/company", label: "Overview", icon: <LayoutDashboard size={18} /> },
-  { to: "/app/company/experiences", label: "Experiences", icon: <Briefcase size={18} /> },
+  { to: "/app/company/projects", label: "Projects", icon: <Briefcase size={18} /> },
   { to: "/app/company/messages", label: "Messages", icon: <MessageSquare size={18} /> },
   { to: "/app/company/profile", label: "Company Profile", icon: <Building2 size={18} /> },
 ];
@@ -48,7 +48,7 @@ const companyNav: NavItem[] = [
 const adminNav: NavItem[] = [
   { to: "/app/admin", label: "Overview", icon: <LayoutDashboard size={18} /> },
   { to: "/app/admin/companies", label: "Companies", icon: <Building2 size={18} /> },
-  { to: "/app/admin/experiences", label: "Experiences", icon: <Briefcase size={18} /> },
+  { to: "/app/admin/projects", label: "Projects", icon: <Briefcase size={18} /> },
   { to: "/app/admin/users", label: "Users", icon: <Users size={18} /> },
   { to: "/app/admin/reports", label: "Reports", icon: <Flag size={18} /> },
 ];
@@ -59,9 +59,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   const [unread, setUnread] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const nav = user?.role === "COMPANY" ? companyNav : user?.role === "ADMIN" ? adminNav : learnerNav;
+  const nav = user?.role === "COMPANY" ? companyNav : user?.role === "ADMIN" ? adminNav : talentNav;
   const notificationsPath =
-    user?.role === "COMPANY" ? "/app/company/notifications" : user?.role === "ADMIN" ? "/app/admin" : "/app/learner/notifications";
+    user?.role === "COMPANY" ? "/app/company/notifications" : user?.role === "ADMIN" ? "/app/admin" : "/app/talent/notifications";
 
   useEffect(() => {
     let mounted = true;

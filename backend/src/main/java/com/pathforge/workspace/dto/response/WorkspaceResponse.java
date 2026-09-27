@@ -5,12 +5,12 @@ import java.util.UUID;
 
 public record WorkspaceResponse(
         UUID id,
-        UUID experienceId,
-        String experienceTitle,
+        UUID projectId,
+        String projectTitle,
         UUID companyId,
         String companyName,
-        UUID learnerId,
-        String learnerName,
+        UUID talentId,
+        String talentName,
         UUID applicationId,
         OffsetDateTime createdAt
 ) {

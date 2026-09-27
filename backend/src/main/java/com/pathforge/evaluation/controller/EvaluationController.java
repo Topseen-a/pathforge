@@ -24,26 +24,26 @@ public class EvaluationController {
 
     private final EvaluationService evaluationService;
 
-    @PostMapping("/api/v1/experiences/{experienceId}/learners/{learnerId}/evaluation")
+    @PostMapping("/api/v1/projects/{projectId}/talents/{talentId}/evaluation")
     public ResponseEntity<EvaluationResponse> createEvaluation(
             @AuthenticationPrincipal UserPrincipal principal,
-            @PathVariable UUID experienceId,
-            @PathVariable UUID learnerId,
+            @PathVariable UUID projectId,
+            @PathVariable UUID talentId,
             @Valid @RequestBody EvaluationRequest request
     ) {
         EvaluationResponse response = evaluationService.createEvaluation(
-                principal.getId(), experienceId, learnerId, request);
+                principal.getId(), projectId, talentId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/api/v1/experiences/{experienceId}/learners/{learnerId}/evaluation")
-    public ResponseEntity<EvaluationResponse> getByExperienceAndLearner(
+    @GetMapping("/api/v1/projects/{projectId}/talents/{talentId}/evaluation")
+    public ResponseEntity<EvaluationResponse> getByProjectAndTalent(
             @AuthenticationPrincipal UserPrincipal principal,
-            @PathVariable UUID experienceId,
-            @PathVariable UUID learnerId
+            @PathVariable UUID projectId,
+            @PathVariable UUID talentId
     ) {
         return ResponseEntity.ok(
-                evaluationService.getByExperienceAndLearner(principal.getId(), experienceId, learnerId));
+                evaluationService.getByProjectAndTalent(principal.getId(), projectId, talentId));
     }
 
     @GetMapping("/api/v1/evaluations/mine")

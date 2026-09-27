@@ -1,7 +1,7 @@
 package com.pathforge.task.model;
 
 import com.pathforge.common.BaseEntity;
-import com.pathforge.experience.model.Experience;
+import com.pathforge.project.model.Project;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -31,8 +31,8 @@ import java.time.OffsetDateTime;
 public class Task extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "experience_id", nullable = false)
-    private Experience experience;
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
     @Column(nullable = false, length = 150)
     private String title;

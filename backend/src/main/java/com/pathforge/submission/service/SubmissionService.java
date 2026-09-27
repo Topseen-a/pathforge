@@ -3,8 +3,8 @@ package com.pathforge.submission.service;
 import com.pathforge.common.exception.BadRequestException;
 import com.pathforge.common.exception.ResourceNotFoundException;
 import com.pathforge.common.exception.UnauthorizedActionException;
-import com.pathforge.learner.model.LearnerProfile;
-import com.pathforge.learner.repository.LearnerProfileRepository;
+import com.pathforge.talent.model.TalentProfile;
+import com.pathforge.talent.repository.TalentProfileRepository;
 import com.pathforge.notification.service.NotificationService;
 import com.pathforge.submission.dto.request.SubmissionRequest;
 import com.pathforge.submission.dto.response.SubmissionResponse;
@@ -30,7 +30,7 @@ public class SubmissionService {
 
     private final SubmissionRepository submissionRepository;
     private final TaskRepository taskRepository;
-    private final LearnerProfileRepository learnerProfileRepository;
+    private final TalentProfileRepository talentProfileRepository;
     private final WorkspaceRepository workspaceRepository;
     private final TaskService taskService;
     private final NotificationService notificationService;
@@ -41,15 +41,15 @@ public class SubmissionService {
             throw new BadRequestException("Provide either content or a file URL for your submission");
         }
 
-        LearnerProfile learner = learnerProfileRepository.findByUserId(userId)
+        TalentProfile talent = talentProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Complete your learner profile before submitting work"));
+                        "Complete your talent profile before submitting work"));
 
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
 
-        boolean hasWorkspace = workspaceRepository.existsByExperience_IdAndLearner_Id(
-                task.getExperience().getId(), learner.getId());
+        boolean hasWorkspace = workspaceRepository.existsByProject_IdAndTalent_Id(
+                task.getProject().getId(), talent.getId());
 
         if (!hasWorkspace) {
             throw new UnauthorizedActionException("You do not have access to this task");
@@ -62,7 +62,7 @@ public class SubmissionService {
 
         Submission submission = Submission.builder()
                 .task(task)
-                .learner(learner)
+                .talent(talent)
                 .content(request.content())
                 .fileUrl(request.fileUrl())
                 .build();
@@ -72,9 +72,9 @@ public class SubmissionService {
         taskService.markSubmitted(taskId);
 
         notificationService.notify(
-                task.getExperience().getCompany().getUser().getId(),
+                task.getProject().getCompany().getUser().getId(),
                 "NEW_SUBMISSION",
-                learner.getUser().getFullName() + " submitted work for \"" + task.getTitle() + "\""
+                talent.getUser().getFullName() + " submitted work for \"" + task.getTitle() + "\""
         );
 
         return toResponse(submission);
@@ -84,7 +84,7 @@ public class SubmissionService {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
 
-        if (!task.getExperience().getCompany().getUser().getId().equals(userId)) {
+        if (!task.getProject().getCompany().getUser().getId().equals(userId)) {
             throw new UnauthorizedActionException("You do not have permission to view these submissions");
         }
 
@@ -94,20 +94,20 @@ public class SubmissionService {
     }
 
     public List<SubmissionResponse> listMySubmissionsForTask(UUID userId, UUID taskId) {
-        LearnerProfile learner = learnerProfileRepository.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Learner profile not found"));
+        TalentProfile talent = talentProfileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Talent profile not found"));
 
-        return submissionRepository.findByTask_IdAndLearner_IdOrderBySubmittedAtDesc(taskId, learner.getId())
+        return submissionRepository.findByTask_IdAndTalent_IdOrderBySubmittedAtDesc(taskId, talent.getId())
                 .stream()
                 .map(this::toResponse)
                 .toList();
     }
 
     public List<SubmissionResponse> listMySubmissions(UUID userId) {
-        LearnerProfile learner = learnerProfileRepository.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Learner profile not found"));
+        TalentProfile talent = talentProfileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Talent profile not found"));
 
-        return submissionRepository.findByLearner_Id(learner.getId()).stream()
+        return submissionRepository.findByTalent_Id(talent.getId()).stream()
                 .map(this::toResponse)
                 .toList();
     }
@@ -117,8 +117,8 @@ public class SubmissionService {
                 submission.getId(),
                 submission.getTask().getId(),
                 submission.getTask().getTitle(),
-                submission.getLearner().getId(),
-                submission.getLearner().getUser().getFullName(),
+                submission.getTalent().getId(),
+                submission.getTalent().getUser().getFullName(),
                 submission.getContent(),
                 submission.getFileUrl(),
                 submission.getSubmittedAt()

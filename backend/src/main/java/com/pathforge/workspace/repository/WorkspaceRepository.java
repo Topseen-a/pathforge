@@ -11,9 +11,9 @@ public interface WorkspaceRepository extends JpaRepository<Workspace, UUID> {
 
     Optional<Workspace> findByApplication_Id(UUID applicationId);
 
-    List<Workspace> findByLearner_Id(UUID learnerId);
+    List<Workspace> findByTalent_Id(UUID talentId);
 
     boolean existsByApplication_Id(UUID applicationId);
 
-    boolean existsByExperience_IdAndLearner_Id(UUID experienceId, UUID learnerId);
+    boolean existsByProject_IdAndTalent_Id(UUID projectId, UUID talentId);
 }

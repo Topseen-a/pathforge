@@ -9,7 +9,7 @@ public record ReportRequest(
 
         UUID reportedUserId,
 
-        UUID experienceId,
+        UUID projectId,
 
         @NotBlank(message = "Reason is required")
         @Size(max = 100, message = "Reason must be under 100 characters")

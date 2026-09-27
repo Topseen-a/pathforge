@@ -1,7 +1,7 @@
 package com.pathforge.common;
 
 public enum Role {
-    LEARNER,
+    TALENT,
     COMPANY,
     ADMIN
 }

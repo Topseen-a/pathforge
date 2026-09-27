@@ -3,9 +3,9 @@ package com.pathforge.task.service;
 import com.pathforge.common.exception.BadRequestException;
 import com.pathforge.common.exception.ResourceNotFoundException;
 import com.pathforge.common.exception.UnauthorizedActionException;
-import com.pathforge.experience.model.Experience;
-import com.pathforge.experience.repository.ExperienceRepository;
-import com.pathforge.learner.repository.LearnerProfileRepository;
+import com.pathforge.project.model.Project;
+import com.pathforge.project.repository.ProjectRepository;
+import com.pathforge.talent.repository.TalentProfileRepository;
 import com.pathforge.task.dto.request.TaskRequest;
 import com.pathforge.task.dto.request.TaskStatusUpdateRequest;
 import com.pathforge.task.dto.response.TaskResponse;
@@ -26,16 +26,16 @@ import java.util.UUID;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-    private final ExperienceRepository experienceRepository;
+    private final ProjectRepository projectRepository;
     private final WorkspaceRepository workspaceRepository;
-    private final LearnerProfileRepository learnerProfileRepository;
+    private final TalentProfileRepository talentProfileRepository;
 
     @Transactional
-    public TaskResponse createTask(UUID userId, UUID experienceId, TaskRequest request) {
-        Experience experience = getOwnedExperience(userId, experienceId);
+    public TaskResponse createTask(UUID userId, UUID projectId, TaskRequest request) {
+        Project project = getOwnedProject(userId, projectId);
 
         Task task = Task.builder()
-                .experience(experience)
+                .project(project)
                 .title(request.title())
                 .description(request.description())
                 .deadline(request.deadline())
@@ -66,7 +66,7 @@ public class TaskService {
 
         if (request.status() == TaskStatus.SUBMITTED) {
             throw new BadRequestException(
-                    "A task can only move to SUBMITTED by the learner submitting work");
+                    "A task can only move to SUBMITTED by the talent submitting work");
         }
 
         task.setStatus(request.status());
@@ -76,7 +76,7 @@ public class TaskService {
     }
 
     /**
-     * Called by SubmissionService when a learner submits work for this task.
+     * Called by SubmissionService when a talent submits work for this task.
      */
     @Transactional
     public void markSubmitted(UUID taskId) {
@@ -87,41 +87,41 @@ public class TaskService {
         taskRepository.saveAndFlush(task);
     }
 
-    public List<TaskResponse> listForExperience(UUID userId, UUID experienceId) {
-        Experience experience = experienceRepository.findById(experienceId)
-                .orElseThrow(() -> new ResourceNotFoundException("Experience not found"));
+    public List<TaskResponse> listForProject(UUID userId, UUID projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found"));
 
-        boolean isOwningCompany = experience.getCompany().getUser().getId().equals(userId);
+        boolean isOwningCompany = project.getCompany().getUser().getId().equals(userId);
 
-        boolean hasWorkspace = learnerProfileRepository.findByUserId(userId)
-                .map(learner -> workspaceRepository.existsByExperience_IdAndLearner_Id(experienceId, learner.getId()))
+        boolean hasWorkspace = talentProfileRepository.findByUserId(userId)
+                .map(talent -> workspaceRepository.existsByProject_IdAndTalent_Id(projectId, talent.getId()))
                 .orElse(false);
 
         if (!isOwningCompany && !hasWorkspace) {
             throw new UnauthorizedActionException("You do not have permission to view these tasks");
         }
 
-        return taskRepository.findByExperience_Id(experienceId).stream()
+        return taskRepository.findByProject_Id(projectId).stream()
                 .map(this::toResponse)
                 .toList();
     }
 
-    private Experience getOwnedExperience(UUID userId, UUID experienceId) {
-        Experience experience = experienceRepository.findById(experienceId)
-                .orElseThrow(() -> new ResourceNotFoundException("Experience not found"));
+    private Project getOwnedProject(UUID userId, UUID projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found"));
 
-        if (!experience.getCompany().getUser().getId().equals(userId)) {
-            throw new UnauthorizedActionException("You do not have permission to modify this experience");
+        if (!project.getCompany().getUser().getId().equals(userId)) {
+            throw new UnauthorizedActionException("You do not have permission to modify this project");
         }
 
-        return experience;
+        return project;
     }
 
     private Task getOwnedTask(UUID userId, UUID taskId) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
 
-        if (!task.getExperience().getCompany().getUser().getId().equals(userId)) {
+        if (!task.getProject().getCompany().getUser().getId().equals(userId)) {
             throw new UnauthorizedActionException("You do not have permission to modify this task");
         }
 
@@ -131,7 +131,7 @@ public class TaskService {
     private TaskResponse toResponse(Task task) {
         return new TaskResponse(
                 task.getId(),
-                task.getExperience().getId(),
+                task.getProject().getId(),
                 task.getTitle(),
                 task.getDescription(),
                 task.getDeadline(),

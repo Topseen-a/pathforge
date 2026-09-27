@@ -7,8 +7,8 @@ import { useAuth } from "@/context/AuthContext";
 import {
   ApplicationApi,
   CompanyApi,
-  ExperienceApi,
-  LearnerProfileApi,
+  ProjectApi,
+  TalentProfileApi,
   MessageApi,
   WorkspaceApi,
 } from "@/lib/resources";
@@ -19,8 +19,8 @@ interface Contact {
   key: string;
   userId: string;
   name: string;
-  experienceId?: string;
-  experienceTitle: string;
+  projectId?: string;
+  projectTitle: string;
 }
 
 export default function Messages() {
@@ -32,21 +32,21 @@ export default function Messages() {
   useEffect(() => {
     const load = async () => {
       if (user?.role === "COMPANY") {
-        const experiences = await ExperienceApi.listMine();
+        const projects = await ProjectApi.listMine();
         const lists = await Promise.all(
-          experiences.map(async (exp) => {
-            const apps = await ApplicationApi.listForExperience(exp.id).catch(() => []);
+          projects.map(async (exp) => {
+            const apps = await ApplicationApi.listForProject(exp.id).catch(() => []);
             const accepted = apps.filter((a) => a.status === "ACCEPTED");
             const withUsers = await Promise.all(
               accepted.map(async (a) => {
-                const profile = await LearnerProfileApi.getById(a.learnerId).catch(() => null);
+                const profile = await TalentProfileApi.getById(a.talentId).catch(() => null);
                 if (!profile) return null;
                 const c: Contact = {
                   key: `${exp.id}-${profile.userId}`,
                   userId: profile.userId,
-                  name: a.learnerName,
-                  experienceId: exp.id,
-                  experienceTitle: exp.title,
+                  name: a.talentName,
+                  projectId: exp.id,
+                  projectTitle: exp.title,
                 };
                 return c;
               })
@@ -59,7 +59,7 @@ export default function Messages() {
         const workspaces = await WorkspaceApi.listMine();
         const withUsers = await Promise.all(
           workspaces.map(async (w) => {
-            const exp = await ExperienceApi.getById(w.experienceId).catch(() => null);
+            const exp = await ProjectApi.getById(w.projectId).catch(() => null);
             if (!exp) return null;
             const company = await CompanyApi.getById(exp.companyId).catch(() => null);
             if (!company) return null;
@@ -67,8 +67,8 @@ export default function Messages() {
               key: w.id,
               userId: company.userId,
               name: w.companyName,
-              experienceId: w.experienceId,
-              experienceTitle: w.experienceTitle,
+              projectId: w.projectId,
+              projectTitle: w.projectTitle,
             };
             return c;
           })
@@ -100,7 +100,7 @@ export default function Messages() {
                   )}
                 >
                   <p className="font-medium">{c.name}</p>
-                  <p className="truncate text-xs text-ink-3">{c.experienceTitle}</p>
+                  <p className="truncate text-xs text-ink-3">{c.projectTitle}</p>
                 </button>
               ))}
             </div>
@@ -134,7 +134,7 @@ function Thread({ contact }: { contact: Contact }) {
     if (!content.trim()) return;
     setSending(true);
     try {
-      await MessageApi.send({ receiverId: contact.userId, content: content.trim(), experienceId: contact.experienceId });
+      await MessageApi.send({ receiverId: contact.userId, content: content.trim(), projectId: contact.projectId });
       setContent("");
       await load();
     } finally {
@@ -146,7 +146,7 @@ function Thread({ contact }: { contact: Contact }) {
     <Card className="flex h-[500px] flex-col">
       <div className="border-b border-surface-border pb-3">
         <p className="text-sm font-medium text-ink-0">{contact.name}</p>
-        <p className="text-xs text-ink-3">{contact.experienceTitle}</p>
+        <p className="text-xs text-ink-3">{contact.projectTitle}</p>
       </div>
       <div className="flex-1 space-y-3 overflow-y-auto py-4">
         {loading ? (

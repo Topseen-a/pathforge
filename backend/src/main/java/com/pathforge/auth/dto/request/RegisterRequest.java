@@ -21,7 +21,7 @@ public record RegisterRequest(
         @Size(min = 8, message = "Password must be at least 8 characters")
         String password,
 
-        // Self-registration is restricted to LEARNER / COMPANY at the service layer —
+        // Self-registration is restricted to TALENT / COMPANY at the service layer —
         // ADMIN accounts are provisioned separately, never through this endpoint.
         @NotNull(message = "Role is required")
         Role role

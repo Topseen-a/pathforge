@@ -3,28 +3,28 @@ import { Plus, X } from "lucide-react";
 import { Card, PageLoader } from "@/components/ui/Misc";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { ExperienceSkillApi } from "@/lib/resources";
-import type { ExperienceSkillResponse } from "@/lib/types";
+import { ProjectSkillApi } from "@/lib/resources";
+import type { ProjectSkillResponse } from "@/lib/types";
 import { useToast } from "@/context/ToastContext";
 import { extractError } from "@/lib/api";
 
-export default function SkillsTab({ experienceId }: { experienceId: string }) {
-  const [skills, setSkills] = useState<ExperienceSkillResponse[]>([]);
+export default function SkillsTab({ projectId }: { projectId: string }) {
+  const [skills, setSkills] = useState<ProjectSkillResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [newSkill, setNewSkill] = useState("");
   const { push } = useToast();
 
-  const load = () => ExperienceSkillApi.list(experienceId).then(setSkills);
+  const load = () => ProjectSkillApi.list(projectId).then(setSkills);
 
   useEffect(() => {
     load().finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [experienceId]);
+  }, [projectId]);
 
   const add = async () => {
     if (!newSkill.trim()) return;
     try {
-      await ExperienceSkillApi.add(experienceId, { skillName: newSkill.trim() });
+      await ProjectSkillApi.add(projectId, { skillName: newSkill.trim() });
       setNewSkill("");
       await load();
     } catch (err) {
@@ -34,7 +34,7 @@ export default function SkillsTab({ experienceId }: { experienceId: string }) {
 
   const remove = async (skillId: string) => {
     try {
-      await ExperienceSkillApi.remove(experienceId, skillId);
+      await ProjectSkillApi.remove(projectId, skillId);
       await load();
     } catch (err) {
       push(extractError(err).message, "error");

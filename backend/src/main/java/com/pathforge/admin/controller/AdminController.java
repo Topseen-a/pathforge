@@ -3,8 +3,8 @@ package com.pathforge.admin.controller;
 import com.pathforge.common.VerificationStatus;
 import com.pathforge.company.dto.response.CompanyResponse;
 import com.pathforge.company.service.CompanyService;
-import com.pathforge.experience.dto.response.ExperienceResponse;
-import com.pathforge.experience.service.ExperienceService;
+import com.pathforge.project.dto.response.ProjectResponse;
+import com.pathforge.project.service.ProjectService;
 import com.pathforge.report.dto.response.ReportResponse;
 import com.pathforge.report.model.ReportStatus;
 import com.pathforge.report.service.ReportService;
@@ -30,7 +30,7 @@ import java.util.UUID;
 public class AdminController {
 
     private final CompanyService companyService;
-    private final ExperienceService experienceService;
+    private final ProjectService projectService;
     private final UserService userService;
     private final ReportService reportService;
 
@@ -42,9 +42,9 @@ public class AdminController {
         return ResponseEntity.ok(companyService.verifyCompany(companyId, status));
     }
 
-    @PutMapping("/experiences/{experienceId}/moderate")
-    public ResponseEntity<ExperienceResponse> moderateExperience(@PathVariable UUID experienceId) {
-        return ResponseEntity.ok(experienceService.moderateExperience(experienceId));
+    @PutMapping("/projects/{projectId}/moderate")
+    public ResponseEntity<ProjectResponse> moderateProject(@PathVariable UUID projectId) {
+        return ResponseEntity.ok(projectService.moderateProject(projectId));
     }
 
     @GetMapping("/users")

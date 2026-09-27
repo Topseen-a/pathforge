@@ -44,7 +44,7 @@ public class SkillService {
 
     /**
      * Looks up a skill by name (case-insensitive), creating it if it doesn't exist yet.
-     * Used by LearnerSkillService (and later ExperienceSkillService) so learners and
+     * Used by TalentSkillService (and later ProjectSkillService) so talents and
      * companies can reference a skill by name without it needing to already exist
      * in the catalog.
      */

@@ -24,7 +24,7 @@ export default function Login() {
       const session = await login(email, password);
       const from = (location.state as { from?: string } | null)?.from;
       const home =
-        session.role === "COMPANY" ? "/app/company" : session.role === "ADMIN" ? "/app/admin" : "/app/learner";
+        session.role === "COMPANY" ? "/app/company" : session.role === "ADMIN" ? "/app/admin" : "/app/talent";
       navigate(from || home, { replace: true });
     } catch (err) {
       setError(extractError(err).message);

@@ -9,11 +9,11 @@ import com.pathforge.application.repository.ApplicationRepository;
 import com.pathforge.common.exception.BadRequestException;
 import com.pathforge.common.exception.ResourceNotFoundException;
 import com.pathforge.common.exception.UnauthorizedActionException;
-import com.pathforge.experience.model.Experience;
-import com.pathforge.experience.model.ExperienceStatus;
-import com.pathforge.experience.repository.ExperienceRepository;
-import com.pathforge.learner.model.LearnerProfile;
-import com.pathforge.learner.repository.LearnerProfileRepository;
+import com.pathforge.project.model.Project;
+import com.pathforge.project.model.ProjectStatus;
+import com.pathforge.project.repository.ProjectRepository;
+import com.pathforge.talent.model.TalentProfile;
+import com.pathforge.talent.repository.TalentProfileRepository;
 import com.pathforge.notification.service.NotificationService;
 import com.pathforge.workspace.service.WorkspaceService;
 import lombok.RequiredArgsConstructor;
@@ -29,31 +29,31 @@ import java.util.UUID;
 public class ApplicationService {
 
     private final ApplicationRepository applicationRepository;
-    private final ExperienceRepository experienceRepository;
-    private final LearnerProfileRepository learnerProfileRepository;
+    private final ProjectRepository projectRepository;
+    private final TalentProfileRepository talentProfileRepository;
     private final WorkspaceService workspaceService;
     private final NotificationService notificationService;
 
     @Transactional
-    public ApplicationResponse apply(UUID userId, UUID experienceId, ApplicationRequest request) {
-        LearnerProfile learner = learnerProfileRepository.findByUserId(userId)
+    public ApplicationResponse apply(UUID userId, UUID projectId, ApplicationRequest request) {
+        TalentProfile talent = talentProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Complete your learner profile before applying"));
+                        "Complete your talent profile before applying"));
 
-        Experience experience = experienceRepository.findById(experienceId)
-                .orElseThrow(() -> new ResourceNotFoundException("Experience not found"));
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found"));
 
-        if (experience.getStatus() != ExperienceStatus.PUBLISHED) {
-            throw new BadRequestException("This experience is not open for applications");
+        if (project.getStatus() != ProjectStatus.PUBLISHED) {
+            throw new BadRequestException("This project is not open for applications");
         }
 
-        if (applicationRepository.existsByExperience_IdAndLearner_Id(experienceId, learner.getId())) {
-            throw new BadRequestException("You have already applied to this experience");
+        if (applicationRepository.existsByProject_IdAndTalent_Id(projectId, talent.getId())) {
+            throw new BadRequestException("You have already applied to this project");
         }
 
         Application application = Application.builder()
-                .experience(experience)
-                .learner(learner)
+                .project(project)
+                .talent(talent)
                 .motivation(request.motivation())
                 .status(ApplicationStatus.PENDING)
                 .build();
@@ -63,25 +63,25 @@ public class ApplicationService {
         return toResponse(application);
     }
 
-    public List<ApplicationResponse> listForExperience(UUID userId, UUID experienceId) {
-        Experience experience = experienceRepository.findById(experienceId)
-                .orElseThrow(() -> new ResourceNotFoundException("Experience not found"));
+    public List<ApplicationResponse> listForProject(UUID userId, UUID projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found"));
 
-        if (!experience.getCompany().getUser().getId().equals(userId)) {
+        if (!project.getCompany().getUser().getId().equals(userId)) {
             throw new UnauthorizedActionException("You do not have permission to view these applications");
         }
 
-        return applicationRepository.findByExperience_Id(experienceId).stream()
+        return applicationRepository.findByProject_Id(projectId).stream()
                 .map(this::toResponse)
                 .toList();
     }
 
     public List<ApplicationResponse> listMyApplications(UUID userId) {
-        LearnerProfile learner = learnerProfileRepository.findByUserId(userId)
+        TalentProfile talent = talentProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Complete your learner profile before viewing applications"));
+                        "Complete your talent profile before viewing applications"));
 
-        return applicationRepository.findByLearner_Id(learner.getId()).stream()
+        return applicationRepository.findByTalent_Id(talent.getId()).stream()
                 .map(this::toResponse)
                 .toList();
     }
@@ -89,8 +89,8 @@ public class ApplicationService {
     public ApplicationResponse getById(UUID userId, UUID applicationId) {
         Application application = getApplication(applicationId);
 
-        boolean isApplicant = application.getLearner().getUser().getId().equals(userId);
-        boolean isOwningCompany = application.getExperience().getCompany().getUser().getId().equals(userId);
+        boolean isApplicant = application.getTalent().getUser().getId().equals(userId);
+        boolean isOwningCompany = application.getProject().getCompany().getUser().getId().equals(userId);
 
         if (!isApplicant && !isOwningCompany) {
             throw new UnauthorizedActionException("You do not have permission to view this application");
@@ -103,7 +103,7 @@ public class ApplicationService {
     public ApplicationResponse decide(UUID userId, UUID applicationId, ApplicationDecisionRequest request) {
         Application application = getApplication(applicationId);
 
-        if (!application.getExperience().getCompany().getUser().getId().equals(userId)) {
+        if (!application.getProject().getCompany().getUser().getId().equals(userId)) {
             throw new UnauthorizedActionException("You do not have permission to decide on this application");
         }
 
@@ -117,15 +117,15 @@ public class ApplicationService {
         if (request.status() == ApplicationStatus.ACCEPTED) {
             workspaceService.createForApplication(application);
             notificationService.notify(
-                    application.getLearner().getUser().getId(),
+                    application.getTalent().getUser().getId(),
                     "APPLICATION_ACCEPTED",
-                    "Your application to \"" + application.getExperience().getTitle() + "\" has been accepted!"
+                    "Your application to \"" + application.getProject().getTitle() + "\" has been accepted!"
             );
         } else if (request.status() == ApplicationStatus.REJECTED) {
             notificationService.notify(
-                    application.getLearner().getUser().getId(),
+                    application.getTalent().getUser().getId(),
                     "APPLICATION_REJECTED",
-                    "Your application to \"" + application.getExperience().getTitle() + "\" was not selected this time."
+                    "Your application to \"" + application.getProject().getTitle() + "\" was not selected this time."
             );
         }
 
@@ -140,10 +140,10 @@ public class ApplicationService {
     private ApplicationResponse toResponse(Application application) {
         return new ApplicationResponse(
                 application.getId(),
-                application.getExperience().getId(),
-                application.getExperience().getTitle(),
-                application.getLearner().getId(),
-                application.getLearner().getUser().getFullName(),
+                application.getProject().getId(),
+                application.getProject().getTitle(),
+                application.getTalent().getId(),
+                application.getTalent().getUser().getFullName(),
                 application.getMotivation(),
                 application.getStatus(),
                 application.getCreatedAt(),

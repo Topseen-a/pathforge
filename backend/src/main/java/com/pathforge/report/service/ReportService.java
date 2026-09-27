@@ -2,8 +2,8 @@ package com.pathforge.report.service;
 
 import com.pathforge.common.exception.BadRequestException;
 import com.pathforge.common.exception.ResourceNotFoundException;
-import com.pathforge.experience.model.Experience;
-import com.pathforge.experience.repository.ExperienceRepository;
+import com.pathforge.project.model.Project;
+import com.pathforge.project.repository.ProjectRepository;
 import com.pathforge.report.dto.request.ReportRequest;
 import com.pathforge.report.dto.response.ReportResponse;
 import com.pathforge.report.model.Report;
@@ -25,12 +25,12 @@ public class ReportService {
 
     private final ReportRepository reportRepository;
     private final UserRepository userRepository;
-    private final ExperienceRepository experienceRepository;
+    private final ProjectRepository projectRepository;
 
     @Transactional
     public ReportResponse fileReport(UUID userId, ReportRequest request) {
-        if (request.reportedUserId() == null && request.experienceId() == null) {
-            throw new BadRequestException("A report must reference either a user or an experience");
+        if (request.reportedUserId() == null && request.projectId() == null) {
+            throw new BadRequestException("A report must reference either a user or an project");
         }
 
         User reporter = userRepository.findById(userId)
@@ -42,16 +42,16 @@ public class ReportService {
                     .orElseThrow(() -> new ResourceNotFoundException("Reported user not found"));
         }
 
-        Experience experience = null;
-        if (request.experienceId() != null) {
-            experience = experienceRepository.findById(request.experienceId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Experience not found"));
+        Project project = null;
+        if (request.projectId() != null) {
+            project = projectRepository.findById(request.projectId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Project not found"));
         }
 
         Report report = Report.builder()
                 .reporter(reporter)
                 .reportedUser(reportedUser)
-                .experience(experience)
+                .project(project)
                 .reason(request.reason())
                 .description(request.description())
                 .status(ReportStatus.OPEN)
@@ -103,8 +103,8 @@ public class ReportService {
                 report.getReporter().getFullName(),
                 report.getReportedUser() != null ? report.getReportedUser().getId() : null,
                 report.getReportedUser() != null ? report.getReportedUser().getFullName() : null,
-                report.getExperience() != null ? report.getExperience().getId() : null,
-                report.getExperience() != null ? report.getExperience().getTitle() : null,
+                report.getProject() != null ? report.getProject().getId() : null,
+                report.getProject() != null ? report.getProject().getTitle() : null,
                 report.getReason(),
                 report.getDescription(),
                 report.getStatus(),

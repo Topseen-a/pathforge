@@ -8,11 +8,11 @@ import java.util.UUID;
 
 public interface ApplicationRepository extends JpaRepository<Application, UUID> {
 
-    List<Application> findByExperience_Id(UUID experienceId);
+    List<Application> findByProject_Id(UUID projectId);
 
-    List<Application> findByLearner_Id(UUID learnerId);
+    List<Application> findByTalent_Id(UUID talentId);
 
-    boolean existsByExperience_IdAndLearner_Id(UUID experienceId, UUID learnerId);
+    boolean existsByProject_IdAndTalent_Id(UUID projectId, UUID talentId);
 
-    boolean existsByExperience_Id(UUID experienceId);
+    boolean existsByProject_Id(UUID projectId);
 }

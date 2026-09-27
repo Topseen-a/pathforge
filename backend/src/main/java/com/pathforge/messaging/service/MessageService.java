@@ -2,9 +2,9 @@ package com.pathforge.messaging.service;
 
 import com.pathforge.common.exception.ResourceNotFoundException;
 import com.pathforge.common.exception.UnauthorizedActionException;
-import com.pathforge.experience.model.Experience;
-import com.pathforge.experience.repository.ExperienceRepository;
-import com.pathforge.learner.repository.LearnerProfileRepository;
+import com.pathforge.project.model.Project;
+import com.pathforge.project.repository.ProjectRepository;
+import com.pathforge.talent.repository.TalentProfileRepository;
 import com.pathforge.messaging.dto.request.MessageRequest;
 import com.pathforge.messaging.dto.response.MessageResponse;
 import com.pathforge.messaging.model.Message;
@@ -26,9 +26,9 @@ public class MessageService {
 
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
-    private final ExperienceRepository experienceRepository;
+    private final ProjectRepository projectRepository;
     private final WorkspaceRepository workspaceRepository;
-    private final LearnerProfileRepository learnerProfileRepository;
+    private final TalentProfileRepository talentProfileRepository;
 
     @Transactional
     public MessageResponse sendMessage(UUID userId, MessageRequest request) {
@@ -38,16 +38,16 @@ public class MessageService {
         User receiver = userRepository.findById(request.receiverId())
                 .orElseThrow(() -> new ResourceNotFoundException("Receiver not found"));
 
-        Experience experience = null;
-        if (request.experienceId() != null) {
-            experience = experienceRepository.findById(request.experienceId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Experience not found"));
+        Project project = null;
+        if (request.projectId() != null) {
+            project = projectRepository.findById(request.projectId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Project not found"));
         }
 
         Message message = Message.builder()
                 .sender(sender)
                 .receiver(receiver)
-                .experience(experience)
+                .project(project)
                 .content(request.content())
                 .build();
 
@@ -62,21 +62,21 @@ public class MessageService {
                 .toList();
     }
 
-    public List<MessageResponse> listForExperience(UUID userId, UUID experienceId) {
-        Experience experience = experienceRepository.findById(experienceId)
-                .orElseThrow(() -> new ResourceNotFoundException("Experience not found"));
+    public List<MessageResponse> listForProject(UUID userId, UUID projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found"));
 
-        boolean isOwningCompany = experience.getCompany().getUser().getId().equals(userId);
+        boolean isOwningCompany = project.getCompany().getUser().getId().equals(userId);
 
-        boolean hasWorkspace = learnerProfileRepository.findByUserId(userId)
-                .map(learner -> workspaceRepository.existsByExperience_IdAndLearner_Id(experienceId, learner.getId()))
+        boolean hasWorkspace = talentProfileRepository.findByUserId(userId)
+                .map(talent -> workspaceRepository.existsByProject_IdAndTalent_Id(projectId, talent.getId()))
                 .orElse(false);
 
         if (!isOwningCompany && !hasWorkspace) {
             throw new UnauthorizedActionException("You do not have permission to view these messages");
         }
 
-        return messageRepository.findByExperience_IdOrderByCreatedAtAsc(experienceId).stream()
+        return messageRepository.findByProject_IdOrderByCreatedAtAsc(projectId).stream()
                 .map(this::toResponse)
                 .toList();
     }
@@ -88,7 +88,7 @@ public class MessageService {
                 message.getSender().getFullName(),
                 message.getReceiver().getId(),
                 message.getReceiver().getFullName(),
-                message.getExperience() != null ? message.getExperience().getId() : null,
+                message.getProject() != null ? message.getProject().getId() : null,
                 message.getContent(),
                 message.getCreatedAt()
         );

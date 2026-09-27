@@ -7,10 +7,10 @@ import com.pathforge.evaluation.dto.request.EvaluationRequest;
 import com.pathforge.evaluation.dto.response.EvaluationResponse;
 import com.pathforge.evaluation.model.Evaluation;
 import com.pathforge.evaluation.repository.EvaluationRepository;
-import com.pathforge.experience.model.Experience;
-import com.pathforge.experience.repository.ExperienceRepository;
-import com.pathforge.learner.model.LearnerProfile;
-import com.pathforge.learner.repository.LearnerProfileRepository;
+import com.pathforge.project.model.Project;
+import com.pathforge.project.repository.ProjectRepository;
+import com.pathforge.talent.model.TalentProfile;
+import com.pathforge.talent.repository.TalentProfileRepository;
 import com.pathforge.passport.service.ExperienceRecordService;
 import com.pathforge.user.model.User;
 import com.pathforge.user.repository.UserRepository;
@@ -28,41 +28,41 @@ import java.util.UUID;
 public class EvaluationService {
 
     private final EvaluationRepository evaluationRepository;
-    private final ExperienceRepository experienceRepository;
-    private final LearnerProfileRepository learnerProfileRepository;
+    private final ProjectRepository projectRepository;
+    private final TalentProfileRepository talentProfileRepository;
     private final UserRepository userRepository;
     private final WorkspaceRepository workspaceRepository;
     private final ExperienceRecordService experienceRecordService;
 
     @Transactional
     public EvaluationResponse createEvaluation(
-            UUID userId, UUID experienceId, UUID learnerId, EvaluationRequest request
+            UUID userId, UUID projectId, UUID talentId, EvaluationRequest request
     ) {
-        Experience experience = experienceRepository.findById(experienceId)
-                .orElseThrow(() -> new ResourceNotFoundException("Experience not found"));
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found"));
 
-        if (!experience.getCompany().getUser().getId().equals(userId)) {
-            throw new UnauthorizedActionException("You do not have permission to evaluate this experience");
+        if (!project.getCompany().getUser().getId().equals(userId)) {
+            throw new UnauthorizedActionException("You do not have permission to evaluate this project");
         }
 
-        LearnerProfile learner = learnerProfileRepository.findById(learnerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Learner not found"));
+        TalentProfile talent = talentProfileRepository.findById(talentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Talent not found"));
 
-        boolean hasWorkspace = workspaceRepository.existsByExperience_IdAndLearner_Id(experienceId, learnerId);
+        boolean hasWorkspace = workspaceRepository.existsByProject_IdAndTalent_Id(projectId, talentId);
         if (!hasWorkspace) {
-            throw new BadRequestException("This learner was never accepted onto this experience");
+            throw new BadRequestException("This talent was never accepted onto this project");
         }
 
-        if (evaluationRepository.existsByExperience_IdAndLearner_Id(experienceId, learnerId)) {
-            throw new BadRequestException("This learner has already been evaluated for this experience");
+        if (evaluationRepository.existsByProject_IdAndTalent_Id(projectId, talentId)) {
+            throw new BadRequestException("This talent has already been evaluated for this project");
         }
 
         User evaluator = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Evaluator not found"));
 
         Evaluation evaluation = Evaluation.builder()
-                .experience(experience)
-                .learner(learner)
+                .project(project)
+                .talent(talent)
                 .evaluator(evaluator)
                 .overallRating(request.overallRating())
                 .qualityRating(request.qualityRating())
@@ -78,14 +78,14 @@ public class EvaluationService {
         return toResponse(evaluation);
     }
 
-    public EvaluationResponse getByExperienceAndLearner(UUID userId, UUID experienceId, UUID learnerId) {
-        Evaluation evaluation = evaluationRepository.findByExperience_IdAndLearner_Id(experienceId, learnerId)
+    public EvaluationResponse getByProjectAndTalent(UUID userId, UUID projectId, UUID talentId) {
+        Evaluation evaluation = evaluationRepository.findByProject_IdAndTalent_Id(projectId, talentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Evaluation not found"));
 
-        boolean isEvaluatedLearner = evaluation.getLearner().getUser().getId().equals(userId);
-        boolean isOwningCompany = evaluation.getExperience().getCompany().getUser().getId().equals(userId);
+        boolean isEvaluatedTalent = evaluation.getTalent().getUser().getId().equals(userId);
+        boolean isOwningCompany = evaluation.getProject().getCompany().getUser().getId().equals(userId);
 
-        if (!isEvaluatedLearner && !isOwningCompany) {
+        if (!isEvaluatedTalent && !isOwningCompany) {
             throw new UnauthorizedActionException("You do not have permission to view this evaluation");
         }
 
@@ -93,10 +93,10 @@ public class EvaluationService {
     }
 
     public List<EvaluationResponse> listMyEvaluations(UUID userId) {
-        LearnerProfile learner = learnerProfileRepository.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Learner profile not found"));
+        TalentProfile talent = talentProfileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Talent profile not found"));
 
-        return evaluationRepository.findByLearner_Id(learner.getId()).stream()
+        return evaluationRepository.findByTalent_Id(talent.getId()).stream()
                 .map(this::toResponse)
                 .toList();
     }
@@ -104,10 +104,10 @@ public class EvaluationService {
     private EvaluationResponse toResponse(Evaluation evaluation) {
         return new EvaluationResponse(
                 evaluation.getId(),
-                evaluation.getExperience().getId(),
-                evaluation.getExperience().getTitle(),
-                evaluation.getLearner().getId(),
-                evaluation.getLearner().getUser().getFullName(),
+                evaluation.getProject().getId(),
+                evaluation.getProject().getTitle(),
+                evaluation.getTalent().getId(),
+                evaluation.getTalent().getUser().getFullName(),
                 evaluation.getEvaluator().getId(),
                 evaluation.getEvaluator().getFullName(),
                 evaluation.getOverallRating(),

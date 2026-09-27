@@ -1,8 +1,8 @@
 package com.pathforge.application.model;
 
 import com.pathforge.common.BaseEntity;
-import com.pathforge.experience.model.Experience;
-import com.pathforge.learner.model.LearnerProfile;
+import com.pathforge.project.model.Project;
+import com.pathforge.talent.model.TalentProfile;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -25,7 +25,7 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(
         name = "applications",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"experience_id", "learner_id"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"project_id", "talent_id"})
 )
 @Getter
 @Setter
@@ -35,12 +35,12 @@ import java.time.OffsetDateTime;
 public class Application extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "experience_id", nullable = false)
-    private Experience experience;
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "learner_id", nullable = false)
-    private LearnerProfile learner;
+    @JoinColumn(name = "talent_id", nullable = false)
+    private TalentProfile talent;
 
     @Column(columnDefinition = "TEXT")
     private String motivation;

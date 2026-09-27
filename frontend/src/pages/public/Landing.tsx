@@ -23,6 +23,7 @@ import {
 import { clsx } from "clsx";
 import { Card, StatCard, StatusBadge } from "@/components/ui/Misc";
 import { Logo } from "@/components/Logo";
+import { Reveal } from "@/components/Reveal";
 
 const NAV_LINKS = [
   { href: "#how-it-works", label: "How it works" },
@@ -31,15 +32,15 @@ const NAV_LINKS = [
 ];
 
 const STATS: [string, string][] = [
-  ["1,200+", "Learners"],
+  ["1,200+", "Talents"],
   ["300+", "Companies"],
-  ["4,800+", "Experiences run"],
-  ["100%", "Free for learners"],
+  ["4,800+", "Projects run"],
+  ["100%", "Free for talents"],
 ];
 
 const STEPS = [
   {
-    title: "Discover an experience",
+    title: "Discover a project",
     description: "Browse short, structured projects from verified businesses — filtered by skill, duration, and pay.",
   },
   {
@@ -83,16 +84,16 @@ const TESTIMONIALS = [
 
 const FAQS = [
   {
-    q: "Is PathForge free for learners?",
-    a: "Yes. Learners never pay a subscription to access experiences, apply, or build their Experience Passport. Companies pay for hosting and premium tools — not learners.",
+    q: "Is PathForge free for talents?",
+    a: "Yes. Talents never pay a subscription to access projects, apply, or build their Experience Passport. Companies pay for hosting and premium tools — not talents.",
   },
   {
     q: "What is an Experience Passport?",
     a: "A verified record of practical work you've actually completed — the company, the tasks, the deliverables, your evaluation, and a unique verification code a third party can check.",
   },
   {
-    q: "Who can post experiences?",
-    a: "Verified businesses, startups, agencies, and professionals. Every company goes through a verification step before they can publish an experience.",
+    q: "Who can post projects?",
+    a: "Verified businesses, startups, agencies, and professionals. Every company goes through a verification step before they can publish a project.",
   },
   {
     q: "Is this the same as an internship or a job board?",
@@ -159,7 +160,7 @@ function Header() {
   );
 }
 
-function MockExperienceCard() {
+function MockProjectCard() {
   return (
     <div className="w-full max-w-sm rounded-3xl border border-forest-border bg-forest-card p-5 text-forest-ink shadow-xl">
       <div className="flex items-center justify-between">
@@ -187,7 +188,7 @@ function MockExperienceCard() {
 
 const PREVIEW_NAV = [
   { label: "Overview", icon: LayoutDashboard, active: true },
-  { label: "Browse Experiences", icon: Briefcase },
+  { label: "Browse Projects", icon: Briefcase },
   { label: "My Applications", icon: ClipboardList },
   { label: "Workspaces", icon: FolderKanban },
   { label: "Passport", icon: Award },
@@ -195,7 +196,7 @@ const PREVIEW_NAV = [
   { label: "Profile", icon: UserRound },
 ];
 
-const PREVIEW_EXPERIENCES: { title: string; sub: string; status: "PUBLISHED" }[] = [
+const PREVIEW_PROJECTS: { title: string; sub: string; status: "PUBLISHED" }[] = [
   { title: "UI/UX Review", sub: "Lagos Fintech Co · REMOTE", status: "PUBLISHED" },
   { title: "Sales Data Analysis", sub: "Kaduna Retail Group · HYBRID", status: "PUBLISHED" },
   { title: "Technical Documentation", sub: "DevWorks · REMOTE", status: "PUBLISHED" },
@@ -243,7 +244,7 @@ function DashboardPreview() {
               <p className="text-xs text-ink-2 sm:text-sm">Here's where your PathForge journey stands today.</p>
             </div>
             <span className="rounded-full bg-accent-500 px-4 py-2 text-xs font-semibold text-ink-0">
-              Browse experiences
+              Browse projects
             </span>
           </div>
 
@@ -256,9 +257,9 @@ function DashboardPreview() {
 
           <div className="mt-5 grid gap-4 lg:grid-cols-3">
             <Card className="lg:col-span-2">
-              <p className="mb-3 text-sm font-semibold text-ink-0">Recommended experiences</p>
+              <p className="mb-3 text-sm font-semibold text-ink-0">Recommended projects</p>
               <div className="space-y-2">
-                {PREVIEW_EXPERIENCES.map((e) => (
+                {PREVIEW_PROJECTS.map((e) => (
                   <div key={e.title} className="flex items-center justify-between rounded-xl border border-surface-border px-3 py-2.5">
                     <div>
                       <p className="text-sm font-medium text-ink-0">{e.title}</p>
@@ -312,7 +313,7 @@ export default function Landing() {
       <Section className="pt-12 sm:pt-16">
         <div className="overflow-hidden rounded-[2.5rem] bg-forest-bg px-6 py-14 text-forest-ink sm:px-12 sm:py-20">
           <div className="grid items-center gap-12 lg:grid-cols-2">
-            <div>
+            <Reveal>
               <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tightest sm:text-5xl lg:text-6xl">
                 Learn a skill.
                 <br />
@@ -338,27 +339,29 @@ export default function Landing() {
                   How it works
                 </a>
               </div>
-            </div>
-            <div className="flex justify-center lg:justify-end">
-              <MockExperienceCard />
-            </div>
+            </Reveal>
+            <Reveal delay={150} className="flex justify-center lg:justify-end">
+              <MockProjectCard />
+            </Reveal>
           </div>
         </div>
       </Section>
 
       {/* Product preview */}
       <div className="px-4 sm:px-6">
-        <DashboardPreview />
+        <Reveal>
+          <DashboardPreview />
+        </Reveal>
       </div>
 
       {/* Stats strip */}
       <Section className="py-0">
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {STATS.map(([num, label]) => (
-            <div key={label} className="card p-5 text-center">
+          {STATS.map(([num, label], i) => (
+            <Reveal key={label} delay={i * 80} className="card p-5 text-center">
               <p className="text-2xl font-bold text-ink-0 sm:text-3xl">{num}</p>
               <p className="mt-1 text-xs text-ink-2 sm:text-sm">{label}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </Section>
@@ -366,7 +369,7 @@ export default function Landing() {
       {/* How it works */}
       <Section id="how-it-works">
         <div className="grid gap-12 lg:grid-cols-2">
-          <div>
+          <Reveal>
             <Eyebrow>How it works</Eyebrow>
             <h2 className="text-3xl font-bold tracking-tightest sm:text-4xl">
               From "I know the theory" to a verified record of real work
@@ -376,17 +379,17 @@ export default function Landing() {
               structured, and honest about what you'll walk away with.
             </p>
             <div className="mt-8 grid grid-cols-2 gap-3">
-              {CATEGORIES.map((c) => (
-                <div key={c.label} className={clsx("flex items-center gap-2 rounded-2xl px-4 py-3", c.tone)}>
+              {CATEGORIES.map((c, i) => (
+                <Reveal key={c.label} delay={150 + i * 80} className={clsx("flex items-center gap-2 rounded-2xl px-4 py-3", c.tone)}>
                   <c.icon size={18} />
                   <span className="text-sm font-medium">{c.label}</span>
-                </div>
+                </Reveal>
               ))}
             </div>
-          </div>
+          </Reveal>
           <div className="space-y-4">
             {STEPS.map((step, i) => (
-              <div key={step.title} className="card flex gap-4 p-5">
+              <Reveal key={step.title} delay={i * 100} className="card flex gap-4 p-5">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-500 text-sm font-bold text-ink-0">
                   {i + 1}
                 </div>
@@ -394,7 +397,7 @@ export default function Landing() {
                   <p className="font-semibold text-ink-0">{step.title}</p>
                   <p className="mt-1 text-sm text-ink-2">{step.description}</p>
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -403,7 +406,7 @@ export default function Landing() {
       {/* For companies */}
       <Section id="for-companies" className="rounded-[2.5rem] bg-surface-2">
         <div className="grid items-center gap-12 lg:grid-cols-2">
-          <div>
+          <Reveal>
             <Eyebrow>For businesses</Eyebrow>
             <h2 className="text-3xl font-bold tracking-tightest sm:text-4xl">
               Get real work done. Discover talent early.
@@ -425,35 +428,37 @@ export default function Landing() {
               to="/register"
               className="mt-8 inline-flex items-center gap-2 rounded-full bg-ink-0 px-6 py-3 text-sm font-semibold text-surface-0 hover:opacity-90"
             >
-              Post an experience <ArrowRight size={16} />
+              Post a project <ArrowRight size={16} />
             </Link>
-          </div>
-          <div className="card flex flex-col gap-4 p-6">
+          </Reveal>
+          <Reveal delay={150} className="card flex flex-col gap-4 p-6">
             <div className="flex items-center gap-2 text-accent-600">
               <ShieldCheck size={18} />
               <span className="text-sm font-semibold">Company verification</span>
             </div>
             <p className="text-sm text-ink-2">
-              Every company is reviewed before they can publish an experience — business details, contact
+              Every company is reviewed before they can publish a project — business details, contact
               information, and representative verification.
             </p>
             <div className="flex items-center gap-3 border-t border-surface-border pt-4">
               <Briefcase size={16} className="text-ink-2" />
-              <span className="text-sm text-ink-1">300+ companies already hosting experiences</span>
+              <span className="text-sm text-ink-1">300+ companies already hosting projects</span>
             </div>
-          </div>
+          </Reveal>
         </div>
       </Section>
 
       {/* Testimonials */}
       <Section className="rounded-[2.5rem] bg-forest-bg text-forest-ink">
-        <Eyebrow>What people say</Eyebrow>
-        <h2 className="max-w-lg text-3xl font-bold tracking-tightest sm:text-4xl">
-          Real experience, verified — from both sides of the table
-        </h2>
+        <Reveal>
+          <Eyebrow>What people say</Eyebrow>
+          <h2 className="max-w-lg text-3xl font-bold tracking-tightest sm:text-4xl">
+            Real experience, verified — from both sides of the table
+          </h2>
+        </Reveal>
         <div className="mt-10 grid gap-4 sm:grid-cols-3">
-          {TESTIMONIALS.map((t) => (
-            <div key={t.name} className="rounded-3xl border border-forest-border bg-forest-card p-6">
+          {TESTIMONIALS.map((t, i) => (
+            <Reveal key={t.name} delay={i * 100} className="rounded-3xl border border-forest-border bg-forest-card p-6">
               <p className="text-sm leading-relaxed text-forest-ink">"{t.quote}"</p>
               <div className="mt-4 flex items-center gap-3">
                 <div className="h-9 w-9 rounded-full bg-accent-500/25" />
@@ -462,14 +467,14 @@ export default function Landing() {
                   <p className="text-xs text-forest-ink-dim">{t.role}</p>
                 </div>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </Section>
 
       {/* Final CTA */}
       <Section>
-        <div className="rounded-[2.5rem] bg-accent-200 px-6 py-16 text-center sm:px-12">
+        <Reveal className="rounded-[2.5rem] bg-accent-200 px-6 py-16 text-center sm:px-12">
           <h2 className="mx-auto max-w-xl text-3xl font-bold tracking-tightest sm:text-4xl">
             Your next opportunity starts with proof, not promises.
           </h2>
@@ -482,16 +487,18 @@ export default function Landing() {
           >
             Create your account <ArrowRight size={16} />
           </Link>
-        </div>
+        </Reveal>
       </Section>
 
       {/* FAQ */}
       <Section id="faq">
-        <Eyebrow>FAQ</Eyebrow>
-        <h2 className="text-3xl font-bold tracking-tightest sm:text-4xl">Answers to common questions</h2>
+        <Reveal>
+          <Eyebrow>FAQ</Eyebrow>
+          <h2 className="text-3xl font-bold tracking-tightest sm:text-4xl">Answers to common questions</h2>
+        </Reveal>
         <div className="mt-8 space-y-3">
           {FAQS.map((f, i) => (
-            <div key={f.q} className="card overflow-hidden p-0">
+            <Reveal key={f.q} delay={i * 70} className="card overflow-hidden p-0">
               <button
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 className="flex w-full items-center justify-between px-5 py-4 text-left"
@@ -503,7 +510,7 @@ export default function Landing() {
                 />
               </button>
               {openFaq === i && <p className="px-5 pb-4 text-sm text-ink-2">{f.a}</p>}
-            </div>
+            </Reveal>
           ))}
         </div>
       </Section>

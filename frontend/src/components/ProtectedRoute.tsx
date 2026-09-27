@@ -12,7 +12,7 @@ export function ProtectedRoute({ children, roles }: { children: ReactNode; roles
   if (loading) return <PageLoader />;
   if (!user) return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   if (roles && !roles.includes(user.role)) {
-    const home = user.role === "COMPANY" ? "/app/company" : user.role === "ADMIN" ? "/app/admin" : "/app/learner";
+    const home = user.role === "COMPANY" ? "/app/company" : user.role === "ADMIN" ? "/app/admin" : "/app/talent";
     return <Navigate to={home} replace />;
   }
   return <DashboardLayout>{children}</DashboardLayout>;

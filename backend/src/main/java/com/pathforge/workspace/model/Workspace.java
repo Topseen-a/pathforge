@@ -2,8 +2,8 @@ package com.pathforge.workspace.model;
 
 import com.pathforge.application.model.Application;
 import com.pathforge.common.BaseEntity;
-import com.pathforge.experience.model.Experience;
-import com.pathforge.learner.model.LearnerProfile;
+import com.pathforge.project.model.Project;
+import com.pathforge.talent.model.TalentProfile;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,7 +24,7 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(
         name = "workspaces",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"experience_id", "learner_id"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"project_id", "talent_id"})
 )
 @Getter
 @Setter
@@ -34,12 +34,12 @@ import java.time.OffsetDateTime;
 public class Workspace extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "experience_id", nullable = false)
-    private Experience experience;
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "learner_id", nullable = false)
-    private LearnerProfile learner;
+    @JoinColumn(name = "talent_id", nullable = false)
+    private TalentProfile talent;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false, unique = true)

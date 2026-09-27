@@ -7,10 +7,10 @@ import java.util.UUID;
 
 public record ApplicationResponse(
         UUID id,
-        UUID experienceId,
-        String experienceTitle,
-        UUID learnerId,
-        String learnerName,
+        UUID projectId,
+        String projectTitle,
+        UUID talentId,
+        String talentName,
         String motivation,
         ApplicationStatus status,
         OffsetDateTime createdAt,

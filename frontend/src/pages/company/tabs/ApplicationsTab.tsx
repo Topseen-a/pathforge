@@ -7,19 +7,19 @@ import { useToast } from "@/context/ToastContext";
 import { extractError } from "@/lib/api";
 import EvaluateModal from "./EvaluateModal";
 
-export default function ApplicationsTab({ experienceId }: { experienceId: string }) {
+export default function ApplicationsTab({ projectId }: { projectId: string }) {
   const [applications, setApplications] = useState<ApplicationResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
   const { push } = useToast();
   const [evaluating, setEvaluating] = useState<ApplicationResponse | null>(null);
 
-  const load = () => ApplicationApi.listForExperience(experienceId).then(setApplications);
+  const load = () => ApplicationApi.listForProject(projectId).then(setApplications);
 
   useEffect(() => {
     load().finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [experienceId]);
+  }, [projectId]);
 
   const decide = async (id: string, status: "ACCEPTED" | "REJECTED") => {
     setBusyId(id);
@@ -45,7 +45,7 @@ export default function ApplicationsTab({ experienceId }: { experienceId: string
           {applications.map((a) => (
             <Card key={a.id} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-sm font-medium text-ink-0">{a.learnerName}</p>
+                <p className="text-sm font-medium text-ink-0">{a.talentName}</p>
                 {a.coverNote && <p className="mt-1 max-w-md text-sm text-ink-2">{a.coverNote}</p>}
                 <p className="mt-1 text-xs text-ink-3">Applied {a.createdAt ? new Date(a.createdAt).toLocaleDateString() : ""}</p>
               </div>
@@ -77,7 +77,7 @@ export default function ApplicationsTab({ experienceId }: { experienceId: string
 
       {evaluating && (
         <EvaluateModal
-          experienceId={experienceId}
+          projectId={projectId}
           application={evaluating}
           onClose={() => setEvaluating(null)}
           onDone={() => {

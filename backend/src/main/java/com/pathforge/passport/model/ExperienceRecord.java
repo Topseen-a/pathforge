@@ -3,8 +3,8 @@ package com.pathforge.passport.model;
 import com.pathforge.common.BaseEntity;
 import com.pathforge.common.VerificationStatus;
 import com.pathforge.evaluation.model.Evaluation;
-import com.pathforge.experience.model.Experience;
-import com.pathforge.learner.model.LearnerProfile;
+import com.pathforge.project.model.Project;
+import com.pathforge.talent.model.TalentProfile;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,7 +26,7 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(
         name = "experience_records",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"learner_id", "experience_id"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"talent_id", "project_id"})
 )
 @Getter
 @Setter
@@ -36,12 +36,12 @@ import java.time.OffsetDateTime;
 public class ExperienceRecord extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "learner_id", nullable = false)
-    private LearnerProfile learner;
+    @JoinColumn(name = "talent_id", nullable = false)
+    private TalentProfile talent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "experience_id", nullable = false)
-    private Experience experience;
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "evaluation_id", nullable = false, unique = true)

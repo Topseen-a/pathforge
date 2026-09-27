@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { CheckCircle2, ShieldCheck } from "lucide-react";
+import { ArrowLeft, CheckCircle2, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card, ErrorBanner, StatusBadge } from "@/components/ui/Misc";
@@ -33,6 +33,9 @@ export default function VerifyPassport() {
   return (
     <div className="min-h-screen bg-surface-0 px-6 py-16 text-ink-0">
       <div className="mx-auto max-w-lg">
+        <Link to="/" className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-ink-2 hover:text-ink-0">
+          <ArrowLeft size={16} /> Back to home
+        </Link>
         <div className="mb-10 flex items-center gap-2">
           <Logo className="h-8 w-8" />
           <span className="text-lg font-semibold">PathForge</span>
@@ -43,7 +46,7 @@ export default function VerifyPassport() {
         </div>
         <h1 className="text-2xl font-semibold">Verify an experience record</h1>
         <p className="mt-2 text-sm text-ink-2">
-          Enter the verification code printed on a learner's PathForge experience passport to confirm it's genuine.
+          Enter the verification code printed on a talent's PathForge experience passport to confirm it's genuine.
         </p>
 
         <form onSubmit={onSubmit} className="mt-8 flex gap-2">
@@ -72,13 +75,13 @@ export default function VerifyPassport() {
               <span className="text-sm font-medium">Record verified</span>
             </div>
             <div>
-              <p className="text-lg font-semibold text-ink-0">{record.experienceTitle}</p>
+              <p className="text-lg font-semibold text-ink-0">{record.projectTitle}</p>
               <p className="text-sm text-ink-2">{record.companyName}</p>
             </div>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <p className="text-ink-3">Learner</p>
-                <p className="text-ink-0">{record.learnerName}</p>
+                <p className="text-ink-3">Talent</p>
+                <p className="text-ink-0">{record.talentName}</p>
               </div>
               <div>
                 <p className="text-ink-3">Status</p>

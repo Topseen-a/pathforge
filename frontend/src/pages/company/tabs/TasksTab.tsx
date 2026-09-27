@@ -9,18 +9,18 @@ import { extractError } from "@/lib/api";
 import { useToast } from "@/context/ToastContext";
 import { clsx } from "clsx";
 
-export default function TasksTab({ experienceId }: { experienceId: string }) {
+export default function TasksTab({ projectId }: { projectId: string }) {
   const [tasks, setTasks] = useState<TaskResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const { push } = useToast();
 
-  const load = () => TaskApi.listForExperience(experienceId).then(setTasks);
+  const load = () => TaskApi.listForProject(projectId).then(setTasks);
 
   useEffect(() => {
     load().finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [experienceId]);
+  }, [projectId]);
 
   if (loading) return <PageLoader />;
 
@@ -34,7 +34,7 @@ export default function TasksTab({ experienceId }: { experienceId: string }) {
 
       {showForm && (
         <NewTaskForm
-          experienceId={experienceId}
+          projectId={projectId}
           onDone={() => {
             setShowForm(false);
             push("Task created", "success");
@@ -44,15 +44,15 @@ export default function TasksTab({ experienceId }: { experienceId: string }) {
       )}
 
       {tasks.length === 0 ? (
-        <EmptyState title="No tasks yet" description="Create tasks so accepted learners know what to work on." />
+        <EmptyState title="No tasks yet" description="Create tasks so accepted talents know what to work on." />
       ) : (
-        tasks.map((task) => <TaskCard key={task.id} task={task} experienceId={experienceId} onChanged={load} />)
+        tasks.map((task) => <TaskCard key={task.id} task={task} projectId={projectId} onChanged={load} />)
       )}
     </div>
   );
 }
 
-function NewTaskForm({ experienceId, onDone }: { experienceId: string; onDone: () => void }) {
+function NewTaskForm({ projectId, onDone }: { projectId: string; onDone: () => void }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -64,7 +64,7 @@ function NewTaskForm({ experienceId, onDone }: { experienceId: string; onDone: (
     setSaving(true);
     setError("");
     try {
-      await TaskApi.create(experienceId, { title, description, dueDate: dueDate || undefined });
+      await TaskApi.create(projectId, { title, description, dueDate: dueDate || undefined });
       onDone();
     } catch (err) {
       setError(extractError(err).message);
@@ -92,7 +92,7 @@ function NewTaskForm({ experienceId, onDone }: { experienceId: string; onDone: (
   );
 }
 
-function TaskCard({ task, experienceId, onChanged }: { task: TaskResponse; experienceId: string; onChanged: () => void }) {
+function TaskCard({ task, projectId, onChanged }: { task: TaskResponse; projectId: string; onChanged: () => void }) {
   const [open, setOpen] = useState(false);
   const [submissions, setSubmissions] = useState<SubmissionResponse[]>([]);
   const [loadingSubs, setLoadingSubs] = useState(false);
@@ -112,7 +112,7 @@ function TaskCard({ task, experienceId, onChanged }: { task: TaskResponse; exper
 
   const approve = async () => {
     try {
-      await TaskApi.updateStatus(experienceId, task.id, "APPROVED");
+      await TaskApi.updateStatus(projectId, task.id, "APPROVED");
       push("Task approved", "success");
       onChanged();
     } catch (err) {
@@ -148,7 +148,7 @@ function TaskCard({ task, experienceId, onChanged }: { task: TaskResponse; exper
           ) : (
             submissions.map((s) => (
               <div key={s.id} className={clsx("rounded-lg bg-surface-2 p-3 text-sm")}>
-                <p className="font-medium text-ink-0">{s.learnerName}</p>
+                <p className="font-medium text-ink-0">{s.talentName}</p>
                 {s.content && <p className="mt-1 text-ink-1">{s.content}</p>}
                 {s.fileUrl && (
                   <a href={s.fileUrl} target="_blank" rel="noreferrer" className="mt-1 block text-accent-600 hover:underline">

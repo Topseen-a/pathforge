@@ -15,7 +15,7 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<Role>("LEARNER");
+  const [role, setRole] = useState<Role>("TALENT");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -25,7 +25,7 @@ export default function Register() {
     setLoading(true);
     try {
       const session = await register({ fullName, email, password, phoneNumber, role });
-      const home = session.role === "COMPANY" ? "/app/company" : "/app/learner";
+      const home = session.role === "COMPANY" ? "/app/company" : "/app/talent";
       navigate(home, { replace: true });
     } catch (err) {
       setError(extractError(err).message);
@@ -35,18 +35,18 @@ export default function Register() {
   };
 
   return (
-    <AuthLayout title="Create your account" subtitle="Join as a learner to build experience, or a company to host talent.">
+    <AuthLayout title="Create your account" subtitle="Join as a talent to build project, or a company to host talent.">
       <form onSubmit={onSubmit} className="space-y-4">
         {error && <ErrorBanner message={error} />}
         <div className="grid grid-cols-2 gap-3">
           <button
             type="button"
-            onClick={() => setRole("LEARNER")}
+            onClick={() => setRole("TALENT")}
             className={`rounded-xl border px-4 py-3 text-sm font-medium transition-colors ${
-              role === "LEARNER" ? "border-accent-500 bg-accent-500/10 text-accent-600" : "border-surface-border text-ink-2"
+              role === "TALENT" ? "border-accent-500 bg-accent-500/10 text-accent-600" : "border-surface-border text-ink-2"
             }`}
           >
-            I'm a learner
+            I'm a talent
           </button>
           <button
             type="button"

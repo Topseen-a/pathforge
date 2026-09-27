@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface ExperienceRecordRepository extends JpaRepository<ExperienceRecord, UUID> {
 
-    List<ExperienceRecord> findByLearner_Id(UUID learnerId);
+    List<ExperienceRecord> findByTalent_Id(UUID talentId);
 
     Optional<ExperienceRecord> findByEvaluation_Id(UUID evaluationId);
 

@@ -1,7 +1,7 @@
 package com.pathforge.report.model;
 
 import com.pathforge.common.BaseEntity;
-import com.pathforge.experience.model.Experience;
+import com.pathforge.project.model.Project;
 import com.pathforge.user.model.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,8 +38,8 @@ public class Report extends BaseEntity {
     private User reportedUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "experience_id")
-    private Experience experience;
+    @JoinColumn(name = "project_id")
+    private Project project;
 
     @Column(length = 100)
     private String reason;

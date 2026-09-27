@@ -3,8 +3,8 @@ package com.pathforge.workspace.service;
 import com.pathforge.application.model.Application;
 import com.pathforge.common.exception.ResourceNotFoundException;
 import com.pathforge.common.exception.UnauthorizedActionException;
-import com.pathforge.learner.model.LearnerProfile;
-import com.pathforge.learner.repository.LearnerProfileRepository;
+import com.pathforge.talent.model.TalentProfile;
+import com.pathforge.talent.repository.TalentProfileRepository;
 import com.pathforge.workspace.dto.response.WorkspaceResponse;
 import com.pathforge.workspace.model.Workspace;
 import com.pathforge.workspace.repository.WorkspaceRepository;
@@ -21,7 +21,7 @@ import java.util.UUID;
 public class WorkspaceService {
 
     private final WorkspaceRepository workspaceRepository;
-    private final LearnerProfileRepository learnerProfileRepository;
+    private final TalentProfileRepository talentProfileRepository;
 
     /**
      * Called by ApplicationService when a company accepts an application.
@@ -34,18 +34,18 @@ public class WorkspaceService {
         return workspaceRepository.findByApplication_Id(application.getId())
                 .orElseGet(() -> workspaceRepository.saveAndFlush(
                         Workspace.builder()
-                                .experience(application.getExperience())
-                                .learner(application.getLearner())
+                                .project(application.getProject())
+                                .talent(application.getTalent())
                                 .application(application)
                                 .build()
                 ));
     }
 
     public List<WorkspaceResponse> listMyWorkspaces(UUID userId) {
-        LearnerProfile learner = learnerProfileRepository.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Learner profile not found"));
+        TalentProfile talent = talentProfileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Talent profile not found"));
 
-        return workspaceRepository.findByLearner_Id(learner.getId()).stream()
+        return workspaceRepository.findByTalent_Id(talent.getId()).stream()
                 .map(this::toResponse)
                 .toList();
     }
@@ -54,10 +54,10 @@ public class WorkspaceService {
         Workspace workspace = workspaceRepository.findById(workspaceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Workspace not found"));
 
-        boolean isLearner = workspace.getLearner().getUser().getId().equals(userId);
-        boolean isOwningCompany = workspace.getExperience().getCompany().getUser().getId().equals(userId);
+        boolean isTalent = workspace.getTalent().getUser().getId().equals(userId);
+        boolean isOwningCompany = workspace.getProject().getCompany().getUser().getId().equals(userId);
 
-        if (!isLearner && !isOwningCompany) {
+        if (!isTalent && !isOwningCompany) {
             throw new UnauthorizedActionException("You do not have permission to view this workspace");
         }
 
@@ -67,12 +67,12 @@ public class WorkspaceService {
     private WorkspaceResponse toResponse(Workspace workspace) {
         return new WorkspaceResponse(
                 workspace.getId(),
-                workspace.getExperience().getId(),
-                workspace.getExperience().getTitle(),
-                workspace.getExperience().getCompany().getId(),
-                workspace.getExperience().getCompany().getName(),
-                workspace.getLearner().getId(),
-                workspace.getLearner().getUser().getFullName(),
+                workspace.getProject().getId(),
+                workspace.getProject().getTitle(),
+                workspace.getProject().getCompany().getId(),
+                workspace.getProject().getCompany().getName(),
+                workspace.getTalent().getId(),
+                workspace.getTalent().getUser().getFullName(),
                 workspace.getApplication().getId(),
                 workspace.getCreatedAt()
         );

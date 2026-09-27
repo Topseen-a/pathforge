@@ -10,7 +10,7 @@ public record MessageRequest(
         @NotNull(message = "Receiver is required")
         UUID receiverId,
 
-        UUID experienceId,
+        UUID projectId,
 
         @NotBlank(message = "Message content is required")
         String content

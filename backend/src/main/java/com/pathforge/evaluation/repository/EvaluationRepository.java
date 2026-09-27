@@ -9,9 +9,9 @@ import java.util.UUID;
 
 public interface EvaluationRepository extends JpaRepository<Evaluation, UUID> {
 
-    Optional<Evaluation> findByExperience_IdAndLearner_Id(UUID experienceId, UUID learnerId);
+    Optional<Evaluation> findByProject_IdAndTalent_Id(UUID projectId, UUID talentId);
 
-    List<Evaluation> findByLearner_Id(UUID learnerId);
+    List<Evaluation> findByTalent_Id(UUID talentId);
 
-    boolean existsByExperience_IdAndLearner_Id(UUID experienceId, UUID learnerId);
+    boolean existsByProject_IdAndTalent_Id(UUID projectId, UUID talentId);
 }

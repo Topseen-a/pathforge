@@ -1,7 +1,7 @@
 package com.pathforge.messaging.model;
 
 import com.pathforge.common.BaseEntity;
-import com.pathforge.experience.model.Experience;
+import com.pathforge.project.model.Project;
 import com.pathforge.user.model.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,8 +36,8 @@ public class Message extends BaseEntity {
     private User receiver;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "experience_id")
-    private Experience experience;
+    @JoinColumn(name = "project_id")
+    private Project project;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;

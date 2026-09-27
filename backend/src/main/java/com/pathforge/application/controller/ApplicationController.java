@@ -26,22 +26,22 @@ public class ApplicationController {
 
     private final ApplicationService applicationService;
 
-    @PostMapping("/api/v1/experiences/{experienceId}/applications")
+    @PostMapping("/api/v1/projects/{projectId}/applications")
     public ResponseEntity<ApplicationResponse> apply(
             @AuthenticationPrincipal UserPrincipal principal,
-            @PathVariable UUID experienceId,
+            @PathVariable UUID projectId,
             @Valid @RequestBody ApplicationRequest request
     ) {
-        ApplicationResponse response = applicationService.apply(principal.getId(), experienceId, request);
+        ApplicationResponse response = applicationService.apply(principal.getId(), projectId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/api/v1/experiences/{experienceId}/applications")
-    public ResponseEntity<List<ApplicationResponse>> listForExperience(
+    @GetMapping("/api/v1/projects/{projectId}/applications")
+    public ResponseEntity<List<ApplicationResponse>> listForProject(
             @AuthenticationPrincipal UserPrincipal principal,
-            @PathVariable UUID experienceId
+            @PathVariable UUID projectId
     ) {
-        return ResponseEntity.ok(applicationService.listForExperience(principal.getId(), experienceId));
+        return ResponseEntity.ok(applicationService.listForProject(principal.getId(), projectId));
     }
 
     @GetMapping("/api/v1/applications/mine")

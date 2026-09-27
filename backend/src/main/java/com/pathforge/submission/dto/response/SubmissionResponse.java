@@ -7,8 +7,8 @@ public record SubmissionResponse(
         UUID id,
         UUID taskId,
         String taskTitle,
-        UUID learnerId,
-        String learnerName,
+        UUID talentId,
+        String talentName,
         String content,
         String fileUrl,
         OffsetDateTime submittedAt

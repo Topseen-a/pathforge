@@ -54,7 +54,7 @@ export default function CompanyProfile() {
     <div className="mx-auto max-w-2xl">
       <PageHeader
         title="Company profile"
-        description="This is what learners see before applying to your experiences."
+        description="This is what talents see before applying to your projects."
         action={company && <StatusBadge status={company.verificationStatus} />}
       />
       <Card>
@@ -69,7 +69,7 @@ export default function CompanyProfile() {
             <Input label="Website" value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} placeholder="https://..." />
             <Input label="Business registration no." value={form.businessRegistrationNo} onChange={(e) => setForm({ ...form, businessRegistrationNo: e.target.value })} />
           </div>
-          <Textarea label="About" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Tell learners about your company..." />
+          <Textarea label="About" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Tell talents about your company..." />
           <Button type="submit" loading={saving}>
             {exists ? "Save changes" : "Create profile"}
           </Button>

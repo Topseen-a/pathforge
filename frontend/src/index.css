@@ -49,6 +49,18 @@ body,
   height: 100%;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Offsets anchor-scroll targets so they don't land tucked under the
+   landing page's sticky nav. */
+section[id] {
+  scroll-margin-top: 6rem;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--color-surface-0);

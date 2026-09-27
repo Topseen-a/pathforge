@@ -4,8 +4,8 @@ import com.pathforge.common.VerificationStatus;
 import com.pathforge.common.exception.ResourceNotFoundException;
 import com.pathforge.common.exception.UnauthorizedActionException;
 import com.pathforge.evaluation.model.Evaluation;
-import com.pathforge.learner.model.LearnerProfile;
-import com.pathforge.learner.repository.LearnerProfileRepository;
+import com.pathforge.talent.model.TalentProfile;
+import com.pathforge.talent.repository.TalentProfileRepository;
 import com.pathforge.passport.dto.response.ExperienceRecordResponse;
 import com.pathforge.passport.model.ExperienceRecord;
 import com.pathforge.passport.repository.ExperienceRecordRepository;
@@ -23,7 +23,7 @@ import java.util.UUID;
 public class ExperienceRecordService {
 
     private final ExperienceRecordRepository experienceRecordRepository;
-    private final LearnerProfileRepository learnerProfileRepository;
+    private final TalentProfileRepository talentProfileRepository;
 
     /**
      * Called by EvaluationService when a company submits an evaluation.
@@ -37,8 +37,8 @@ public class ExperienceRecordService {
         return experienceRecordRepository.findByEvaluation_Id(evaluation.getId())
                 .orElseGet(() -> experienceRecordRepository.saveAndFlush(
                         ExperienceRecord.builder()
-                                .learner(evaluation.getLearner())
-                                .experience(evaluation.getExperience())
+                                .talent(evaluation.getTalent())
+                                .project(evaluation.getProject())
                                 .evaluation(evaluation)
                                 .verificationStatus(VerificationStatus.VERIFIED)
                                 .verificationCode(generateVerificationCode())
@@ -48,22 +48,22 @@ public class ExperienceRecordService {
     }
 
     public List<ExperienceRecordResponse> getMyPassport(UUID userId) {
-        LearnerProfile learner = learnerProfileRepository.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Learner profile not found"));
+        TalentProfile talent = talentProfileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Talent profile not found"));
 
-        return experienceRecordRepository.findByLearner_Id(learner.getId()).stream()
+        return experienceRecordRepository.findByTalent_Id(talent.getId()).stream()
                 .map(this::toResponse)
                 .toList();
     }
 
     public ExperienceRecordResponse getById(UUID userId, UUID recordId) {
         ExperienceRecord record = experienceRecordRepository.findById(recordId)
-                .orElseThrow(() -> new ResourceNotFoundException("Experience record not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Project record not found"));
 
-        boolean isLearner = record.getLearner().getUser().getId().equals(userId);
-        boolean isOwningCompany = record.getExperience().getCompany().getUser().getId().equals(userId);
+        boolean isTalent = record.getTalent().getUser().getId().equals(userId);
+        boolean isOwningCompany = record.getProject().getCompany().getUser().getId().equals(userId);
 
-        if (!isLearner && !isOwningCompany) {
+        if (!isTalent && !isOwningCompany) {
             throw new UnauthorizedActionException("You do not have permission to view this record");
         }
 
@@ -72,7 +72,7 @@ public class ExperienceRecordService {
 
     /**
      * Public verification lookup — no authentication or ownership check.
-     * Anyone holding the code (e.g. an employer checking a learner's claim)
+     * Anyone holding the code (e.g. an employer checking a talent's claim)
      * can confirm a record's authenticity.
      */
     public ExperienceRecordResponse verifyByCode(String verificationCode) {
@@ -89,11 +89,11 @@ public class ExperienceRecordService {
     private ExperienceRecordResponse toResponse(ExperienceRecord record) {
         return new ExperienceRecordResponse(
                 record.getId(),
-                record.getLearner().getId(),
-                record.getLearner().getUser().getFullName(),
-                record.getExperience().getId(),
-                record.getExperience().getTitle(),
-                record.getExperience().getCompany().getName(),
+                record.getTalent().getId(),
+                record.getTalent().getUser().getFullName(),
+                record.getProject().getId(),
+                record.getProject().getTitle(),
+                record.getProject().getCompany().getName(),
                 record.getVerificationStatus(),
                 record.getVerificationCode(),
                 record.getCompletedAt()

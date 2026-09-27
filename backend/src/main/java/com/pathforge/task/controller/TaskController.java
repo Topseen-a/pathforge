@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/experiences/{experienceId}/tasks")
+@RequestMapping("/api/v1/projects/{projectId}/tasks")
 @RequiredArgsConstructor
 public class TaskController {
 
@@ -31,25 +31,25 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<TaskResponse> createTask(
             @AuthenticationPrincipal UserPrincipal principal,
-            @PathVariable UUID experienceId,
+            @PathVariable UUID projectId,
             @Valid @RequestBody TaskRequest request
     ) {
-        TaskResponse response = taskService.createTask(principal.getId(), experienceId, request);
+        TaskResponse response = taskService.createTask(principal.getId(), projectId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskResponse>> listForExperience(
+    public ResponseEntity<List<TaskResponse>> listForProject(
             @AuthenticationPrincipal UserPrincipal principal,
-            @PathVariable UUID experienceId
+            @PathVariable UUID projectId
     ) {
-        return ResponseEntity.ok(taskService.listForExperience(principal.getId(), experienceId));
+        return ResponseEntity.ok(taskService.listForProject(principal.getId(), projectId));
     }
 
     @PutMapping("/{taskId}")
     public ResponseEntity<TaskResponse> updateTask(
             @AuthenticationPrincipal UserPrincipal principal,
-            @PathVariable UUID experienceId,
+            @PathVariable UUID projectId,
             @PathVariable UUID taskId,
             @Valid @RequestBody TaskRequest request
     ) {
@@ -59,7 +59,7 @@ public class TaskController {
     @PutMapping("/{taskId}/status")
     public ResponseEntity<TaskResponse> updateStatus(
             @AuthenticationPrincipal UserPrincipal principal,
-            @PathVariable UUID experienceId,
+            @PathVariable UUID projectId,
             @PathVariable UUID taskId,
             @Valid @RequestBody TaskStatusUpdateRequest request
     ) {

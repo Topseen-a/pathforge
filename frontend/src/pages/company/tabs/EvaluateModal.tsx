@@ -30,12 +30,12 @@ function RatingInput({ label, value, onChange }: { label: string; value: number;
 }
 
 export default function EvaluateModal({
-  experienceId,
+  projectId,
   application,
   onClose,
   onDone,
 }: {
-  experienceId: string;
+  projectId: string;
   application: ApplicationResponse;
   onClose: () => void;
   onDone: () => void;
@@ -52,7 +52,7 @@ export default function EvaluateModal({
     setSubmitting(true);
     setError("");
     try {
-      await EvaluationApi.create(experienceId, application.learnerId, {
+      await EvaluationApi.create(projectId, application.talentId, {
         professionalismRating,
         skillRating,
         communicationRating,
@@ -67,14 +67,14 @@ export default function EvaluateModal({
   };
 
   return (
-    <Modal title={`Evaluate ${application.learnerName}`} onClose={onClose}>
+    <Modal title={`Evaluate ${application.talentName}`} onClose={onClose}>
       <form onSubmit={onSubmit} className="space-y-4">
         {error && <ErrorBanner message={error} />}
         <RatingInput label="Professionalism" value={professionalismRating} onChange={setProfessionalismRating} />
         <RatingInput label="Skill" value={skillRating} onChange={setSkillRating} />
         <RatingInput label="Communication" value={communicationRating} onChange={setCommunicationRating} />
-        <Textarea label="Feedback (optional)" value={feedback} onChange={(e) => setFeedback(e.target.value)} placeholder="Share feedback for the learner's passport..." />
-        <p className="text-xs text-ink-3">Submitting creates a verified passport record for this learner.</p>
+        <Textarea label="Feedback (optional)" value={feedback} onChange={(e) => setFeedback(e.target.value)} placeholder="Share feedback for the talent's passport..." />
+        <p className="text-xs text-ink-3">Submitting creates a verified passport record for this talent.</p>
         <div className="flex gap-2">
           <Button type="submit" loading={submitting} className="flex-1">
             Submit evaluation

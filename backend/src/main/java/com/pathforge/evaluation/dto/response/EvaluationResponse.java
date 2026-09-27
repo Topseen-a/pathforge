@@ -6,10 +6,10 @@ import java.util.UUID;
 
 public record EvaluationResponse(
         UUID id,
-        UUID experienceId,
-        String experienceTitle,
-        UUID learnerId,
-        String learnerName,
+        UUID projectId,
+        String projectTitle,
+        UUID talentId,
+        String talentName,
         UUID evaluatorId,
         String evaluatorName,
         BigDecimal overallRating,

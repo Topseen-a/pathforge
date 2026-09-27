@@ -1,7 +1,7 @@
 package com.pathforge.submission.model;
 
 import com.pathforge.common.BaseEntity;
-import com.pathforge.learner.model.LearnerProfile;
+import com.pathforge.talent.model.TalentProfile;
 import com.pathforge.task.model.Task;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,8 +32,8 @@ public class Submission extends BaseEntity {
     private Task task;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "learner_id", nullable = false)
-    private LearnerProfile learner;
+    @JoinColumn(name = "talent_id", nullable = false)
+    private TalentProfile talent;
 
     @Column(columnDefinition = "TEXT")
     private String content;

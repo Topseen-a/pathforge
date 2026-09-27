@@ -57,7 +57,7 @@ export default function AdminCompanies() {
           </Button>
         </form>
         <p className="mt-2 text-xs text-ink-3">
-          Tip: company IDs can be found in application/experience details, or the company's own profile response.
+          Tip: company IDs can be found in application/project details, or the company's own profile response.
         </p>
       </Card>
 

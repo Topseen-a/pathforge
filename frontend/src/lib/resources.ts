@@ -5,16 +5,16 @@ import type {
   CompanyResponse,
   EvaluationResponse,
   ExperienceRecordResponse,
-  ExperienceResponse,
-  ExperienceSkillResponse,
-  LearnerProfileResponse,
-  LearnerSkillResponse,
   MessageResponse,
   NotificationResponse,
+  ProjectResponse,
+  ProjectSkillResponse,
   ReportResponse,
   Role,
   SkillResponse,
   SubmissionResponse,
+  TalentProfileResponse,
+  TalentSkillResponse,
   TaskResponse,
   UserResponse,
   VerificationStatus,
@@ -29,15 +29,15 @@ export const AuthApi = {
     api.post<AuthResponse>("/auth/login", body).then((r) => r.data),
 };
 
-// ---------- Learner profile ----------
-export const LearnerProfileApi = {
-  create: (body: Partial<LearnerProfileResponse>) =>
-    api.post<LearnerProfileResponse>("/learners/me/profile", body).then((r) => r.data),
-  update: (body: Partial<LearnerProfileResponse>) =>
-    api.put<LearnerProfileResponse>("/learners/me/profile", body).then((r) => r.data),
-  getMine: () => api.get<LearnerProfileResponse>("/learners/me/profile").then((r) => r.data),
+// ---------- Talent profile ----------
+export const TalentProfileApi = {
+  create: (body: Partial<TalentProfileResponse>) =>
+    api.post<TalentProfileResponse>("/talents/me/profile", body).then((r) => r.data),
+  update: (body: Partial<TalentProfileResponse>) =>
+    api.put<TalentProfileResponse>("/talents/me/profile", body).then((r) => r.data),
+  getMine: () => api.get<TalentProfileResponse>("/talents/me/profile").then((r) => r.data),
   getById: (profileId: string) =>
-    api.get<LearnerProfileResponse>(`/learners/${profileId}/profile`).then((r) => r.data),
+    api.get<TalentProfileResponse>(`/talents/${profileId}/profile`).then((r) => r.data),
 };
 
 // ---------- Company profile ----------
@@ -55,42 +55,42 @@ export const SkillApi = {
     api.post<SkillResponse>("/skills", body).then((r) => r.data),
 };
 
-export const LearnerSkillApi = {
-  listMine: () => api.get<LearnerSkillResponse[]>("/learners/me/skills").then((r) => r.data),
+export const TalentSkillApi = {
+  listMine: () => api.get<TalentSkillResponse[]>("/talents/me/skills").then((r) => r.data),
   add: (body: { skillName: string; category?: string; proficiency?: string }) =>
-    api.post<LearnerSkillResponse>("/learners/me/skills", body).then((r) => r.data),
-  remove: (skillId: string) => api.delete(`/learners/me/skills/${skillId}`).then((r) => r.data),
+    api.post<TalentSkillResponse>("/talents/me/skills", body).then((r) => r.data),
+  remove: (skillId: string) => api.delete(`/talents/me/skills/${skillId}`).then((r) => r.data),
 };
 
-export const ExperienceSkillApi = {
-  list: (experienceId: string) =>
-    api.get<ExperienceSkillResponse[]>(`/experiences/${experienceId}/skills`).then((r) => r.data),
-  add: (experienceId: string, body: { skillName: string; category?: string }) =>
-    api.post<ExperienceSkillResponse>(`/experiences/${experienceId}/skills`, body).then((r) => r.data),
-  remove: (experienceId: string, skillId: string) =>
-    api.delete(`/experiences/${experienceId}/skills/${skillId}`).then((r) => r.data),
+export const ProjectSkillApi = {
+  list: (projectId: string) =>
+    api.get<ProjectSkillResponse[]>(`/projects/${projectId}/skills`).then((r) => r.data),
+  add: (projectId: string, body: { skillName: string; category?: string }) =>
+    api.post<ProjectSkillResponse>(`/projects/${projectId}/skills`, body).then((r) => r.data),
+  remove: (projectId: string, skillId: string) =>
+    api.delete(`/projects/${projectId}/skills/${skillId}`).then((r) => r.data),
 };
 
-// ---------- Experiences ----------
-export const ExperienceApi = {
-  create: (body: Partial<ExperienceResponse>) =>
-    api.post<ExperienceResponse>("/experiences", body).then((r) => r.data),
-  update: (id: string, body: Partial<ExperienceResponse>) =>
-    api.put<ExperienceResponse>(`/experiences/${id}`, body).then((r) => r.data),
-  publish: (id: string) => api.post<ExperienceResponse>(`/experiences/${id}/publish`).then((r) => r.data),
-  close: (id: string) => api.post<ExperienceResponse>(`/experiences/${id}/close`).then((r) => r.data),
-  getById: (id: string) => api.get<ExperienceResponse>(`/experiences/${id}`).then((r) => r.data),
-  listPublished: () => api.get<ExperienceResponse[]>("/experiences").then((r) => r.data),
-  listMine: () => api.get<ExperienceResponse[]>("/experiences/mine").then((r) => r.data),
-  remove: (id: string) => api.delete(`/experiences/${id}`).then((r) => r.data),
+// ---------- Projects ----------
+export const ProjectApi = {
+  create: (body: Partial<ProjectResponse>) =>
+    api.post<ProjectResponse>("/projects", body).then((r) => r.data),
+  update: (id: string, body: Partial<ProjectResponse>) =>
+    api.put<ProjectResponse>(`/projects/${id}`, body).then((r) => r.data),
+  publish: (id: string) => api.post<ProjectResponse>(`/projects/${id}/publish`).then((r) => r.data),
+  close: (id: string) => api.post<ProjectResponse>(`/projects/${id}/close`).then((r) => r.data),
+  getById: (id: string) => api.get<ProjectResponse>(`/projects/${id}`).then((r) => r.data),
+  listPublished: () => api.get<ProjectResponse[]>("/projects").then((r) => r.data),
+  listMine: () => api.get<ProjectResponse[]>("/projects/mine").then((r) => r.data),
+  remove: (id: string) => api.delete(`/projects/${id}`).then((r) => r.data),
 };
 
 // ---------- Applications ----------
 export const ApplicationApi = {
-  apply: (experienceId: string, body: { coverNote?: string }) =>
-    api.post<ApplicationResponse>(`/experiences/${experienceId}/applications`, body).then((r) => r.data),
-  listForExperience: (experienceId: string) =>
-    api.get<ApplicationResponse[]>(`/experiences/${experienceId}/applications`).then((r) => r.data),
+  apply: (projectId: string, body: { coverNote?: string }) =>
+    api.post<ApplicationResponse>(`/projects/${projectId}/applications`, body).then((r) => r.data),
+  listForProject: (projectId: string) =>
+    api.get<ApplicationResponse[]>(`/projects/${projectId}/applications`).then((r) => r.data),
   listMine: () => api.get<ApplicationResponse[]>("/applications/mine").then((r) => r.data),
   getById: (applicationId: string) =>
     api.get<ApplicationResponse>(`/applications/${applicationId}`).then((r) => r.data),
@@ -106,16 +106,16 @@ export const WorkspaceApi = {
 
 // ---------- Tasks ----------
 export const TaskApi = {
-  create: (experienceId: string, body: { title: string; description: string; dueDate?: string }) =>
-    api.post<TaskResponse>(`/experiences/${experienceId}/tasks`, body).then((r) => r.data),
-  update: (experienceId: string, taskId: string, body: Partial<TaskResponse>) =>
-    api.put<TaskResponse>(`/experiences/${experienceId}/tasks/${taskId}`, body).then((r) => r.data),
-  updateStatus: (experienceId: string, taskId: string, status: string) =>
+  create: (projectId: string, body: { title: string; description: string; dueDate?: string }) =>
+    api.post<TaskResponse>(`/projects/${projectId}/tasks`, body).then((r) => r.data),
+  update: (projectId: string, taskId: string, body: Partial<TaskResponse>) =>
+    api.put<TaskResponse>(`/projects/${projectId}/tasks/${taskId}`, body).then((r) => r.data),
+  updateStatus: (projectId: string, taskId: string, status: string) =>
     api
-      .put<TaskResponse>(`/experiences/${experienceId}/tasks/${taskId}/status`, { status })
+      .put<TaskResponse>(`/projects/${projectId}/tasks/${taskId}/status`, { status })
       .then((r) => r.data),
-  listForExperience: (experienceId: string) =>
-    api.get<TaskResponse[]>(`/experiences/${experienceId}/tasks`).then((r) => r.data),
+  listForProject: (projectId: string) =>
+    api.get<TaskResponse[]>(`/projects/${projectId}/tasks`).then((r) => r.data),
 };
 
 // ---------- Submissions ----------
@@ -131,16 +131,16 @@ export const SubmissionApi = {
 // ---------- Evaluations ----------
 export const EvaluationApi = {
   create: (
-    experienceId: string,
-    learnerId: string,
+    projectId: string,
+    talentId: string,
     body: { professionalismRating: number; skillRating: number; communicationRating: number; feedback?: string }
   ) =>
     api
-      .post<EvaluationResponse>(`/experiences/${experienceId}/learners/${learnerId}/evaluation`, body)
+      .post<EvaluationResponse>(`/projects/${projectId}/talents/${talentId}/evaluation`, body)
       .then((r) => r.data),
-  get: (experienceId: string, learnerId: string) =>
+  get: (projectId: string, talentId: string) =>
     api
-      .get<EvaluationResponse>(`/experiences/${experienceId}/learners/${learnerId}/evaluation`)
+      .get<EvaluationResponse>(`/projects/${projectId}/talents/${talentId}/evaluation`)
       .then((r) => r.data),
   listMine: () => api.get<EvaluationResponse[]>("/evaluations/mine").then((r) => r.data),
 };
@@ -155,12 +155,12 @@ export const PassportApi = {
 
 // ---------- Messaging ----------
 export const MessageApi = {
-  send: (body: { receiverId: string; content: string; experienceId?: string }) =>
+  send: (body: { receiverId: string; content: string; projectId?: string }) =>
     api.post<MessageResponse>("/messages", body).then((r) => r.data),
   withUser: (otherUserId: string) =>
     api.get<MessageResponse[]>(`/messages/with/${otherUserId}`).then((r) => r.data),
-  forExperience: (experienceId: string) =>
-    api.get<MessageResponse[]>(`/messages/experience/${experienceId}`).then((r) => r.data),
+  forProject: (projectId: string) =>
+    api.get<MessageResponse[]>(`/messages/project/${projectId}`).then((r) => r.data),
 };
 
 // ---------- Notifications ----------
@@ -173,7 +173,7 @@ export const NotificationApi = {
 
 // ---------- Reports ----------
 export const ReportApi = {
-  file: (body: { reportedUserId?: string; experienceId?: string; reason: string }) =>
+  file: (body: { reportedUserId?: string; projectId?: string; reason: string }) =>
     api.post<ReportResponse>("/reports", body).then((r) => r.data),
   listMine: () => api.get<ReportResponse[]>("/reports/mine").then((r) => r.data),
 };
@@ -184,8 +184,8 @@ export const AdminApi = {
     api
       .put<CompanyResponse>(`/admin/companies/${companyId}/verify`, null, { params: { status } })
       .then((r) => r.data),
-  moderateExperience: (experienceId: string) =>
-    api.put<ExperienceResponse>(`/admin/experiences/${experienceId}/moderate`).then((r) => r.data),
+  moderateProject: (projectId: string) =>
+    api.put<ProjectResponse>(`/admin/projects/${projectId}/moderate`).then((r) => r.data),
   listUsers: () => api.get<UserResponse[]>("/admin/users").then((r) => r.data),
   getUser: (userId: string) => api.get<UserResponse>(`/admin/users/${userId}`).then((r) => r.data),
   suspendUser: (userId: string) => api.put<UserResponse>(`/admin/users/${userId}/suspend`).then((r) => r.data),

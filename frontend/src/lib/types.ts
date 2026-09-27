@@ -1,10 +1,10 @@
 // Shared types mirroring the PathForge Spring Boot backend DTOs.
 
-export type Role = "LEARNER" | "COMPANY" | "ADMIN";
+export type Role = "TALENT" | "COMPANY" | "ADMIN";
 export type UserStatus = "ACTIVE" | "SUSPENDED";
 export type VerificationStatus = "PENDING" | "VERIFIED" | "REJECTED" | "SUSPENDED";
-export type WorkMode = "REMOTE" | "ONSITE" | "HYBRID";
-export type ExperienceStatus = "DRAFT" | "PUBLISHED" | "CLOSED";
+export type WorkMode = "REMOTE" | "PHYSICAL" | "HYBRID";
+export type ProjectStatus = "DRAFT" | "PUBLISHED" | "CLOSED";
 export type ApplicationStatus = "PENDING" | "ACCEPTED" | "REJECTED";
 export type TaskStatus = "TODO" | "IN_PROGRESS" | "SUBMITTED" | "APPROVED" | "COMPLETED";
 export type ReportStatus = "OPEN" | "RESOLVED" | "DISMISSED";
@@ -27,7 +27,7 @@ export interface UserResponse {
   createdAt?: string;
 }
 
-export interface LearnerProfileResponse {
+export interface TalentProfileResponse {
   id: string;
   userId: string;
   fullName: string;
@@ -62,20 +62,20 @@ export interface SkillResponse {
   category?: string;
 }
 
-export interface LearnerSkillResponse {
+export interface TalentSkillResponse {
   skillId: string;
   name: string;
   category?: string;
   proficiency?: string;
 }
 
-export interface ExperienceSkillResponse {
+export interface ProjectSkillResponse {
   skillId: string;
   name: string;
   category?: string;
 }
 
-export interface ExperienceResponse {
+export interface ProjectResponse {
   id: string;
   companyId: string;
   companyName: string;
@@ -86,17 +86,17 @@ export interface ExperienceResponse {
   paid: boolean;
   compensationAmount?: number;
   durationDays?: number;
-  status: ExperienceStatus;
+  status: ProjectStatus;
   createdAt?: string;
   updatedAt?: string;
 }
 
 export interface ApplicationResponse {
   id: string;
-  experienceId: string;
-  experienceTitle: string;
-  learnerId: string;
-  learnerName: string;
+  projectId: string;
+  projectTitle: string;
+  talentId: string;
+  talentName: string;
   status: ApplicationStatus;
   coverNote?: string;
   createdAt?: string;
@@ -105,18 +105,18 @@ export interface ApplicationResponse {
 export interface WorkspaceResponse {
   id: string;
   applicationId: string;
-  experienceId: string;
-  experienceTitle: string;
+  projectId: string;
+  projectTitle: string;
   companyId: string;
   companyName: string;
-  learnerId: string;
-  learnerName: string;
+  talentId: string;
+  talentName: string;
   createdAt?: string;
 }
 
 export interface TaskResponse {
   id: string;
-  experienceId: string;
+  projectId: string;
   title: string;
   description: string;
   status: TaskStatus;
@@ -128,8 +128,8 @@ export interface TaskResponse {
 export interface SubmissionResponse {
   id: string;
   taskId: string;
-  learnerId: string;
-  learnerName: string;
+  talentId: string;
+  talentName: string;
   content?: string;
   fileUrl?: string;
   submittedAt?: string;
@@ -137,10 +137,10 @@ export interface SubmissionResponse {
 
 export interface EvaluationResponse {
   id: string;
-  experienceId: string;
-  experienceTitle: string;
-  learnerId: string;
-  learnerName: string;
+  projectId: string;
+  projectTitle: string;
+  talentId: string;
+  talentName: string;
   evaluatorId: string;
   professionalismRating: number;
   skillRating: number;
@@ -151,11 +151,11 @@ export interface EvaluationResponse {
 
 export interface ExperienceRecordResponse {
   id: string;
-  experienceId: string;
-  experienceTitle: string;
+  projectId: string;
+  projectTitle: string;
   companyName: string;
-  learnerId: string;
-  learnerName: string;
+  talentId: string;
+  talentName: string;
   verificationStatus: VerificationStatus;
   verificationCode: string;
   completedAt?: string;
@@ -167,7 +167,7 @@ export interface MessageResponse {
   senderName: string;
   receiverId: string;
   receiverName: string;
-  experienceId?: string;
+  projectId?: string;
   content: string;
   createdAt?: string;
 }
@@ -185,7 +185,7 @@ export interface ReportResponse {
   reporterId: string;
   reporterName: string;
   reportedUserId?: string;
-  experienceId?: string;
+  projectId?: string;
   reason: string;
   status: ReportStatus;
   createdAt?: string;

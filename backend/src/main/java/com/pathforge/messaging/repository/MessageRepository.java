@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface MessageRepository extends JpaRepository<Message, UUID> {
 
-    List<Message> findByExperience_IdOrderByCreatedAtAsc(UUID experienceId);
+    List<Message> findByProject_IdOrderByCreatedAtAsc(UUID projectId);
 
     @Query("""
             SELECT m FROM Message m

@@ -10,7 +10,7 @@ public interface SubmissionRepository extends JpaRepository<Submission, UUID> {
 
     List<Submission> findByTask_Id(UUID taskId);
 
-    List<Submission> findByLearner_Id(UUID learnerId);
+    List<Submission> findByTalent_Id(UUID talentId);
 
-    List<Submission> findByTask_IdAndLearner_IdOrderBySubmittedAtDesc(UUID taskId, UUID learnerId);
+    List<Submission> findByTask_IdAndTalent_IdOrderBySubmittedAtDesc(UUID taskId, UUID talentId);
 }

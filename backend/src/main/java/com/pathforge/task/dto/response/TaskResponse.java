@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public record TaskResponse(
         UUID id,
-        UUID experienceId,
+        UUID projectId,
         String title,
         String description,
         LocalDate deadline,

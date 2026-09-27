@@ -7,10 +7,10 @@ import java.util.UUID;
 
 public record ExperienceRecordResponse(
         UUID id,
-        UUID learnerId,
-        String learnerName,
-        UUID experienceId,
-        String experienceTitle,
+        UUID talentId,
+        String talentName,
+        UUID projectId,
+        String projectTitle,
         String companyName,
         VerificationStatus verificationStatus,
         String verificationCode,

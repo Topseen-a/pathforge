@@ -9,7 +9,7 @@ public record MessageResponse(
         String senderName,
         UUID receiverId,
         String receiverName,
-        UUID experienceId,
+        UUID projectId,
         String content,
         OffsetDateTime createdAt
 ) {
