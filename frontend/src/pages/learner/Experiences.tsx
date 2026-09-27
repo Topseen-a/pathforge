@@ -47,7 +47,7 @@ export default function LearnerExperiences() {
               key={m}
               onClick={() => setMode(m)}
               className={`rounded-xl border px-3 py-2 text-xs font-medium transition-colors ${
-                mode === m ? "border-accent-500 bg-accent-500/10 text-accent-400" : "border-surface-border text-ink-2 hover:bg-surface-2"
+                mode === m ? "border-accent-500 bg-accent-500/10 text-accent-600" : "border-surface-border text-ink-2 hover:bg-surface-2"
               }`}
             >
               {m === "ALL" ? "All" : m.charAt(0) + m.slice(1).toLowerCase()}

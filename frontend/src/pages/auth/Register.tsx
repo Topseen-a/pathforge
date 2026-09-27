@@ -43,7 +43,7 @@ export default function Register() {
             type="button"
             onClick={() => setRole("LEARNER")}
             className={`rounded-xl border px-4 py-3 text-sm font-medium transition-colors ${
-              role === "LEARNER" ? "border-accent-500 bg-accent-500/10 text-accent-400" : "border-surface-border text-ink-2"
+              role === "LEARNER" ? "border-accent-500 bg-accent-500/10 text-accent-600" : "border-surface-border text-ink-2"
             }`}
           >
             I'm a learner
@@ -52,7 +52,7 @@ export default function Register() {
             type="button"
             onClick={() => setRole("COMPANY")}
             className={`rounded-xl border px-4 py-3 text-sm font-medium transition-colors ${
-              role === "COMPANY" ? "border-accent-500 bg-accent-500/10 text-accent-400" : "border-surface-border text-ink-2"
+              role === "COMPANY" ? "border-accent-500 bg-accent-500/10 text-accent-600" : "border-surface-border text-ink-2"
             }`}
           >
             I'm a company
@@ -68,7 +68,7 @@ export default function Register() {
       </form>
       <p className="mt-6 text-sm text-ink-2">
         Already have an account?{" "}
-        <Link to="/login" className="font-medium text-accent-400 hover:text-accent-300">
+        <Link to="/login" className="font-medium text-accent-600 hover:text-accent-700">
           Sign in
         </Link>
       </p>

@@ -25,7 +25,7 @@ export default function LearnerApplications() {
           title="No applications yet"
           description="Browse open experiences and apply to start building your passport."
           action={
-            <Link to="/app/learner/experiences" className="text-sm font-medium text-accent-400 hover:text-accent-300">
+            <Link to="/app/learner/experiences" className="text-sm font-medium text-accent-600 hover:text-accent-700">
               Browse experiences →
             </Link>
           }

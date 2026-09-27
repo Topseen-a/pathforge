@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Logo } from "@/components/Logo";
 
 export function AuthLayout({ children, title, subtitle }: { children: ReactNode; title: string; subtitle: string }) {
   return (
@@ -6,7 +7,7 @@ export function AuthLayout({ children, title, subtitle }: { children: ReactNode;
       <div className="flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-20">
         <div className="mx-auto w-full max-w-sm">
           <div className="mb-10 flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-accent-500" />
+            <Logo className="h-8 w-8" />
             <span className="text-lg font-semibold">PathForge</span>
           </div>
           <h1 className="text-2xl font-semibold">{title}</h1>

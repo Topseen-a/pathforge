@@ -28,7 +28,7 @@ export default function LearnerWorkspaces() {
           {workspaces.map((w) => (
             <Link key={w.id} to={`/app/learner/workspaces/${w.id}`}>
               <Card className="flex items-start gap-3 transition-colors hover:border-accent-500/40">
-                <div className="rounded-xl bg-accent-500/10 p-2.5 text-accent-400">
+                <div className="rounded-xl bg-accent-500/10 p-2.5 text-accent-600">
                   <FolderKanban size={18} />
                 </div>
                 <div>

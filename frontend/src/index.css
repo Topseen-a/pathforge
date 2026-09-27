@@ -31,7 +31,7 @@
   --color-ink-3: #94a192;
 
   /* Deep forest green — used for dark landing-page sections (hero, CTA bands,
-     testimonials), independent of the light/dark app theme toggle below. */
+     testimonials). The app itself is light-only. */
   --color-forest-bg: #0f2419;
   --color-forest-card: #17301f;
   --color-forest-border: #ffffff1a;
@@ -54,23 +54,6 @@ body {
   background-color: var(--color-surface-0);
   color: var(--color-ink-0);
   -webkit-font-smoothing: antialiased;
-}
-
-/* Dark mode variant, toggled via [data-theme="dark"] on <html> — reuses the
-   same forest/cream brand hues, just inverted, rather than an unrelated palette. */
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --color-surface-0: #0f2419;
-  --color-surface-1: #17301f;
-  --color-surface-2: #1c3825;
-  --color-surface-3: #24432c;
-  --color-surface-4: #305536;
-  --color-surface-border: #ffffff1a;
-
-  --color-ink-0: #f6f1e2;
-  --color-ink-1: #d7d3c2;
-  --color-ink-2: #a9b3a7;
-  --color-ink-3: #798579;
 }
 
 ::-webkit-scrollbar {

@@ -34,7 +34,7 @@ export default function Notifications() {
           {notifications.map((n) => (
             <Card key={n.id} className={clsx("flex items-start justify-between gap-3", !n.read && "border-accent-500/30 bg-accent-500/5")}>
               <div className="flex items-start gap-3">
-                <div className={clsx("mt-0.5 rounded-lg p-2", n.read ? "bg-surface-3 text-ink-3" : "bg-accent-500/15 text-accent-400")}>
+                <div className={clsx("mt-0.5 rounded-lg p-2", n.read ? "bg-surface-3 text-ink-3" : "bg-accent-500/15 text-accent-600")}>
                   <Bell size={14} />
                 </div>
                 <div>

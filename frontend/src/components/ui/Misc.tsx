@@ -7,7 +7,7 @@ export function Card({ className, children }: { className?: string; children: Re
 
 const badgeTones: Record<string, string> = {
   neutral: "bg-surface-3 text-ink-1",
-  accent: "bg-accent-500/15 text-accent-400",
+  accent: "bg-accent-500/15 text-accent-600",
   success: "bg-emerald-500/15 text-emerald-400",
   warning: "bg-amber-500/15 text-amber-400",
   danger: "bg-red-500/15 text-red-400",
@@ -92,7 +92,7 @@ export function StatCard({
         <p className="mt-2 text-2xl font-semibold text-ink-0">{value}</p>
         {hint && <p className="mt-1 text-xs text-ink-3">{hint}</p>}
       </div>
-      {icon && <div className="rounded-xl bg-accent-500/10 p-2.5 text-accent-400">{icon}</div>}
+      {icon && <div className="rounded-xl bg-accent-500/10 p-2.5 text-accent-600">{icon}</div>}
     </Card>
   );
 }

@@ -45,7 +45,7 @@ export default function Login() {
       </form>
       <p className="mt-6 text-sm text-ink-2">
         New to PathForge?{" "}
-        <Link to="/register" className="font-medium text-accent-400 hover:text-accent-300">
+        <Link to="/register" className="font-medium text-accent-600 hover:text-accent-700">
           Create an account
         </Link>
       </p>

@@ -13,16 +13,14 @@ import {
   Flag,
   Building2,
   UserRound,
-  Sun,
-  Moon,
   LogOut,
   Menu,
   X,
 } from "lucide-react";
 import { clsx } from "clsx";
 import { useAuth } from "@/context/AuthContext";
-import { useTheme } from "@/context/ThemeContext";
 import { NotificationApi } from "@/lib/resources";
+import { Logo } from "@/components/Logo";
 
 interface NavItem {
   to: string;
@@ -57,7 +55,6 @@ const adminNav: NavItem[] = [
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
   const { user, logout } = useAuth();
-  const { theme, toggle } = useTheme();
   const navigate = useNavigate();
   const [unread, setUnread] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -92,7 +89,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       {/* Mobile top bar */}
       <div className="flex items-center justify-between border-b border-surface-border px-4 py-3 lg:hidden">
         <div className="flex items-center gap-2">
-          <div className="h-7 w-7 rounded-full bg-accent-500" />
+          <Logo className="h-7 w-7" />
           <span className="font-semibold">PathForge</span>
         </div>
         <button onClick={() => setMobileOpen((o) => !o)} className="rounded-lg p-2 hover:bg-surface-2">
@@ -108,7 +105,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         )}
       >
         <div className="hidden items-center gap-2 px-6 py-6 lg:flex">
-          <div className="h-8 w-8 rounded-full bg-accent-500" />
+          <Logo className="h-8 w-8" />
           <span className="text-lg font-semibold">PathForge</span>
         </div>
 
@@ -122,7 +119,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               className={({ isActive }) =>
                 clsx(
                   "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
-                  isActive ? "bg-accent-500/15 text-accent-400" : "text-ink-2 hover:bg-surface-2 hover:text-ink-0"
+                  isActive ? "bg-accent-500/15 text-accent-600" : "text-ink-2 hover:bg-surface-2 hover:text-ink-0"
                 )
               }
             >
@@ -146,13 +143,6 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               </span>
             )}
           </NavLink>
-          <button
-            onClick={toggle}
-            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-ink-2 hover:bg-surface-2 hover:text-ink-0"
-          >
-            {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
-            {theme === "dark" ? "Light mode" : "Dark mode"}
-          </button>
           <div className="flex items-center gap-3 rounded-xl px-3 py-2">
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-surface-3 text-sm font-semibold">
               {user?.fullName?.[0]?.toUpperCase() ?? "?"}
@@ -166,7 +156,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
             </button>
           </div>
           {user?.role === "ADMIN" && (
-            <div className="flex items-center gap-2 rounded-xl bg-accent-500/10 px-3 py-2 text-xs text-accent-400">
+            <div className="flex items-center gap-2 rounded-xl bg-accent-500/10 px-3 py-2 text-xs text-accent-600">
               <ShieldCheck size={14} /> Admin access
             </div>
           )}

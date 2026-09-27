@@ -7,6 +7,7 @@ import { Card, ErrorBanner, StatusBadge } from "@/components/ui/Misc";
 import { PassportApi } from "@/lib/resources";
 import { extractError } from "@/lib/api";
 import type { ExperienceRecordResponse } from "@/lib/types";
+import { Logo } from "@/components/Logo";
 
 export default function VerifyPassport() {
   const [code, setCode] = useState("");
@@ -33,10 +34,10 @@ export default function VerifyPassport() {
     <div className="min-h-screen bg-surface-0 px-6 py-16 text-ink-0">
       <div className="mx-auto max-w-lg">
         <div className="mb-10 flex items-center gap-2">
-          <div className="h-8 w-8 rounded-full bg-accent-500" />
+          <Logo className="h-8 w-8" />
           <span className="text-lg font-semibold">PathForge</span>
         </div>
-        <div className="mb-2 flex items-center gap-2 text-accent-400">
+        <div className="mb-2 flex items-center gap-2 text-accent-600">
           <ShieldCheck size={20} />
           <span className="text-sm font-medium uppercase tracking-wide">Passport verification</span>
         </div>
@@ -66,7 +67,7 @@ export default function VerifyPassport() {
 
         {record && (
           <Card className="mt-6 space-y-4">
-            <div className="flex items-center gap-2 text-accent-400">
+            <div className="flex items-center gap-2 text-accent-600">
               <CheckCircle2 size={18} />
               <span className="text-sm font-medium">Record verified</span>
             </div>
@@ -96,7 +97,7 @@ export default function VerifyPassport() {
         )}
 
         <p className="mt-10 text-sm text-ink-2">
-          <Link to="/login" className="font-medium text-accent-400 hover:text-accent-300">
+          <Link to="/login" className="font-medium text-accent-600 hover:text-accent-700">
             ← Back to sign in
           </Link>
         </p>

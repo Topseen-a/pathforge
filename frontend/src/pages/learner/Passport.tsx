@@ -35,7 +35,7 @@ export default function LearnerPassport() {
             <Card key={r.id} className="space-y-3">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="rounded-xl bg-accent-500/10 p-2 text-accent-400">
+                  <div className="rounded-xl bg-accent-500/10 p-2 text-accent-600">
                     <Award size={16} />
                   </div>
                   <div>

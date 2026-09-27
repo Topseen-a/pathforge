@@ -130,7 +130,7 @@ function TaskCard({ task, experienceId, onChanged }: { task: TaskResponse; exper
         <StatusBadge status={task.status} />
       </div>
       <div className="flex items-center gap-3 border-t border-surface-border pt-3">
-        <button onClick={toggle} className="text-xs font-medium text-accent-400 hover:text-accent-300">
+        <button onClick={toggle} className="text-xs font-medium text-accent-600 hover:text-accent-700">
           {open ? "Hide submissions" : "View submissions"}
         </button>
         {task.status === "SUBMITTED" && (
@@ -151,7 +151,7 @@ function TaskCard({ task, experienceId, onChanged }: { task: TaskResponse; exper
                 <p className="font-medium text-ink-0">{s.learnerName}</p>
                 {s.content && <p className="mt-1 text-ink-1">{s.content}</p>}
                 {s.fileUrl && (
-                  <a href={s.fileUrl} target="_blank" rel="noreferrer" className="mt-1 block text-accent-400 hover:underline">
+                  <a href={s.fileUrl} target="_blank" rel="noreferrer" className="mt-1 block text-accent-600 hover:underline">
                     {s.fileUrl}
                   </a>
                 )}

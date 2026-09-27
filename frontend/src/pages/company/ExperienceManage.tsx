@@ -85,7 +85,7 @@ export default function ExperienceManage() {
             onClick={() => setTab(t)}
             className={clsx(
               "border-b-2 px-3 py-2.5 text-sm font-medium transition-colors",
-              tab === t ? "border-accent-500 text-accent-400" : "border-transparent text-ink-2 hover:text-ink-0"
+              tab === t ? "border-accent-500 text-accent-600" : "border-transparent text-ink-2 hover:text-ink-0"
             )}
           >
             {t}

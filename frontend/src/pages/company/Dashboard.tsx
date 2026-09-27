@@ -55,7 +55,7 @@ export default function CompanyDashboard() {
       <Card className="mt-8">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-base font-semibold text-ink-0">Your experiences</h2>
-          <Link to="/app/company/experiences" className="text-xs font-medium text-accent-400 hover:text-accent-300">
+          <Link to="/app/company/experiences" className="text-xs font-medium text-accent-600 hover:text-accent-700">
             View all
           </Link>
         </div>

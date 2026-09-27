@@ -1,19 +1,28 @@
 import { useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
+  Award,
   ArrowRight,
   BarChart3,
+  Bell,
   Briefcase,
   CheckCircle2,
   ChevronDown,
+  ClipboardList,
+  FolderKanban,
+  LayoutDashboard,
   Megaphone,
   Menu,
+  MessageSquare,
   Palette,
   PenTool,
   ShieldCheck,
+  UserRound,
   X,
 } from "lucide-react";
 import { clsx } from "clsx";
+import { Card, StatCard, StatusBadge } from "@/components/ui/Misc";
+import { Logo } from "@/components/Logo";
 
 const NAV_LINKS = [
   { href: "#how-it-works", label: "How it works" },
@@ -96,7 +105,7 @@ function Header() {
   return (
     <header className="sticky top-4 z-50 mx-auto flex max-w-6xl items-center justify-between rounded-full border border-surface-border bg-surface-1/90 px-4 py-2.5 shadow-sm backdrop-blur sm:px-6">
       <Link to="/" className="flex items-center gap-2">
-        <div className="h-7 w-7 rounded-full bg-accent-500" />
+        <Logo className="h-7 w-7" />
         <span className="text-base font-semibold text-ink-0">PathForge</span>
       </Link>
 
@@ -114,7 +123,7 @@ function Header() {
         </Link>
         <Link
           to="/register"
-          className="rounded-full bg-accent-500 px-4 py-2 text-sm font-semibold text-ink-0 hover:bg-accent-400"
+          className="rounded-full bg-accent-500 px-4 py-2 text-sm font-semibold text-ink-0 hover:bg-accent-600"
         >
           Get started
         </Link>
@@ -176,6 +185,108 @@ function MockExperienceCard() {
   );
 }
 
+const PREVIEW_NAV = [
+  { label: "Overview", icon: LayoutDashboard, active: true },
+  { label: "Browse Experiences", icon: Briefcase },
+  { label: "My Applications", icon: ClipboardList },
+  { label: "Workspaces", icon: FolderKanban },
+  { label: "Passport", icon: Award },
+  { label: "Messages", icon: MessageSquare },
+  { label: "Profile", icon: UserRound },
+];
+
+const PREVIEW_EXPERIENCES: { title: string; sub: string; status: "PUBLISHED" }[] = [
+  { title: "UI/UX Review", sub: "Lagos Fintech Co · REMOTE", status: "PUBLISHED" },
+  { title: "Sales Data Analysis", sub: "Kaduna Retail Group · HYBRID", status: "PUBLISHED" },
+  { title: "Technical Documentation", sub: "DevWorks · REMOTE", status: "PUBLISHED" },
+];
+
+const PREVIEW_APPLICATIONS: { title: string; status: "ACCEPTED" | "PENDING" }[] = [
+  { title: "Social Media Audit", status: "ACCEPTED" },
+  { title: "Market Research", status: "PENDING" },
+  { title: "Business Process Documentation", status: "PENDING" },
+];
+
+function DashboardPreview() {
+  return (
+    <div className="mx-auto -mt-16 max-w-5xl overflow-hidden rounded-[2rem] border border-surface-border bg-surface-1 shadow-2xl sm:-mt-24">
+      <div className="flex">
+        <aside className="hidden w-56 shrink-0 flex-col border-r border-surface-border p-4 sm:flex">
+          <div className="mb-6 flex items-center gap-2 px-2">
+            <Logo className="h-6 w-6" />
+            <span className="text-sm font-semibold text-ink-0">PathForge</span>
+          </div>
+          <nav className="space-y-1">
+            {PREVIEW_NAV.map((item) => (
+              <div
+                key={item.label}
+                className={clsx(
+                  "flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-medium",
+                  item.active ? "bg-accent-500/20 text-ink-0" : "text-ink-2"
+                )}
+              >
+                <item.icon size={15} />
+                {item.label}
+              </div>
+            ))}
+          </nav>
+          <div className="mt-auto flex items-center gap-2 rounded-xl px-2 py-2 text-ink-2">
+            <Bell size={15} />
+            <span className="text-xs font-medium">Notifications</span>
+          </div>
+        </aside>
+
+        <div className="flex-1 p-5 sm:p-8">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-lg font-semibold text-ink-0">Welcome back, David</p>
+              <p className="text-xs text-ink-2 sm:text-sm">Here's where your PathForge journey stands today.</p>
+            </div>
+            <span className="rounded-full bg-accent-500 px-4 py-2 text-xs font-semibold text-ink-0">
+              Browse experiences
+            </span>
+          </div>
+
+          <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
+            <StatCard label="Applications" value={6} hint="2 pending" icon={<ClipboardList size={16} />} />
+            <StatCard label="Active workspaces" value={3} icon={<FolderKanban size={16} />} />
+            <StatCard label="Passport records" value={5} hint="Verified experiences" icon={<Award size={16} />} />
+            <StatCard label="Open opportunities" value={18} hint="Currently published" icon={<Briefcase size={16} />} />
+          </div>
+
+          <div className="mt-5 grid gap-4 lg:grid-cols-3">
+            <Card className="lg:col-span-2">
+              <p className="mb-3 text-sm font-semibold text-ink-0">Recommended experiences</p>
+              <div className="space-y-2">
+                {PREVIEW_EXPERIENCES.map((e) => (
+                  <div key={e.title} className="flex items-center justify-between rounded-xl border border-surface-border px-3 py-2.5">
+                    <div>
+                      <p className="text-sm font-medium text-ink-0">{e.title}</p>
+                      <p className="text-xs text-ink-3">{e.sub}</p>
+                    </div>
+                    <StatusBadge status={e.status} />
+                  </div>
+                ))}
+              </div>
+            </Card>
+            <Card>
+              <p className="mb-3 text-sm font-semibold text-ink-0">Recent applications</p>
+              <div className="space-y-2.5">
+                {PREVIEW_APPLICATIONS.map((a) => (
+                  <div key={a.title} className="flex items-center justify-between">
+                    <p className="truncate pr-2 text-sm text-ink-1">{a.title}</p>
+                    <StatusBadge status={a.status} />
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Section({ id, className, children }: { id?: string; className?: string; children: ReactNode }) {
   return (
     <section id={id} className={clsx("mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24", className)}>
@@ -216,7 +327,7 @@ export default function Landing() {
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   to="/register"
-                  className="inline-flex items-center gap-2 rounded-full bg-accent-500 px-6 py-3 text-sm font-semibold text-ink-0 hover:bg-accent-400"
+                  className="inline-flex items-center gap-2 rounded-full bg-accent-500 px-6 py-3 text-sm font-semibold text-ink-0 hover:bg-accent-600"
                 >
                   Get started <ArrowRight size={16} />
                 </Link>
@@ -234,6 +345,11 @@ export default function Landing() {
           </div>
         </div>
       </Section>
+
+      {/* Product preview */}
+      <div className="px-4 sm:px-6">
+        <DashboardPreview />
+      </div>
 
       {/* Stats strip */}
       <Section className="py-0">
@@ -396,7 +512,7 @@ export default function Landing() {
       <footer className="border-t border-surface-border">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-8 sm:flex-row sm:px-6">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-full bg-accent-500" />
+            <Logo className="h-6 w-6" />
             <span className="text-sm font-semibold text-ink-0">PathForge</span>
           </div>
           <p className="text-xs text-ink-3">Experience before employment.</p>

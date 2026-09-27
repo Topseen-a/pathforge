@@ -91,7 +91,7 @@ export default function LearnerExperienceDetail() {
       {experience.status !== "PUBLISHED" ? (
         <ErrorBanner message="This experience is not currently accepting applications." />
       ) : applied ? (
-        <Card className="text-center text-sm text-accent-400">Your application has been submitted. Track it under My Applications.</Card>
+        <Card className="text-center text-sm text-accent-600">Your application has been submitted. Track it under My Applications.</Card>
       ) : (
         <Card className="space-y-4">
           <h2 className="text-base font-semibold text-ink-0">Apply for this experience</h2>

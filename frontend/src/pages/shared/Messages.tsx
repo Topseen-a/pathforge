@@ -96,7 +96,7 @@ export default function Messages() {
                   onClick={() => setActive(c)}
                   className={clsx(
                     "w-full rounded-xl px-3 py-2.5 text-left text-sm transition-colors",
-                    active?.key === c.key ? "bg-accent-500/15 text-accent-400" : "text-ink-1 hover:bg-surface-2"
+                    active?.key === c.key ? "bg-accent-500/15 text-accent-600" : "text-ink-1 hover:bg-surface-2"
                   )}
                 >
                   <p className="font-medium">{c.name}</p>
