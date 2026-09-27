@@ -86,13 +86,13 @@ export function StatCard({
   icon?: ReactNode;
 }) {
   return (
-    <Card className="flex items-start justify-between">
-      <div>
+    <Card className="flex items-start justify-between gap-2">
+      <div className="min-w-0">
         <p className="text-xs font-medium uppercase tracking-wide text-ink-2">{label}</p>
-        <p className="mt-2 text-2xl font-semibold text-ink-0">{value}</p>
+        <p className="mt-2 truncate text-2xl font-semibold text-ink-0">{value}</p>
         {hint && <p className="mt-1 text-xs text-ink-3">{hint}</p>}
       </div>
-      {icon && <div className="rounded-xl bg-accent-500/10 p-2.5 text-accent-600">{icon}</div>}
+      {icon && <div className="shrink-0 rounded-xl bg-accent-500/10 p-2.5 text-accent-600">{icon}</div>}
     </Card>
   );
 }

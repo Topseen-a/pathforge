@@ -47,7 +47,7 @@ export default function TalentDashboard() {
         }
       />
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Applications" value={applications.length} hint={`${pending} pending`} icon={<ClipboardList size={18} />} />
         <StatCard label="Active workspaces" value={workspaces.length} icon={<FolderKanban size={18} />} />
         <StatCard label="Passport records" value={passport.length} hint="Verified experiences" icon={<Award size={18} />} />

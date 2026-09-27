@@ -23,7 +23,7 @@ export default function AdminDashboard() {
   return (
     <div>
       <PageHeader title="Admin overview" description="Moderate companies, projects, users, and reports." />
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Total users" value={stats.users} icon={<Users size={18} />} />
         <StatCard label="Published projects" value={stats.projects} icon={<Briefcase size={18} />} />
         <StatCard label="Open reports" value={stats.reports} icon={<Flag size={18} />} />

@@ -45,7 +45,7 @@ export default function CompanyDashboard() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Total projects" value={projects.length} icon={<Briefcase size={18} />} />
         <StatCard label="Published" value={published} icon={<CheckCircle2 size={18} />} />
         <StatCard label="Drafts" value={drafts} icon={<ClipboardList size={18} />} />

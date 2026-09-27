@@ -41,7 +41,7 @@ const STATS: [string, string][] = [
 const STEPS = [
   {
     title: "Discover a project",
-    description: "Browse short, structured projects from verified businesses — filtered by skill, duration, and pay.",
+    description: "Browse short, structured projects from verified businesses filtered by skill, duration, and pay.",
   },
   {
     title: "Apply and get selected",
@@ -64,32 +64,68 @@ const CATEGORIES = [
   { icon: PenTool, label: "Content & Documentation", tone: "bg-surface-3 text-ink-0" },
 ];
 
-const TESTIMONIALS = [
+const TESTIMONIALS: {
+  quote: string;
+  name: string;
+  role: string;
+  avatar: { kind: "initials"; initials: string; bg: string; fg: string } | { kind: "logo" };
+}[] = [
   {
     quote: "PathForge turned my first real project into proof employers actually trust.",
     name: "Chidinma A.",
     role: "Product Design Experience Record",
+    avatar: { kind: "initials", initials: "CA", bg: "bg-accent-500/25", fg: "text-accent-200" },
   },
   {
-    quote: "We needed a social media audit and got a genuinely sharp piece of work back — plus a talent pipeline.",
+    quote: "We needed a social media audit and got a genuinely sharp piece of work back plus a talent pipeline.",
     name: "BrightHub Digital",
     role: "Hiring company",
+    avatar: { kind: "logo" },
   },
   {
     quote: "Three days, one mentor review, and suddenly I had something real to put on my portfolio.",
     name: "David O.",
     role: "Digital Marketing Experience Record",
+    avatar: { kind: "initials", initials: "DO", bg: "bg-forest-ink/15", fg: "text-forest-ink" },
   },
 ];
+
+function BrightHubMark() {
+  return (
+    <svg viewBox="0 0 36 36" className="h-9 w-9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect width="36" height="36" rx="10" fill="#f6f1e2" />
+      <circle cx="18" cy="18" r="4.5" fill="#0f2419" />
+      <g stroke="#0f2419" strokeWidth="2" strokeLinecap="round">
+        <path d="M18 7v4" />
+        <path d="M18 25v4" />
+        <path d="M7 18h4" />
+        <path d="M25 18h4" />
+        <path d="M10.5 10.5l2.8 2.8" />
+        <path d="M22.7 22.7l2.8 2.8" />
+        <path d="M25.5 10.5l-2.8 2.8" />
+        <path d="M13.3 22.7l-2.8 2.8" />
+      </g>
+    </svg>
+  );
+}
+
+function TestimonialAvatar({ avatar }: { avatar: (typeof TESTIMONIALS)[number]["avatar"] }) {
+  if (avatar.kind === "logo") return <BrightHubMark />;
+  return (
+    <div className={clsx("flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold", avatar.bg, avatar.fg)}>
+      {avatar.initials}
+    </div>
+  );
+}
 
 const FAQS = [
   {
     q: "Is PathForge free for talents?",
-    a: "Yes. Talents never pay a subscription to access projects, apply, or build their Experience Passport. Companies pay for hosting and premium tools — not talents.",
+    a: "Yes. Talents never pay a subscription to access projects, apply, or build their Experience Passport. Companies pay for hosting and premium tools, not talents.",
   },
   {
     q: "What is an Experience Passport?",
-    a: "A verified record of practical work you've actually completed — the company, the tasks, the deliverables, your evaluation, and a unique verification code a third party can check.",
+    a: "A verified record of practical work you've actually completed. The company, the tasks, the deliverables, your evaluation, and a unique verification code a third party can check.",
   },
   {
     q: "Who can post projects?",
@@ -97,7 +133,7 @@ const FAQS = [
   },
   {
     q: "Is this the same as an internship or a job board?",
-    a: "No. PathForge is focused specifically on short, structured practical experience — not long-term hiring, recruitment, or freelance marketplaces.",
+    a: "No. PathForge is focused specifically on short, structured practical experience, not long-term hiring, recruitment, or freelance marketplaces.",
   },
 ];
 
@@ -237,7 +273,7 @@ function DashboardPreview() {
           </div>
         </aside>
 
-        <div className="flex-1 p-5 sm:p-8">
+        <div className="min-w-0 flex-1 p-5 sm:p-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-lg font-semibold text-ink-0">Welcome back, David</p>
@@ -248,7 +284,7 @@ function DashboardPreview() {
             </span>
           </div>
 
-          <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
             <StatCard label="Applications" value={6} hint="2 pending" icon={<ClipboardList size={16} />} />
             <StatCard label="Active workspaces" value={3} icon={<FolderKanban size={16} />} />
             <StatCard label="Passport records" value={5} hint="Verified experiences" icon={<Award size={16} />} />
@@ -260,10 +296,10 @@ function DashboardPreview() {
               <p className="mb-3 text-sm font-semibold text-ink-0">Recommended projects</p>
               <div className="space-y-2">
                 {PREVIEW_PROJECTS.map((e) => (
-                  <div key={e.title} className="flex items-center justify-between rounded-xl border border-surface-border px-3 py-2.5">
-                    <div>
-                      <p className="text-sm font-medium text-ink-0">{e.title}</p>
-                      <p className="text-xs text-ink-3">{e.sub}</p>
+                  <div key={e.title} className="flex items-center justify-between gap-2 rounded-xl border border-surface-border px-3 py-2.5">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-ink-0">{e.title}</p>
+                      <p className="truncate text-xs text-ink-3">{e.sub}</p>
                     </div>
                     <StatusBadge status={e.status} />
                   </div>
@@ -301,7 +337,7 @@ function Eyebrow({ children }: { children: ReactNode }) {
 }
 
 export default function Landing() {
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
     <div className="bg-surface-0 text-ink-0">
@@ -314,7 +350,7 @@ export default function Landing() {
         <div className="overflow-hidden rounded-[2.5rem] bg-forest-bg px-6 py-14 text-forest-ink sm:px-12 sm:py-20">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <Reveal>
-              <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tightest sm:text-5xl lg:text-6xl">
+              <h1 className="font-display text-4xl font-extrabold leading-[1.05] tracking-tightest sm:text-5xl lg:text-6xl">
                 Learn a skill.
                 <br />
                 Gain experience.
@@ -359,7 +395,7 @@ export default function Landing() {
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {STATS.map(([num, label], i) => (
             <Reveal key={label} delay={i * 80} className="card p-5 text-center">
-              <p className="text-2xl font-bold text-ink-0 sm:text-3xl">{num}</p>
+              <p className="font-display text-2xl font-bold text-ink-0 sm:text-3xl">{num}</p>
               <p className="mt-1 text-xs text-ink-2 sm:text-sm">{label}</p>
             </Reveal>
           ))}
@@ -371,7 +407,7 @@ export default function Landing() {
         <div className="grid gap-12 lg:grid-cols-2">
           <Reveal>
             <Eyebrow>How it works</Eyebrow>
-            <h2 className="text-3xl font-bold tracking-tightest sm:text-4xl">
+            <h2 className="font-display text-3xl font-bold tracking-tightest sm:text-4xl">
               From "I know the theory" to a verified record of real work
             </h2>
             <p className="mt-4 max-w-md text-ink-2">
@@ -408,11 +444,11 @@ export default function Landing() {
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <Reveal>
             <Eyebrow>For businesses</Eyebrow>
-            <h2 className="text-3xl font-bold tracking-tightest sm:text-4xl">
+            <h2 className="font-display text-3xl font-bold tracking-tightest sm:text-4xl">
               Get real work done. Discover talent early.
             </h2>
             <p className="mt-4 max-w-md text-ink-2">
-              Post a short, well-defined project — a social media audit, a UI/UX review, a data cleanup — without
+              Post a short, well-defined project, a social media audit, a UI/UX review, a data cleanup without
               committing to a full-time hire. Review the work, give feedback, and verify what was delivered.
             </p>
             <ul className="mt-6 space-y-3">
@@ -437,7 +473,7 @@ export default function Landing() {
               <span className="text-sm font-semibold">Company verification</span>
             </div>
             <p className="text-sm text-ink-2">
-              Every company is reviewed before they can publish a project — business details, contact
+              Every company is reviewed before they can publish a project, business details, contact
               information, and representative verification.
             </p>
             <div className="flex items-center gap-3 border-t border-surface-border pt-4">
@@ -452,8 +488,8 @@ export default function Landing() {
       <Section className="rounded-[2.5rem] bg-forest-bg text-forest-ink">
         <Reveal>
           <Eyebrow>What people say</Eyebrow>
-          <h2 className="max-w-lg text-3xl font-bold tracking-tightest sm:text-4xl">
-            Real experience, verified — from both sides of the table
+          <h2 className="font-display max-w-lg text-3xl font-bold tracking-tightest sm:text-4xl">
+            Real experience, verified from both sides of the table
           </h2>
         </Reveal>
         <div className="mt-10 grid gap-4 sm:grid-cols-3">
@@ -461,7 +497,7 @@ export default function Landing() {
             <Reveal key={t.name} delay={i * 100} className="rounded-3xl border border-forest-border bg-forest-card p-6">
               <p className="text-sm leading-relaxed text-forest-ink">"{t.quote}"</p>
               <div className="mt-4 flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-accent-500/25" />
+                <TestimonialAvatar avatar={t.avatar} />
                 <div>
                   <p className="text-sm font-medium">{t.name}</p>
                   <p className="text-xs text-forest-ink-dim">{t.role}</p>
@@ -475,11 +511,11 @@ export default function Landing() {
       {/* Final CTA */}
       <Section>
         <Reveal className="rounded-[2.5rem] bg-accent-200 px-6 py-16 text-center sm:px-12">
-          <h2 className="mx-auto max-w-xl text-3xl font-bold tracking-tightest sm:text-4xl">
+          <h2 className="font-display mx-auto max-w-xl text-3xl font-bold tracking-tightest sm:text-4xl">
             Your next opportunity starts with proof, not promises.
           </h2>
           <p className="mx-auto mt-4 max-w-md text-ink-1">
-            Build your Experience Passport with your first practical project — it's free to start.
+            Build your Experience Passport with your first practical project. It's free to start.
           </p>
           <Link
             to="/register"
@@ -494,22 +530,31 @@ export default function Landing() {
       <Section id="faq">
         <Reveal>
           <Eyebrow>FAQ</Eyebrow>
-          <h2 className="text-3xl font-bold tracking-tightest sm:text-4xl">Answers to common questions</h2>
+          <h2 className="font-display text-3xl font-bold tracking-tightest sm:text-4xl">Answers to common questions</h2>
         </Reveal>
         <div className="mt-8 space-y-3">
           {FAQS.map((f, i) => (
             <Reveal key={f.q} delay={i * 70} className="card overflow-hidden p-0">
               <button
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="flex w-full items-center justify-between px-5 py-4 text-left"
+                className="flex w-full cursor-pointer items-center justify-between px-5 py-4 text-left"
               >
                 <span className="font-medium text-ink-0">{f.q}</span>
                 <ChevronDown
                   size={18}
-                  className={clsx("shrink-0 text-ink-2 transition-transform", openFaq === i && "rotate-180")}
+                  className={clsx("shrink-0 text-ink-2 transition-transform duration-300", openFaq === i && "rotate-180")}
                 />
               </button>
-              {openFaq === i && <p className="px-5 pb-4 text-sm text-ink-2">{f.a}</p>}
+              <div
+                className={clsx(
+                  "grid transition-all duration-300 ease-out",
+                  openFaq === i ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                )}
+              >
+                <div className="overflow-hidden">
+                  <p className="px-5 pb-4 text-sm text-ink-2">{f.a}</p>
+                </div>
+              </div>
             </Reveal>
           ))}
         </div>
