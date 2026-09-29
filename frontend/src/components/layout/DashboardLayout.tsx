@@ -98,7 +98,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen bg-surface-0 text-ink-0 lg:flex">
+    <div className="min-h-screen bg-surface-0 text-ink-0">
       {/* Mobile top bar */}
       <div className="flex items-center justify-between border-b border-surface-border bg-surface-0 px-4 py-3 lg:hidden">
         <div className="flex items-center gap-2">
@@ -122,8 +122,8 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       {/* Sidebar */}
       <aside
         className={clsx(
-          "fixed inset-y-0 left-0 z-50 flex w-72 shrink-0 flex-col border-r border-surface-border bg-surface-1 shadow-2xl transition-transform duration-300 ease-out",
-          "lg:static lg:z-auto lg:w-64 lg:translate-x-0 lg:shadow-none",
+          "fixed inset-y-0 left-0 z-50 flex w-72 shrink-0 flex-col overflow-y-auto border-r border-surface-border bg-surface-1 shadow-2xl transition-transform duration-300 ease-out",
+          "lg:w-64 lg:translate-x-0 lg:shadow-none",
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
@@ -167,8 +167,14 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
             )}
           </NavLink>
           <div className="flex items-center gap-3 rounded-xl px-3 py-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-surface-3 text-sm font-semibold">
-              {user?.fullName?.[0]?.toUpperCase() ?? "?"}
+            <div className="h-9 w-9 shrink-0 overflow-hidden rounded-full bg-surface-3">
+              {user?.avatarUrl ? (
+                <img src={user.avatarUrl} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-sm font-semibold">
+                  {user?.fullName?.[0]?.toUpperCase() ?? "?"}
+                </div>
+              )}
             </div>
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium text-ink-0">{user?.fullName}</p>
@@ -187,7 +193,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 overflow-x-hidden">
+      <main className="overflow-x-hidden lg:pl-64">
         <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
           <PageTransition key={location.pathname}>{children}</PageTransition>
         </div>

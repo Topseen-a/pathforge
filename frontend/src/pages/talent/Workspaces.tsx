@@ -26,8 +26,8 @@ export default function TalentWorkspaces() {
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {workspaces.map((w) => (
-            <Link key={w.id} to={`/app/talent/workspaces/${w.id}`}>
-              <Card className="flex items-start gap-3 transition-colors hover:border-accent-500/40">
+            <Link key={w.id} to={`/app/talent/workspaces/${w.id}`} className="block">
+              <Card className="flex items-start gap-3 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-500/40 hover:shadow-md">
                 <div className="rounded-xl bg-accent-500/10 p-2.5 text-accent-600">
                   <FolderKanban size={18} />
                 </div>

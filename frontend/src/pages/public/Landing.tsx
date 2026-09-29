@@ -26,6 +26,8 @@ import { Logo } from "@/components/Logo";
 import { Reveal } from "@/components/Reveal";
 import { InitialsAvatar } from "@/components/InitialsAvatar";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
+import chidinmaPhoto from "@/assets/chidinma-a.jpg";
+import davidPhoto from "@/assets/david-o.jpg";
 
 const NAV_LINKS = [
   { href: "#how-it-works", label: "How it works" },
@@ -70,13 +72,13 @@ const TESTIMONIALS: {
   quote: string;
   name: string;
   role: string;
-  avatar: { kind: "initials"; initials: string; bg: string; fg: string } | { kind: "logo" };
+  avatar: { kind: "initials"; initials: string; bg: string; fg: string } | { kind: "logo" } | { kind: "photo"; src: string };
 }[] = [
   {
     quote: "PathForge turned my first real project into proof employers actually trust.",
     name: "Chidinma A.",
     role: "Product Design Experience Record",
-    avatar: { kind: "initials", initials: "CA", bg: "bg-accent-500/25", fg: "text-accent-200" },
+    avatar: { kind: "photo", src: chidinmaPhoto },
   },
   {
     quote: "We needed a social media audit and got a genuinely sharp piece of work back plus a talent pipeline.",
@@ -88,7 +90,7 @@ const TESTIMONIALS: {
     quote: "Three days, one mentor review, and suddenly I had something real to put on my portfolio.",
     name: "David O.",
     role: "Digital Marketing Experience Record",
-    avatar: { kind: "initials", initials: "DO", bg: "bg-forest-ink/15", fg: "text-forest-ink" },
+    avatar: { kind: "photo", src: davidPhoto },
   },
 ];
 
@@ -113,6 +115,7 @@ function BrightHubMark() {
 
 function TestimonialAvatar({ avatar }: { avatar: (typeof TESTIMONIALS)[number]["avatar"] }) {
   if (avatar.kind === "logo") return <BrightHubMark />;
+  if (avatar.kind === "photo") return <img src={avatar.src} alt="" className="h-9 w-9 shrink-0 rounded-full object-cover" />;
   return <InitialsAvatar initials={avatar.initials} bg={avatar.bg} fg={avatar.fg} />;
 }
 

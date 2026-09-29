@@ -47,7 +47,7 @@ export default function TalentPassport() {
               </div>
               <button
                 onClick={() => copyCode(r.verificationCode)}
-                className="flex w-full items-center justify-between rounded-lg bg-surface-2 px-3 py-2 text-xs font-mono text-ink-1 hover:bg-surface-3"
+                className="flex w-full cursor-pointer items-center justify-between rounded-lg bg-surface-2 px-3 py-2 text-xs font-mono text-ink-1 hover:bg-surface-3"
               >
                 {r.verificationCode}
                 <Copy size={12} />

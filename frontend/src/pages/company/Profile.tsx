@@ -1,89 +1,23 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { Building2, ExternalLink, Pencil } from "lucide-react";
 import { PageHeader } from "@/components/layout/DashboardLayout";
+import { ChangePasswordCard } from "@/components/ChangePasswordCard";
 import { Button } from "@/components/ui/Button";
-import { Input, PasswordInput, Textarea } from "@/components/ui/Input";
+import { Input, Textarea } from "@/components/ui/Input";
 import { Card, ErrorBanner, PageLoader, StatusBadge } from "@/components/ui/Misc";
-import { AuthApi, CompanyApi } from "@/lib/resources";
+import { CompanyApi } from "@/lib/resources";
 import type { CompanyResponse } from "@/lib/types";
 import { extractError } from "@/lib/api";
 import { useToast } from "@/context/ToastContext";
+import { useAuth } from "@/context/AuthContext";
 
 const MAX_LOGO_BYTES = 1_500_000;
-
-function ChangePasswordCard() {
-  const { push } = useToast();
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const [saving, setSaving] = useState(false);
-
-  const onSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setError("");
-    if (newPassword !== confirmPassword) {
-      setError("New passwords don't match");
-      return;
-    }
-    setSaving(true);
-    try {
-      await AuthApi.changePassword(currentPassword, newPassword);
-      push("Password updated", "success");
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
-    } catch (err) {
-      setError(extractError(err).message);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  return (
-    <Card className="mt-6">
-      <h2 className="mb-4 text-base font-semibold text-ink-0">Change password</h2>
-      {error && (
-        <div className="mb-4">
-          <ErrorBanner message={error} />
-        </div>
-      )}
-      <form onSubmit={onSubmit} className="space-y-4">
-        <PasswordInput
-          label="Current password"
-          required
-          value={currentPassword}
-          onChange={(e) => setCurrentPassword(e.target.value)}
-        />
-        <div className="grid grid-cols-2 gap-4">
-          <PasswordInput
-            label="New password"
-            required
-            minLength={6}
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="At least 6 characters"
-          />
-          <PasswordInput
-            label="Confirm new password"
-            required
-            minLength={6}
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </div>
-        <Button type="submit" variant="outline" loading={saving}>
-          Update password
-        </Button>
-      </form>
-    </Card>
-  );
-}
 
 const emptyForm = { name: "", businessRegistrationNo: "", description: "", website: "", logoUrl: "" };
 
 export default function CompanyProfile() {
   const { push } = useToast();
+  const { setAvatarUrl } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [company, setCompany] = useState<CompanyResponse | null>(null);
   const [exists, setExists] = useState(true);
@@ -143,6 +77,7 @@ export default function CompanyProfile() {
       setCompany(res);
       setExists(true);
       setIsEditing(false);
+      setAvatarUrl(res.logoUrl);
       push("Company profile saved", "success");
     } catch (err) {
       setError(extractError(err).message);
@@ -206,7 +141,7 @@ export default function CompanyProfile() {
               <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={onLogoChange} />
             </div>
             <Input label="Company name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Input label="Website" value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} placeholder="https://..." />
               <Input label="Business registration no." value={form.businessRegistrationNo} onChange={(e) => setForm({ ...form, businessRegistrationNo: e.target.value })} />
             </div>
@@ -241,7 +176,7 @@ export default function CompanyProfile() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 border-t border-surface-border pt-4 text-sm">
+              <div className="grid grid-cols-1 gap-4 border-t border-surface-border pt-4 text-sm sm:grid-cols-2">
                 <div>
                   <p className="text-ink-3">Website</p>
                   {company.website ? (

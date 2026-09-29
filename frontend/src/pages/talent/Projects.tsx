@@ -46,7 +46,7 @@ export default function TalentProjects() {
             <button
               key={m}
               onClick={() => setMode(m)}
-              className={`rounded-xl border px-3 py-2 text-xs font-medium transition-colors ${
+              className={`cursor-pointer rounded-xl border px-3 py-2 text-xs font-medium transition-colors ${
                 mode === m ? "border-accent-500 bg-accent-500/10 text-accent-600" : "border-surface-border text-ink-2 hover:bg-surface-2"
               }`}
             >

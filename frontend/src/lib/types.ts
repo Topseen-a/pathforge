@@ -37,6 +37,7 @@ export interface TalentProfileResponse {
   education?: string;
   interests?: string;
   portfolioUrl?: string;
+  avatarUrl?: string;
   createdAt?: string;
   updatedAt?: string;
 }

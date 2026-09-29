@@ -50,7 +50,7 @@ export default function SkillsTab({ projectId }: { projectId: string }) {
         {skills.map((s) => (
           <span key={s.skillId} className="flex items-center gap-1.5 rounded-full bg-surface-3 px-3 py-1.5 text-xs text-ink-1">
             {s.name}
-            <button onClick={() => remove(s.skillId)} className="text-ink-3 hover:text-red-400">
+            <button onClick={() => remove(s.skillId)} className="cursor-pointer text-ink-3 hover:text-red-400">
               <X size={12} />
             </button>
           </span>

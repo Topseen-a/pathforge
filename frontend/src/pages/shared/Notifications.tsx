@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Bell, CheckCheck } from "lucide-react";
 import { PageHeader } from "@/components/layout/DashboardLayout";
+import { BackButton } from "@/components/BackButton";
 import { Card, EmptyState, PageLoader } from "@/components/ui/Misc";
 import { Button } from "@/components/ui/Button";
 import { NotificationApi } from "@/lib/resources";
@@ -26,6 +27,7 @@ export default function Notifications() {
 
   return (
     <div className="mx-auto max-w-2xl">
+      <BackButton />
       <PageHeader title="Notifications" description="Updates on your applications, tasks, and messages." />
       {notifications.length === 0 ? (
         <EmptyState title="You're all caught up" description="New notifications will show up here." />

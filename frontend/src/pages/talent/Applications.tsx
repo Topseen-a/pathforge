@@ -33,7 +33,7 @@ export default function TalentApplications() {
       ) : (
         <div className="space-y-3">
           {applications.map((a) => (
-            <Card key={a.id} className="flex items-center justify-between">
+            <Card key={a.id} className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm font-medium text-ink-0">{a.projectTitle}</p>
                 <p className="text-xs text-ink-3">Applied {a.createdAt ? new Date(a.createdAt).toLocaleDateString() : ""}</p>
