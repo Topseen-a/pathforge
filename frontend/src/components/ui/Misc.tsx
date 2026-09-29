@@ -88,7 +88,7 @@ export function StatCard({
   return (
     <Card className="flex items-start justify-between gap-2">
       <div className="min-w-0">
-        <p className="text-xs font-medium uppercase tracking-wide text-ink-2">{label}</p>
+        <p className="font-mono text-xs font-medium uppercase tracking-wide text-ink-2">{label}</p>
         <p className="mt-2 truncate text-2xl font-semibold text-ink-0">{value}</p>
         {hint && <p className="mt-1 text-xs text-ink-3">{hint}</p>}
       </div>

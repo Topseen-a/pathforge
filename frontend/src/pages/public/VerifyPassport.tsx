@@ -38,13 +38,13 @@ export default function VerifyPassport() {
         </Link>
         <div className="mb-10 flex items-center gap-2">
           <Logo className="h-8 w-8" />
-          <span className="text-lg font-semibold">PathForge</span>
+          <span className="font-display text-lg font-semibold">PathForge</span>
         </div>
         <div className="mb-2 flex items-center gap-2 text-accent-600">
           <ShieldCheck size={20} />
-          <span className="text-sm font-medium uppercase tracking-wide">Passport verification</span>
+          <span className="font-mono text-sm font-medium uppercase tracking-wide">Passport verification</span>
         </div>
-        <h1 className="text-2xl font-semibold">Verify an experience record</h1>
+        <h1 className="font-display text-2xl font-semibold">Verify an experience record</h1>
         <p className="mt-2 text-sm text-ink-2">
           Enter the verification code printed on a talent's PathForge experience passport to confirm it's genuine.
         </p>

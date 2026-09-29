@@ -90,7 +90,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       <div className="flex items-center justify-between border-b border-surface-border px-4 py-3 lg:hidden">
         <div className="flex items-center gap-2">
           <Logo className="h-7 w-7" />
-          <span className="font-semibold">PathForge</span>
+          <span className="font-display font-semibold">PathForge</span>
         </div>
         <button onClick={() => setMobileOpen((o) => !o)} className="rounded-lg p-2 hover:bg-surface-2">
           {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -106,7 +106,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       >
         <div className="hidden items-center gap-2 px-6 py-6 lg:flex">
           <Logo className="h-8 w-8" />
-          <span className="text-lg font-semibold">PathForge</span>
+          <span className="font-display text-lg font-semibold">PathForge</span>
         </div>
 
         <nav className="flex-1 space-y-1 px-3 py-4">
@@ -175,7 +175,7 @@ export function PageHeader({ title, description, action }: { title: string; desc
   return (
     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h1 className="text-2xl font-semibold text-ink-0">{title}</h1>
+        <h1 className="font-display text-2xl font-semibold text-ink-0">{title}</h1>
         {description && <p className="mt-1 text-sm text-ink-2">{description}</p>}
       </div>
       {action}

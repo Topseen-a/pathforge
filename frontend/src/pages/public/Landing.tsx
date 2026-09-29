@@ -24,6 +24,7 @@ import { clsx } from "clsx";
 import { Card, StatCard, StatusBadge } from "@/components/ui/Misc";
 import { Logo } from "@/components/Logo";
 import { Reveal } from "@/components/Reveal";
+import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 
 const NAV_LINKS = [
   { href: "#how-it-works", label: "How it works" },
@@ -140,22 +141,22 @@ const FAQS = [
 function Header() {
   const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-4 z-50 mx-auto flex max-w-6xl items-center justify-between rounded-full border border-surface-border bg-surface-1/90 px-4 py-2.5 shadow-sm backdrop-blur sm:px-6">
+    <header className="sticky top-4 z-50 mx-auto flex max-w-4xl items-center justify-between rounded-full border border-surface-border bg-surface-1/90 px-4 py-2.5 shadow-sm backdrop-blur sm:px-6">
       <Link to="/" className="flex items-center gap-2">
         <Logo className="h-7 w-7" />
-        <span className="text-base font-semibold text-ink-0">PathForge</span>
+        <span className="font-display text-base font-semibold text-ink-0">PathForge</span>
       </Link>
 
       <nav className="hidden items-center gap-6 md:flex">
         {NAV_LINKS.map((l) => (
-          <a key={l.href} href={l.href} className="text-sm font-medium text-ink-2 hover:text-ink-0">
+          <a key={l.href} href={l.href} className="font-display text-sm font-bold text-ink-2 hover:text-ink-0">
             {l.label}
           </a>
         ))}
       </nav>
 
       <div className="hidden items-center gap-2 md:flex">
-        <Link to="/login" className="rounded-full px-4 py-2 text-sm font-medium text-ink-1 hover:text-ink-0">
+        <Link to="/login" className="font-display rounded-full px-4 py-2 text-sm font-bold text-ink-1 hover:text-ink-0">
           Log in
         </Link>
         <Link
@@ -177,13 +178,13 @@ function Header() {
               key={l.href}
               href={l.href}
               onClick={() => setOpen(false)}
-              className="block rounded-xl px-3 py-2 text-sm font-medium text-ink-1 hover:bg-surface-2"
+              className="font-display block rounded-xl px-3 py-2 text-sm font-bold text-ink-1 hover:bg-surface-2"
             >
               {l.label}
             </a>
           ))}
           <div className="flex gap-2 pt-2">
-            <Link to="/login" className="flex-1 rounded-full border border-surface-border px-4 py-2 text-center text-sm font-medium text-ink-0">
+            <Link to="/login" className="font-display flex-1 rounded-full border border-surface-border px-4 py-2 text-center text-sm font-bold text-ink-0">
               Log in
             </Link>
             <Link to="/register" className="flex-1 rounded-full bg-accent-500 px-4 py-2 text-center text-sm font-semibold text-ink-0">
@@ -251,7 +252,7 @@ function DashboardPreview() {
         <aside className="hidden w-56 shrink-0 flex-col border-r border-surface-border p-4 sm:flex">
           <div className="mb-6 flex items-center gap-2 px-2">
             <Logo className="h-6 w-6" />
-            <span className="text-sm font-semibold text-ink-0">PathForge</span>
+            <span className="font-display text-sm font-semibold text-ink-0">PathForge</span>
           </div>
           <nav className="space-y-1">
             {PREVIEW_NAV.map((item) => (
@@ -276,7 +277,7 @@ function DashboardPreview() {
         <div className="min-w-0 flex-1 p-5 sm:p-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-lg font-semibold text-ink-0">Welcome back, David</p>
+              <p className="font-display text-lg font-semibold text-ink-0">Welcome back, David</p>
               <p className="text-xs text-ink-2 sm:text-sm">Here's where your PathForge journey stands today.</p>
             </div>
             <span className="rounded-full bg-accent-500 px-4 py-2 text-xs font-semibold text-ink-0">
@@ -333,10 +334,11 @@ function Section({ id, className, children }: { id?: string; className?: string;
 }
 
 function Eyebrow({ children }: { children: ReactNode }) {
-  return <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-accent-600">{children}</p>;
+  return <p className="mb-3 font-mono text-xs font-semibold uppercase tracking-wide text-accent-600">{children}</p>;
 }
 
 export default function Landing() {
+  useSmoothScroll();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
@@ -565,7 +567,7 @@ export default function Landing() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-8 sm:flex-row sm:px-6">
           <div className="flex items-center gap-2">
             <Logo className="h-6 w-6" />
-            <span className="text-sm font-semibold text-ink-0">PathForge</span>
+            <span className="font-display text-sm font-semibold text-ink-0">PathForge</span>
           </div>
           <p className="text-xs text-ink-3">Experience before employment.</p>
           <Link to="/verify" className="text-xs font-medium text-ink-2 hover:text-ink-0">

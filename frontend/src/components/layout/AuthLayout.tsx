@@ -14,9 +14,9 @@ export function AuthLayout({ children, title, subtitle }: { children: ReactNode;
           </Link>
           <div className="mb-10 flex items-center gap-2">
             <Logo className="h-8 w-8" />
-            <span className="text-lg font-semibold">PathForge</span>
+            <span className="font-display text-lg font-semibold">PathForge</span>
           </div>
-          <h1 className="text-2xl font-semibold">{title}</h1>
+          <h1 className="font-display text-2xl font-semibold">{title}</h1>
           <p className="mt-2 text-sm text-ink-2">{subtitle}</p>
           <div className="mt-8">{children}</div>
         </Reveal>
@@ -27,7 +27,7 @@ export function AuthLayout({ children, title, subtitle }: { children: ReactNode;
           <div />
           <Reveal delay={150} className="space-y-6">
             <div className="max-w-sm space-y-4 rounded-3xl border border-forest-border bg-forest-card p-6">
-              <p className="text-xs font-medium uppercase tracking-wide text-accent-400">Verified passport</p>
+              <p className="font-mono text-xs font-medium uppercase tracking-wide text-accent-400">Verified passport</p>
               <p className="text-lg font-medium text-forest-ink">
                 "PathForge turned my first real project into proof employers actually trust."
               </p>
