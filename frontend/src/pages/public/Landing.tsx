@@ -24,6 +24,7 @@ import { clsx } from "clsx";
 import { Card, StatCard, StatusBadge } from "@/components/ui/Misc";
 import { Logo } from "@/components/Logo";
 import { Reveal } from "@/components/Reveal";
+import { InitialsAvatar } from "@/components/InitialsAvatar";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 
 const NAV_LINKS = [
@@ -112,11 +113,7 @@ function BrightHubMark() {
 
 function TestimonialAvatar({ avatar }: { avatar: (typeof TESTIMONIALS)[number]["avatar"] }) {
   if (avatar.kind === "logo") return <BrightHubMark />;
-  return (
-    <div className={clsx("flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold", avatar.bg, avatar.fg)}>
-      {avatar.initials}
-    </div>
-  );
+  return <InitialsAvatar initials={avatar.initials} bg={avatar.bg} fg={avatar.fg} />;
 }
 
 const FAQS = [

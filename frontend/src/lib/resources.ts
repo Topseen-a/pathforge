@@ -27,6 +27,9 @@ export const AuthApi = {
     api.post<AuthResponse>("/auth/register", body).then((r) => r.data),
   login: (body: { email: string; password: string }) =>
     api.post<AuthResponse>("/auth/login", body).then((r) => r.data),
+  forgotPassword: (email: string) => api.post<void>("/auth/forgot-password", { email }).then((r) => r.data),
+  resetPassword: (token: string, newPassword: string) =>
+    api.post<void>("/auth/reset-password", { token, newPassword }).then((r) => r.data),
 };
 
 // ---------- Talent profile ----------

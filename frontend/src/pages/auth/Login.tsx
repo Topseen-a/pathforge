@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthLayout } from "@/components/layout/AuthLayout";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Input, PasswordInput } from "@/components/ui/Input";
 import { ErrorBanner } from "@/components/ui/Misc";
 import { useAuth } from "@/context/AuthContext";
 import { extractError } from "@/lib/api";
@@ -38,7 +38,12 @@ export default function Login() {
       <form onSubmit={onSubmit} className="space-y-4">
         {error && <ErrorBanner message={error} />}
         <Input label="Email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
-        <Input label="Password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
+        <div>
+          <PasswordInput label="Password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
+          <Link to="/forgot-password" className="mt-1.5 inline-block text-xs font-medium text-accent-600 hover:text-accent-700">
+            Forgot password?
+          </Link>
+        </div>
         <Button type="submit" className="w-full" loading={loading}>
           Sign in
         </Button>

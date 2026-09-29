@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Reveal } from "@/components/Reveal";
+import { InitialsAvatar } from "@/components/InitialsAvatar";
 
 export function AuthLayout({ children, title, subtitle }: { children: ReactNode; title: string; subtitle: string }) {
   return (
@@ -32,7 +33,7 @@ export function AuthLayout({ children, title, subtitle }: { children: ReactNode;
                 "PathForge turned my first real project into proof employers actually trust."
               </p>
               <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-accent-500/25" />
+                <InitialsAvatar initials="CA" />
                 <div>
                   <p className="text-sm font-medium text-forest-ink">Chidinma A.</p>
                   <p className="text-xs text-forest-ink-dim">Product Design Experience Record</p>

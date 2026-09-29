@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthLayout } from "@/components/layout/AuthLayout";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Input, PasswordInput } from "@/components/ui/Input";
 import { ErrorBanner } from "@/components/ui/Misc";
 import { useAuth } from "@/context/AuthContext";
 import { extractError } from "@/lib/api";
@@ -42,7 +42,7 @@ export default function Register() {
           <button
             type="button"
             onClick={() => setRole("TALENT")}
-            className={`rounded-xl border px-4 py-3 text-sm font-medium transition-colors ${
+            className={`cursor-pointer rounded-xl border px-4 py-3 text-sm font-medium transition-colors ${
               role === "TALENT" ? "border-accent-500 bg-accent-500/10 text-accent-600" : "border-surface-border text-ink-2"
             }`}
           >
@@ -51,7 +51,7 @@ export default function Register() {
           <button
             type="button"
             onClick={() => setRole("COMPANY")}
-            className={`rounded-xl border px-4 py-3 text-sm font-medium transition-colors ${
+            className={`cursor-pointer rounded-xl border px-4 py-3 text-sm font-medium transition-colors ${
               role === "COMPANY" ? "border-accent-500 bg-accent-500/10 text-accent-600" : "border-surface-border text-ink-2"
             }`}
           >
@@ -61,7 +61,7 @@ export default function Register() {
         <Input label="Full name" required value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Jane Doe" />
         <Input label="Email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
         <Input label="Phone number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="+234..." />
-        <Input label="Password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="At least 6 characters" />
+        <PasswordInput label="Password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="At least 6 characters" />
         <Button type="submit" className="w-full" loading={loading}>
           Create account
         </Button>

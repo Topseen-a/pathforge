@@ -1,4 +1,5 @@
-import { type InputHTMLAttributes, type TextareaHTMLAttributes, type SelectHTMLAttributes, forwardRef } from "react";
+import { type InputHTMLAttributes, type TextareaHTMLAttributes, type SelectHTMLAttributes, forwardRef, useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { clsx } from "clsx";
 
 interface FieldWrapProps {
@@ -24,6 +25,39 @@ export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputE
   }
 );
 Input.displayName = "Input";
+
+export const PasswordInput = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement> & FieldWrapProps>(
+  ({ label, error, hint, className, id, ...rest }, ref) => {
+    const [visible, setVisible] = useState(false);
+    const inputId = id || rest.name;
+    return (
+      <label className="block space-y-1.5" htmlFor={inputId}>
+        {label && <span className="text-xs font-medium text-ink-1">{label}</span>}
+        <div className="relative">
+          <input
+            ref={ref}
+            id={inputId}
+            type={visible ? "text" : "password"}
+            className={clsx(baseFieldClass, "pr-10", error && "border-red-500/60", className)}
+            {...rest}
+          />
+          <button
+            type="button"
+            onClick={() => setVisible((v) => !v)}
+            tabIndex={-1}
+            aria-label={visible ? "Hide password" : "Show password"}
+            className="absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 text-ink-3 hover:text-ink-0"
+          >
+            {visible ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        </div>
+        {hint && !error && <span className="text-xs text-ink-3">{hint}</span>}
+        {error && <span className="text-xs text-red-400">{error}</span>}
+      </label>
+    );
+  }
+);
+PasswordInput.displayName = "PasswordInput";
 
 export const Textarea = forwardRef<
   HTMLTextAreaElement,
