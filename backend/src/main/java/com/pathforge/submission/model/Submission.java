@@ -38,7 +38,7 @@ public class Submission extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "file_url", length = 255)
+    @Column(name = "file_url", columnDefinition = "TEXT")
     private String fileUrl;
 
     @CreationTimestamp

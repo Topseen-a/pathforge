@@ -2,6 +2,7 @@ package com.pathforge.messaging.service;
 
 import com.pathforge.common.exception.ResourceNotFoundException;
 import com.pathforge.common.exception.UnauthorizedActionException;
+import com.pathforge.notification.service.NotificationService;
 import com.pathforge.project.model.Project;
 import com.pathforge.project.repository.ProjectRepository;
 import com.pathforge.talent.repository.TalentProfileRepository;
@@ -29,6 +30,7 @@ public class MessageService {
     private final ProjectRepository projectRepository;
     private final WorkspaceRepository workspaceRepository;
     private final TalentProfileRepository talentProfileRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public MessageResponse sendMessage(UUID userId, MessageRequest request) {
@@ -52,6 +54,12 @@ public class MessageService {
                 .build();
 
         message = messageRepository.saveAndFlush(message);
+
+        notificationService.notify(
+                receiver.getId(),
+                "NEW_MESSAGE",
+                sender.getFullName() + " sent you a message"
+        );
 
         return toResponse(message);
     }

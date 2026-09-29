@@ -34,6 +34,11 @@ public class AdminController {
     private final UserService userService;
     private final ReportService reportService;
 
+    @GetMapping("/companies")
+    public ResponseEntity<List<CompanyResponse>> listCompanies() {
+        return ResponseEntity.ok(companyService.listAllCompanies());
+    }
+
     @PutMapping("/companies/{companyId}/verify")
     public ResponseEntity<CompanyResponse> verifyCompany(
             @PathVariable UUID companyId,

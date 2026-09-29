@@ -60,6 +60,12 @@ public class ApplicationService {
 
         application = applicationRepository.saveAndFlush(application);
 
+        notificationService.notify(
+                project.getCompany().getUser().getId(),
+                "NEW_APPLICATION",
+                talent.getUser().getFullName() + " applied to \"" + project.getTitle() + "\""
+        );
+
         return toResponse(application);
     }
 

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -57,6 +58,17 @@ public class CompanyService {
                 .orElseThrow(() -> new ResourceNotFoundException("Company profile not found"));
 
         return toResponse(company, company.getUser());
+    }
+
+    /**
+     * Admin-only listing, newest first, so a reviewer can find recently
+     * registered (typically still PENDING) companies without already
+     * knowing a company's ID.
+     */
+    public List<CompanyResponse> listAllCompanies() {
+        return companyRepository.findAllByOrderByCreatedAtDesc().stream()
+                .map(c -> toResponse(c, c.getUser()))
+                .toList();
     }
 
     public CompanyResponse getById(UUID companyId) {
