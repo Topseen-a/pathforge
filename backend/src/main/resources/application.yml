@@ -24,10 +24,28 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
 
+  mail:
+    host: ${MAIL_HOST:}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
 app:
   jwt:
     secret: ${JWT_SECRET:change-this-to-a-long-random-secret-key-in-production}
     expiration-ms: 86400000   # 24 hours
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
+  password-reset:
+    token-expiry-minutes: 60
 
 springdoc:
   swagger-ui:

@@ -1,5 +1,5 @@
-import { type InputHTMLAttributes, type TextareaHTMLAttributes, type SelectHTMLAttributes, forwardRef, useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { type InputHTMLAttributes, type TextareaHTMLAttributes, forwardRef, useEffect, useRef, useState } from "react";
+import { Check, ChevronDown, Eye, EyeOff } from "lucide-react";
 import { clsx } from "clsx";
 
 interface FieldWrapProps {
@@ -19,7 +19,7 @@ export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputE
         {label && <span className="text-xs font-medium text-ink-1">{label}</span>}
         <input ref={ref} id={inputId} className={clsx(baseFieldClass, error && "border-red-500/60", className)} {...rest} />
         {hint && !error && <span className="text-xs text-ink-3">{hint}</span>}
-        {error && <span className="text-xs text-red-400">{error}</span>}
+        {error && <span className="text-xs text-red-600">{error}</span>}
       </label>
     );
   }
@@ -52,7 +52,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, InputHTMLAttributes<HT
           </button>
         </div>
         {hint && !error && <span className="text-xs text-ink-3">{hint}</span>}
-        {error && <span className="text-xs text-red-400">{error}</span>}
+        {error && <span className="text-xs text-red-600">{error}</span>}
       </label>
     );
   }
@@ -69,26 +69,87 @@ export const Textarea = forwardRef<
       {label && <span className="text-xs font-medium text-ink-1">{label}</span>}
       <textarea ref={ref} id={inputId} className={clsx(baseFieldClass, "min-h-[100px] resize-y", error && "border-red-500/60", className)} {...rest} />
       {hint && !error && <span className="text-xs text-ink-3">{hint}</span>}
-      {error && <span className="text-xs text-red-400">{error}</span>}
+      {error && <span className="text-xs text-red-600">{error}</span>}
     </label>
   );
 });
 Textarea.displayName = "Textarea";
 
-export const Select = forwardRef<
-  HTMLSelectElement,
-  SelectHTMLAttributes<HTMLSelectElement> & FieldWrapProps
->(({ label, error, hint, className, id, children, ...rest }, ref) => {
-  const inputId = id || rest.name;
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
+interface SelectProps extends FieldWrapProps {
+  value: string;
+  onChange: (value: string) => void;
+  options: SelectOption[];
+  placeholder?: string;
+  className?: string;
+}
+
+export function Select({ label, error, hint, value, onChange, options, placeholder, className }: SelectProps) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const selected = options.find((o) => o.value === value);
+
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (e: MouseEvent) => {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false);
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
   return (
-    <label className="block space-y-1.5" htmlFor={inputId}>
+    <div className="block space-y-1.5" ref={rootRef}>
       {label && <span className="text-xs font-medium text-ink-1">{label}</span>}
-      <select ref={ref} id={inputId} className={clsx(baseFieldClass, error && "border-red-500/60", className)} {...rest}>
-        {children}
-      </select>
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          className={clsx(
+            baseFieldClass,
+            "flex cursor-pointer items-center justify-between text-left hover:border-ink-3/50",
+            error && "border-red-500/60",
+            className
+          )}
+        >
+          <span className={selected ? "text-ink-0" : "text-ink-3"}>{selected?.label ?? placeholder ?? "Select..."}</span>
+          <ChevronDown size={16} className={clsx("shrink-0 text-ink-3 transition-transform duration-200", open && "rotate-180")} />
+        </button>
+        {open && (
+          <div className="absolute z-20 mt-1.5 w-full overflow-hidden rounded-2xl border border-surface-border bg-surface-1 p-1.5 shadow-lg">
+            {options.map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => {
+                  onChange(opt.value);
+                  setOpen(false);
+                }}
+                className={clsx(
+                  "flex w-full cursor-pointer items-center justify-between rounded-xl px-3 py-2 text-left text-sm transition-colors hover:bg-surface-3",
+                  opt.value === value ? "font-medium text-accent-600" : "text-ink-1"
+                )}
+              >
+                {opt.label}
+                {opt.value === value && <Check size={14} />}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
       {hint && !error && <span className="text-xs text-ink-3">{hint}</span>}
-      {error && <span className="text-xs text-red-400">{error}</span>}
-    </label>
+      {error && <span className="text-xs text-red-600">{error}</span>}
+    </div>
   );
-});
-Select.displayName = "Select";
+}

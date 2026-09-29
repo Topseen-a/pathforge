@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PageHeader } from "@/components/layout/DashboardLayout";
+import { BackButton } from "@/components/BackButton";
 import { Button } from "@/components/ui/Button";
 import { Input, Select, Textarea } from "@/components/ui/Input";
 import { Card, ErrorBanner, PageLoader } from "@/components/ui/Misc";
@@ -73,6 +74,7 @@ export default function ProjectForm() {
 
   return (
     <div className="mx-auto max-w-2xl">
+      <BackButton />
       <PageHeader title={isEdit ? "Edit project" : "Post a new project"} description="Describe the work experience you're offering talents." />
       <Card>
         {error && (
@@ -90,11 +92,16 @@ export default function ProjectForm() {
             placeholder="What will the talent do, and what will they learn?"
           />
           <div className="grid grid-cols-2 gap-4">
-            <Select label="Work mode" value={form.workMode} onChange={(e) => setForm({ ...form, workMode: e.target.value as WorkMode })}>
-              <option value="REMOTE">Remote</option>
-              <option value="PHYSICAL">Onsite</option>
-              <option value="HYBRID">Hybrid</option>
-            </Select>
+            <Select
+              label="Work mode"
+              value={form.workMode}
+              onChange={(v) => setForm({ ...form, workMode: v as WorkMode })}
+              options={[
+                { value: "REMOTE", label: "Remote" },
+                { value: "PHYSICAL", label: "Onsite" },
+                { value: "HYBRID", label: "Hybrid" },
+              ]}
+            />
             <Input label="Location" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="Lagos, Nigeria" />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -105,8 +112,13 @@ export default function ProjectForm() {
               value={form.durationDays}
               onChange={(e) => setForm({ ...form, durationDays: e.target.value })}
             />
-            <label className="flex items-center gap-2 pt-6 text-sm text-ink-1">
-              <input type="checkbox" checked={form.paid} onChange={(e) => setForm({ ...form, paid: e.target.checked })} className="h-4 w-4 rounded border-surface-border accent-accent-500" />
+            <label className="flex cursor-pointer items-center gap-2 pt-6 text-sm text-ink-1">
+              <input
+                type="checkbox"
+                checked={form.paid}
+                onChange={(e) => setForm({ ...form, paid: e.target.checked })}
+                className="h-4 w-4 cursor-pointer rounded border-surface-border accent-accent-500"
+              />
               This project is paid
             </label>
           </div>

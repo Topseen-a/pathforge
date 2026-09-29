@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { PageHeader } from "@/components/layout/DashboardLayout";
+import { BackButton } from "@/components/BackButton";
 import { Button } from "@/components/ui/Button";
 import { Card, ErrorBanner, PageLoader, StatusBadge } from "@/components/ui/Misc";
 import { ProjectApi } from "@/lib/resources";
@@ -66,6 +67,7 @@ export default function ProjectManage() {
 
   return (
     <div>
+      <BackButton />
       <PageHeader
         title={project.title}
         description={`${project.workMode} · ${project.paid ? "Paid" : "Unpaid"}`}
@@ -84,7 +86,7 @@ export default function ProjectManage() {
             key={t}
             onClick={() => setTab(t)}
             className={clsx(
-              "border-b-2 px-3 py-2.5 text-sm font-medium transition-colors",
+              "cursor-pointer border-b-2 px-3 py-2.5 text-sm font-medium transition-colors",
               tab === t ? "border-accent-500 text-accent-600" : "border-transparent text-ink-2 hover:text-ink-0"
             )}
           >

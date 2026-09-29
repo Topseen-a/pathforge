@@ -8,10 +8,10 @@ export function Card({ className, children }: { className?: string; children: Re
 const badgeTones: Record<string, string> = {
   neutral: "bg-surface-3 text-ink-1",
   accent: "bg-accent-500/15 text-accent-600",
-  success: "bg-emerald-500/15 text-emerald-400",
-  warning: "bg-amber-500/15 text-amber-400",
-  danger: "bg-red-500/15 text-red-400",
-  info: "bg-sky-500/15 text-sky-400",
+  success: "bg-emerald-500/15 text-emerald-700",
+  warning: "bg-amber-500/15 text-amber-700",
+  danger: "bg-red-500/15 text-red-700",
+  info: "bg-sky-500/15 text-sky-700",
 };
 
 export function Badge({ tone = "neutral", children }: { tone?: keyof typeof badgeTones; children: ReactNode }) {
@@ -70,7 +70,7 @@ export function PageLoader() {
 export function ErrorBanner({ message }: { message: string }) {
   if (!message) return null;
   return (
-    <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">{message}</div>
+    <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700">{message}</div>
   );
 }
 

@@ -40,7 +40,7 @@ export default function CompanyDashboard() {
       />
 
       {company && company.verificationStatus !== "VERIFIED" && (
-        <div className="mb-6 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-400">
+        <div className="mb-6 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-700">
           Your company is {company.verificationStatus.toLowerCase()}. You'll need to be verified by an admin before you can publish projects.
         </div>
       )}

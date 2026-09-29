@@ -44,6 +44,7 @@ public class CompanyService {
                 .description(request.description())
                 .website(request.website())
                 .businessRegistrationNo(request.businessRegistrationNo())
+                .logoUrl(request.logoUrl())
                 .build();
 
         company = companyRepository.saveAndFlush(company);
@@ -74,6 +75,7 @@ public class CompanyService {
         company.setDescription(request.description());
         company.setWebsite(request.website());
         company.setBusinessRegistrationNo(request.businessRegistrationNo());
+        company.setLogoUrl(request.logoUrl());
 
         company = companyRepository.saveAndFlush(company);
 
@@ -113,6 +115,7 @@ public class CompanyService {
                 company.getDescription(),
                 company.getWebsite(),
                 company.getBusinessRegistrationNo(),
+                company.getLogoUrl(),
                 company.getVerificationStatus(),
                 company.getVerifiedAt(),
                 company.getCreatedAt(),

@@ -61,8 +61,8 @@ export default function TalentProjects() {
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {filtered.map((exp) => (
-            <Link key={exp.id} to={`/app/talent/projects/${exp.id}`}>
-              <Card className="h-full space-y-3 transition-colors hover:border-accent-500/40">
+            <Link key={exp.id} to={`/app/talent/projects/${exp.id}`} className="block h-full">
+              <Card className="h-full space-y-3 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-500/40 hover:shadow-md">
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="text-base font-semibold text-ink-0">{exp.title}</p>

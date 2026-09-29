@@ -33,7 +33,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             className={clsx(
               "pointer-events-auto min-w-[220px] max-w-sm rounded-xl border px-4 py-3 text-sm shadow-lg backdrop-blur",
               t.tone === "success" && "border-accent-500/30 bg-accent-500/10 text-accent-600",
-              t.tone === "error" && "border-red-500/30 bg-red-500/10 text-red-400",
+              t.tone === "error" && "border-red-500/30 bg-red-500/10 text-red-700",
               t.tone === "info" && "border-surface-border bg-surface-2 text-ink-0"
             )}
           >

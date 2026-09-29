@@ -122,7 +122,7 @@ function TaskCard({ task, projectId, onChanged }: { task: TaskResponse; projectI
 
   return (
     <Card className="space-y-3">
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex flex-col items-start gap-2 sm:flex-row sm:justify-between sm:gap-3">
         <div>
           <p className="text-sm font-medium text-ink-0">{task.title}</p>
           <p className="mt-1 text-sm text-ink-2">{task.description}</p>

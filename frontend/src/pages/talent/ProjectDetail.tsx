@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { PageHeader } from "@/components/layout/DashboardLayout";
+import { BackButton } from "@/components/BackButton";
 import { Card, ErrorBanner, PageLoader, StatusBadge } from "@/components/ui/Misc";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Input";
@@ -11,7 +12,6 @@ import { useToast } from "@/context/ToastContext";
 
 export default function TalentProjectDetail() {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const { push } = useToast();
   const [project, setProject] = useState<ProjectResponse | null>(null);
   const [skills, setSkills] = useState<ProjectSkillResponse[]>([]);
@@ -52,6 +52,7 @@ export default function TalentProjectDetail() {
 
   return (
     <div className="mx-auto max-w-3xl">
+      <BackButton />
       <PageHeader title={project.title} description={project.companyName} action={<StatusBadge status={project.status} />} />
 
       <Card className="mb-6 space-y-4">
@@ -103,14 +104,9 @@ export default function TalentProjectDetail() {
               value={coverNote}
               onChange={(e) => setCoverNote(e.target.value)}
             />
-            <div className="flex gap-3">
-              <Button type="submit" loading={applying}>
-                Submit application
-              </Button>
-              <Button type="button" variant="ghost" onClick={() => navigate(-1)}>
-                Back
-              </Button>
-            </div>
+            <Button type="submit" loading={applying}>
+              Submit application
+            </Button>
           </form>
         </Card>
       )}

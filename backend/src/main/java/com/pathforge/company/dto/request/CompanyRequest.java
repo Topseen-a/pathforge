@@ -16,6 +16,9 @@ public record CompanyRequest(
         String website,
 
         @Size(max = 100, message = "Business registration number must be under 100 characters")
-        String businessRegistrationNo
+        String businessRegistrationNo,
+
+        @Size(max = 3_000_000, message = "Logo image is too large")
+        String logoUrl
 ) {
 }

@@ -50,6 +50,7 @@ export interface CompanyResponse {
   description?: string;
   website?: string;
   businessRegistrationNo?: string;
+  logoUrl?: string;
   verificationStatus: VerificationStatus;
   verifiedAt?: string;
   createdAt?: string;

@@ -37,8 +37,8 @@ export default function CompanyProjects() {
       ) : (
         <div className="space-y-3">
           {projects.map((exp) => (
-            <Link key={exp.id} to={`/app/company/projects/${exp.id}`}>
-              <Card className="flex items-center justify-between transition-colors hover:border-accent-500/40">
+            <Link key={exp.id} to={`/app/company/projects/${exp.id}`} className="block">
+              <Card className="flex items-center justify-between transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-500/40 hover:shadow-md">
                 <div>
                   <p className="text-sm font-medium text-ink-0">{exp.title}</p>
                   <p className="text-xs text-ink-3">

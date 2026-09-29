@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useParams } from "react-router-dom";
 import { PageHeader } from "@/components/layout/DashboardLayout";
+import { BackButton } from "@/components/BackButton";
 import { Button } from "@/components/ui/Button";
 import { Textarea, Input } from "@/components/ui/Input";
 import { Card, EmptyState, ErrorBanner, PageLoader, StatusBadge } from "@/components/ui/Misc";
@@ -35,6 +36,7 @@ export default function TalentWorkspaceDetail() {
 
   return (
     <div>
+      <BackButton />
       <PageHeader title={workspace.projectTitle} description={`Workspace with ${workspace.companyName}`} />
 
       {tasks.length === 0 ? (
@@ -43,7 +45,7 @@ export default function TalentWorkspaceDetail() {
         <div className="space-y-3">
           {tasks.map((task) => (
             <Card key={task.id} className="space-y-3">
-              <div className="flex items-start justify-between gap-3">
+              <div className="flex flex-col items-start gap-2 sm:flex-row sm:justify-between sm:gap-3">
                 <div>
                   <p className="text-sm font-medium text-ink-0">{task.title}</p>
                   <p className="mt-1 text-sm text-ink-2">{task.description}</p>

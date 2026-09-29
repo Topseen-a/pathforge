@@ -77,3 +77,16 @@ body {
   border-radius: 1.5rem;
   min-width: 0;
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  margin-right: -0.25rem;
+  opacity: 0.6;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  background-color: var(--color-surface-3);
+}

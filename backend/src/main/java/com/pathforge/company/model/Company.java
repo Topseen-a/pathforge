@@ -46,6 +46,9 @@ public class Company extends BaseEntity {
     @Column(name = "business_registration_no", length = 100)
     private String businessRegistrationNo;
 
+    @Column(name = "logo_url", columnDefinition = "TEXT")
+    private String logoUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "verification_status", nullable = false, length = 20)
     @Builder.Default

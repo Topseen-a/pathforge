@@ -30,6 +30,8 @@ export const AuthApi = {
   forgotPassword: (email: string) => api.post<void>("/auth/forgot-password", { email }).then((r) => r.data),
   resetPassword: (token: string, newPassword: string) =>
     api.post<void>("/auth/reset-password", { token, newPassword }).then((r) => r.data),
+  changePassword: (currentPassword: string, newPassword: string) =>
+    api.put<void>("/auth/change-password", { currentPassword, newPassword }).then((r) => r.data),
 };
 
 // ---------- Talent profile ----------

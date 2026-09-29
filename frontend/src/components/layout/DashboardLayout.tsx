@@ -1,5 +1,5 @@
 import { type ReactNode, useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Briefcase,
@@ -21,6 +21,7 @@ import { clsx } from "clsx";
 import { useAuth } from "@/context/AuthContext";
 import { NotificationApi } from "@/lib/resources";
 import { Logo } from "@/components/Logo";
+import { PageTransition } from "@/components/PageTransition";
 
 interface NavItem {
   to: string;
@@ -56,6 +57,7 @@ const adminNav: NavItem[] = [
 export function DashboardLayout({ children }: { children: ReactNode }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [unread, setUnread] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -84,24 +86,45 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
     navigate("/login");
   };
 
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
   return (
     <div className="min-h-screen bg-surface-0 text-ink-0 lg:flex">
       {/* Mobile top bar */}
-      <div className="flex items-center justify-between border-b border-surface-border px-4 py-3 lg:hidden">
+      <div className="flex items-center justify-between border-b border-surface-border bg-surface-0 px-4 py-3 lg:hidden">
         <div className="flex items-center gap-2">
           <Logo className="h-7 w-7" />
           <span className="font-display font-semibold">PathForge</span>
         </div>
-        <button onClick={() => setMobileOpen((o) => !o)} className="rounded-lg p-2 hover:bg-surface-2">
+        <button onClick={() => setMobileOpen((o) => !o)} className="cursor-pointer rounded-lg p-2 hover:bg-surface-2">
           {mobileOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
+      {/* Mobile backdrop */}
+      <div
+        onClick={() => setMobileOpen(false)}
+        className={clsx(
+          "fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 lg:hidden",
+          mobileOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+        )}
+      />
+
       {/* Sidebar */}
       <aside
         className={clsx(
-          "w-64 shrink-0 border-r border-surface-border bg-surface-1 lg:flex lg:flex-col",
-          mobileOpen ? "block" : "hidden lg:flex"
+          "fixed inset-y-0 left-0 z-50 flex w-72 shrink-0 flex-col border-r border-surface-border bg-surface-1 shadow-2xl transition-transform duration-300 ease-out",
+          "lg:static lg:z-auto lg:w-64 lg:translate-x-0 lg:shadow-none",
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <div className="hidden items-center gap-2 px-6 py-6 lg:flex">
@@ -132,7 +155,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         <div className="space-y-3 border-t border-surface-border px-3 py-4">
           <NavLink
             to={notificationsPath}
-            className="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm text-ink-2 hover:bg-surface-2 hover:text-ink-0"
+            className="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium text-ink-2 hover:bg-surface-2 hover:text-ink-0"
           >
             <span className="flex items-center gap-3">
               <Bell size={18} /> Notifications
@@ -151,7 +174,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               <p className="truncate text-sm font-medium text-ink-0">{user?.fullName}</p>
               <p className="truncate text-xs text-ink-3">{user?.role}</p>
             </div>
-            <button onClick={handleLogout} title="Log out" className="rounded-lg p-1.5 text-ink-2 hover:bg-surface-2 hover:text-red-400">
+            <button onClick={handleLogout} title="Log out" className="cursor-pointer rounded-lg p-1.5 text-ink-2 hover:bg-surface-2 hover:text-red-400">
               <LogOut size={16} />
             </button>
           </div>
@@ -165,7 +188,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
 
       {/* Main content */}
       <main className="flex-1 overflow-x-hidden">
-        <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-10 lg:py-10">{children}</div>
+        <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
+          <PageTransition key={location.pathname}>{children}</PageTransition>
+        </div>
       </main>
     </div>
   );
@@ -173,7 +198,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
 
 export function PageHeader({ title, description, action }: { title: string; description?: string; action?: ReactNode }) {
   return (
-    <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <h1 className="font-display text-2xl font-semibold text-ink-0">{title}</h1>
         {description && <p className="mt-1 text-sm text-ink-2">{description}</p>}

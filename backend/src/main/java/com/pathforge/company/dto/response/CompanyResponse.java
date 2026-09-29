@@ -14,6 +14,7 @@ public record CompanyResponse(
         String description,
         String website,
         String businessRegistrationNo,
+        String logoUrl,
         VerificationStatus verificationStatus,
         OffsetDateTime verifiedAt,
         OffsetDateTime createdAt,
