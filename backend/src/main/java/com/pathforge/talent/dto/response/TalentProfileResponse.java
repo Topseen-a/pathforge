@@ -13,6 +13,7 @@ public record TalentProfileResponse(
         String education,
         String interests,
         String portfolioUrl,
+        String avatarUrl,
         OffsetDateTime createdAt,
         OffsetDateTime updatedAt
 ) {

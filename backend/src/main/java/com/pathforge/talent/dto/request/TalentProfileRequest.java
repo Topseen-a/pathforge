@@ -17,6 +17,9 @@ public record TalentProfileRequest(
         String interests,
 
         @Size(max = 255, message = "Portfolio URL must be under 255 characters")
-        String portfolioUrl
+        String portfolioUrl,
+
+        @Size(max = 3_000_000, message = "Profile photo is too large")
+        String avatarUrl
 ) {
 }

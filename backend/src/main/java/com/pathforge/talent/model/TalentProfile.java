@@ -46,6 +46,9 @@ public class TalentProfile extends BaseEntity {
     @Column(name = "portfolio_url", length = 255)
     private String portfolioUrl;
 
+    @Column(name = "avatar_url", columnDefinition = "TEXT")
+    private String avatarUrl;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;

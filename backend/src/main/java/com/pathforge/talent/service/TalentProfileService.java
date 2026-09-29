@@ -43,6 +43,7 @@ public class TalentProfileService {
                 .education(request.education())
                 .interests(request.interests())
                 .portfolioUrl(request.portfolioUrl())
+                .avatarUrl(request.avatarUrl())
                 .build();
 
         profile = talentProfileRepository.saveAndFlush(profile);
@@ -74,6 +75,7 @@ public class TalentProfileService {
         profile.setEducation(request.education());
         profile.setInterests(request.interests());
         profile.setPortfolioUrl(request.portfolioUrl());
+        profile.setAvatarUrl(request.avatarUrl());
 
         profile = talentProfileRepository.saveAndFlush(profile);
 
@@ -91,6 +93,7 @@ public class TalentProfileService {
                 profile.getEducation(),
                 profile.getInterests(),
                 profile.getPortfolioUrl(),
+                profile.getAvatarUrl(),
                 profile.getCreatedAt(),
                 profile.getUpdatedAt()
         );
