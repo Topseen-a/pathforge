@@ -92,7 +92,7 @@ export const ProjectApi = {
 
 // ---------- Applications ----------
 export const ApplicationApi = {
-  apply: (projectId: string, body: { coverNote?: string }) =>
+  apply: (projectId: string, body: { motivation: string }) =>
     api.post<ApplicationResponse>(`/projects/${projectId}/applications`, body).then((r) => r.data),
   listForProject: (projectId: string) =>
     api.get<ApplicationResponse[]>(`/projects/${projectId}/applications`).then((r) => r.data),
@@ -138,7 +138,13 @@ export const EvaluationApi = {
   create: (
     projectId: string,
     talentId: string,
-    body: { professionalismRating: number; skillRating: number; communicationRating: number; feedback?: string }
+    body: {
+      overallRating: number;
+      professionalismRating: number;
+      qualityRating: number;
+      communicationRating: number;
+      feedback?: string;
+    }
   ) =>
     api
       .post<EvaluationResponse>(`/projects/${projectId}/talents/${talentId}/evaluation`, body)
@@ -185,6 +191,7 @@ export const ReportApi = {
 
 // ---------- Admin ----------
 export const AdminApi = {
+  listCompanies: () => api.get<CompanyResponse[]>("/admin/companies").then((r) => r.data),
   verifyCompany: (companyId: string, status: VerificationStatus) =>
     api
       .put<CompanyResponse>(`/admin/companies/${companyId}/verify`, null, { params: { status } })

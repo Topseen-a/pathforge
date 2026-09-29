@@ -46,7 +46,7 @@ export default function ApplicationsTab({ projectId }: { projectId: string }) {
             <Card key={a.id} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm font-medium text-ink-0">{a.talentName}</p>
-                {a.coverNote && <p className="mt-1 max-w-md text-sm text-ink-2">{a.coverNote}</p>}
+                {a.motivation && <p className="mt-1 max-w-md text-sm text-ink-2">{a.motivation}</p>}
                 <p className="mt-1 text-xs text-ink-3">Applied {a.createdAt ? new Date(a.createdAt).toLocaleDateString() : ""}</p>
               </div>
               <div className="flex items-center gap-2">

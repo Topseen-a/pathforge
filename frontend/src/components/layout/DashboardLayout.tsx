@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { clsx } from "clsx";
 import { useAuth } from "@/context/AuthContext";
+import { useToast } from "@/context/ToastContext";
 import { NotificationApi } from "@/lib/resources";
 import { Logo } from "@/components/Logo";
 import { PageTransition } from "@/components/PageTransition";
@@ -56,29 +57,53 @@ const adminNav: NavItem[] = [
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
   const { user, logout } = useAuth();
+  const { push } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
   const [unread, setUnread] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const seenNotificationIds = useRef<Set<string> | null>(null);
 
   const nav = user?.role === "COMPANY" ? companyNav : user?.role === "ADMIN" ? adminNav : talentNav;
   const notificationsPath =
-    user?.role === "COMPANY" ? "/app/company/notifications" : user?.role === "ADMIN" ? "/app/admin" : "/app/talent/notifications";
+    user?.role === "COMPANY"
+      ? "/app/company/notifications"
+      : user?.role === "ADMIN"
+        ? "/app/admin/notifications"
+        : "/app/talent/notifications";
 
   useEffect(() => {
     let mounted = true;
-    NotificationApi.countUnread()
-      .then((n) => mounted && setUnread(n))
-      .catch(() => {});
-    const interval = setInterval(() => {
-      NotificationApi.countUnread()
-        .then((n) => mounted && setUnread(n))
+
+    const poll = () => {
+      NotificationApi.listUnread()
+        .then((list) => {
+          if (!mounted) return;
+          setUnread(list.length);
+
+          if (seenNotificationIds.current === null) {
+            // First check this session: don't pop toasts for notifications
+            // that were already sitting unread before the user showed up.
+            seenNotificationIds.current = new Set(list.map((n) => n.id));
+            return;
+          }
+
+          const unseen = list.filter((n) => !seenNotificationIds.current!.has(n.id));
+          for (const n of unseen) {
+            push(n.message, "success");
+            seenNotificationIds.current.add(n.id);
+          }
+        })
         .catch(() => {});
-    }, 30000);
+    };
+
+    poll();
+    const interval = setInterval(poll, 15000);
     return () => {
       mounted = false;
       clearInterval(interval);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLogout = () => {

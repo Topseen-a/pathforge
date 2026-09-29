@@ -1,5 +1,6 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { useParams } from "react-router-dom";
+import { Paperclip, X } from "lucide-react";
 import { PageHeader } from "@/components/layout/DashboardLayout";
 import { BackButton } from "@/components/BackButton";
 import { Button } from "@/components/ui/Button";
@@ -9,6 +10,8 @@ import { SubmissionApi, TaskApi, WorkspaceApi } from "@/lib/resources";
 import type { SubmissionResponse, TaskResponse, WorkspaceResponse } from "@/lib/types";
 import { extractError } from "@/lib/api";
 import { useToast } from "@/context/ToastContext";
+
+const MAX_SUBMISSION_FILE_BYTES = 2_000_000;
 
 export default function TalentWorkspaceDetail() {
   const { id } = useParams<{ id: string }>();
@@ -95,15 +98,39 @@ function TaskSubmissions({ taskId, onSubmitClick, disabled }: { taskId: string; 
 }
 
 function SubmissionForm({ task, onDone, onCancel }: { task: TaskResponse; onDone: () => void; onCancel: () => void }) {
+  const { push } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [content, setContent] = useState("");
   const [fileUrl, setFileUrl] = useState("");
+  const [attachedFileName, setAttachedFileName] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (file.size > MAX_SUBMISSION_FILE_BYTES) {
+      push("File must be under 2MB", "error");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setFileUrl(reader.result as string);
+      setAttachedFileName(file.name);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const removeFile = () => {
+    setFileUrl("");
+    setAttachedFileName("");
+  };
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!content.trim() && !fileUrl.trim()) {
-      setError("Provide a description of your work or a link to it.");
+      setError("Provide a description of your work, a file, or a link to it.");
       return;
     }
     setSubmitting(true);
@@ -122,7 +149,36 @@ function SubmissionForm({ task, onDone, onCancel }: { task: TaskResponse; onDone
     <form onSubmit={onSubmit} className="space-y-3">
       {error && <ErrorBanner message={error} />}
       <Textarea label="Description" placeholder="Describe what you completed..." value={content} onChange={(e) => setContent(e.target.value)} />
-      <Input label="File / link (optional)" placeholder="https://..." value={fileUrl} onChange={(e) => setFileUrl(e.target.value)} />
+
+      {attachedFileName ? (
+        <div>
+          <span className="mb-1.5 block text-xs font-medium text-ink-1">Attached file</span>
+          <div className="flex items-center justify-between rounded-2xl border border-surface-border bg-surface-2 px-3.5 py-2.5 text-sm">
+            <span className="flex items-center gap-2 truncate text-ink-0">
+              <Paperclip size={14} className="shrink-0 text-ink-3" />
+              <span className="truncate">{attachedFileName}</span>
+            </span>
+            <button type="button" onClick={removeFile} className="cursor-pointer text-ink-3 hover:text-red-500">
+              <X size={14} />
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex gap-2">
+          <Input
+            label="File link (optional)"
+            placeholder="https://..."
+            value={fileUrl}
+            onChange={(e) => setFileUrl(e.target.value)}
+            className="flex-1"
+          />
+          <Button type="button" variant="outline" size="sm" className="mt-6 h-fit" onClick={() => fileInputRef.current?.click()}>
+            <Paperclip size={14} /> Attach
+          </Button>
+          <input ref={fileInputRef} type="file" className="hidden" onChange={onFileChange} />
+        </div>
+      )}
+
       <div className="flex gap-2">
         <Button type="submit" size="sm" loading={submitting}>
           Submit

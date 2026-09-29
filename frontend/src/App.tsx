@@ -80,6 +80,7 @@ export default function App() {
       <Route path="/app/admin/projects" element={<ProtectedRoute roles={["ADMIN"]}><AdminProjects /></ProtectedRoute>} />
       <Route path="/app/admin/users" element={<ProtectedRoute roles={["ADMIN"]}><AdminUsers /></ProtectedRoute>} />
       <Route path="/app/admin/reports" element={<ProtectedRoute roles={["ADMIN"]}><AdminReports /></ProtectedRoute>} />
+      <Route path="/app/admin/notifications" element={<ProtectedRoute roles={["ADMIN"]}><Notifications /></ProtectedRoute>} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

@@ -95,7 +95,7 @@ export default function Messages() {
                   key={c.key}
                   onClick={() => setActive(c)}
                   className={clsx(
-                    "w-full rounded-xl px-3 py-2.5 text-left text-sm transition-colors",
+                    "w-full cursor-pointer rounded-xl px-3 py-2.5 text-left text-sm transition-colors",
                     active?.key === c.key ? "bg-accent-500/15 text-accent-600" : "text-ink-1 hover:bg-surface-2"
                   )}
                 >

@@ -1,42 +1,35 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Card, ErrorBanner, StatusBadge } from "@/components/ui/Misc";
-import { AdminApi, CompanyApi } from "@/lib/resources";
+import { Card, EmptyState, PageLoader, StatusBadge } from "@/components/ui/Misc";
+import { AdminApi } from "@/lib/resources";
 import type { CompanyResponse } from "@/lib/types";
 import { extractError } from "@/lib/api";
 import { useToast } from "@/context/ToastContext";
 
 export default function AdminCompanies() {
-  const [companyId, setCompanyId] = useState("");
-  const [company, setCompany] = useState<CompanyResponse | null>(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [companies, setCompanies] = useState<CompanyResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState<CompanyResponse | null>(null);
   const [busy, setBusy] = useState(false);
   const { push } = useToast();
 
-  const lookup = async (e: FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setCompany(null);
-    setLoading(true);
-    try {
-      const res = await CompanyApi.getById(companyId.trim());
-      setCompany(res);
-    } catch (err) {
-      setError(extractError(err).message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const load = () => AdminApi.listCompanies().then(setCompanies);
+
+  useEffect(() => {
+    load()
+      .catch((err) => push(extractError(err).message, "error"))
+      .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const setStatus = async (status: "VERIFIED" | "REJECTED" | "SUSPENDED") => {
-    if (!company) return;
+    if (!selected) return;
     setBusy(true);
     try {
-      const res = await AdminApi.verifyCompany(company.id, status);
-      setCompany(res);
+      const res = await AdminApi.verifyCompany(selected.id, status);
+      setSelected(res);
+      setCompanies((prev) => prev.map((c) => (c.id === res.id ? res : c)));
       push(`Company marked ${status.toLowerCase()}`, "success");
     } catch (err) {
       push(extractError(err).message, "error");
@@ -45,44 +38,52 @@ export default function AdminCompanies() {
     }
   };
 
+  if (loading) return <PageLoader />;
+
   return (
     <div>
-      <PageHeader title="Companies" description="Look up a company by ID to review and verify it." />
+      <PageHeader title="Companies" description="Review and verify registered companies." />
 
-      <Card className="mb-6">
-        <form onSubmit={lookup} className="flex gap-2">
-          <Input placeholder="Company ID" value={companyId} onChange={(e) => setCompanyId(e.target.value)} className="flex-1" />
-          <Button type="submit" loading={loading}>
-            Look up
-          </Button>
-        </form>
-        <p className="mt-2 text-xs text-ink-3">
-          Tip: company IDs can be found in application/project details, or the company's own profile response.
-        </p>
-      </Card>
+      {companies.length === 0 ? (
+        <EmptyState title="No companies yet" description="Registered companies will show up here." />
+      ) : (
+        <div className="mb-6 space-y-3">
+          {companies.map((c) => (
+            <button
+              key={c.id}
+              onClick={() => setSelected(c)}
+              className="flex w-full cursor-pointer items-center justify-between rounded-2xl border border-surface-border bg-surface-1 p-4 text-left transition-colors hover:border-accent-500/40"
+            >
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium text-ink-0">{c.name}</p>
+                <p className="truncate text-xs text-ink-3">{c.email}</p>
+              </div>
+              <StatusBadge status={c.verificationStatus} />
+            </button>
+          ))}
+        </div>
+      )}
 
-      {error && <ErrorBanner message={error} />}
-
-      {company && (
+      {selected && (
         <Card className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-base font-semibold text-ink-0">{company.name}</p>
-              <p className="text-sm text-ink-2">{company.email}</p>
+              <p className="text-base font-semibold text-ink-0">{selected.name}</p>
+              <p className="text-sm text-ink-2">{selected.email}</p>
             </div>
-            <StatusBadge status={company.verificationStatus} />
+            <StatusBadge status={selected.verificationStatus} />
           </div>
-          <div className="grid grid-cols-2 gap-4 text-sm">
+          <div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
             <div>
               <p className="text-ink-3">Website</p>
-              <p className="text-ink-0">{company.website ?? "—"}</p>
+              <p className="text-ink-0">{selected.website ?? "—"}</p>
             </div>
             <div>
               <p className="text-ink-3">Business registration no.</p>
-              <p className="text-ink-0">{company.businessRegistrationNo ?? "—"}</p>
+              <p className="text-ink-0">{selected.businessRegistrationNo ?? "—"}</p>
             </div>
           </div>
-          {company.description && <p className="text-sm text-ink-1">{company.description}</p>}
+          {selected.description && <p className="text-sm text-ink-1">{selected.description}</p>}
           <div className="flex flex-wrap gap-2 border-t border-surface-border pt-4">
             <Button size="sm" loading={busy} onClick={() => setStatus("VERIFIED")}>
               Verify

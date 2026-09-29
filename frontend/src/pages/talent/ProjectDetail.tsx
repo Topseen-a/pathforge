@@ -6,7 +6,7 @@ import { Card, ErrorBanner, PageLoader, StatusBadge } from "@/components/ui/Misc
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Input";
 import { ApplicationApi, ProjectApi, ProjectSkillApi } from "@/lib/resources";
-import type { ProjectResponse, ProjectSkillResponse } from "@/lib/types";
+import type { ApplicationResponse, ProjectResponse, ProjectSkillResponse } from "@/lib/types";
 import { extractError } from "@/lib/api";
 import { useToast } from "@/context/ToastContext";
 
@@ -16,17 +16,18 @@ export default function TalentProjectDetail() {
   const [project, setProject] = useState<ProjectResponse | null>(null);
   const [skills, setSkills] = useState<ProjectSkillResponse[]>([]);
   const [loading, setLoading] = useState(true);
-  const [coverNote, setCoverNote] = useState("");
+  const [motivation, setMotivation] = useState("");
   const [applying, setApplying] = useState(false);
   const [error, setError] = useState("");
-  const [applied, setApplied] = useState(false);
+  const [existingApplication, setExistingApplication] = useState<ApplicationResponse | null>(null);
 
   useEffect(() => {
     if (!id) return;
-    Promise.all([ProjectApi.getById(id), ProjectSkillApi.list(id).catch(() => [])])
-      .then(([exp, sk]) => {
+    Promise.all([ProjectApi.getById(id), ProjectSkillApi.list(id).catch(() => []), ApplicationApi.listMine().catch(() => [])])
+      .then(([exp, sk, applications]) => {
         setProject(exp);
         setSkills(sk);
+        setExistingApplication(applications.find((a) => a.projectId === id) ?? null);
       })
       .finally(() => setLoading(false));
   }, [id]);
@@ -40,8 +41,8 @@ export default function TalentProjectDetail() {
     setError("");
     setApplying(true);
     try {
-      await ApplicationApi.apply(id, { coverNote });
-      setApplied(true);
+      const res = await ApplicationApi.apply(id, { motivation });
+      setExistingApplication(res);
       push("Application submitted", "success");
     } catch (err) {
       setError(extractError(err).message);
@@ -89,20 +90,24 @@ export default function TalentProjectDetail() {
         )}
       </Card>
 
-      {project.status !== "PUBLISHED" ? (
+      {existingApplication ? (
+        <Card className="flex items-center justify-between gap-3">
+          <p className="text-sm text-ink-1">You've already applied to this project. Track it under My Applications.</p>
+          <StatusBadge status={existingApplication.status} />
+        </Card>
+      ) : project.status !== "PUBLISHED" ? (
         <ErrorBanner message="This project is not currently accepting applications." />
-      ) : applied ? (
-        <Card className="text-center text-sm text-accent-600">Your application has been submitted. Track it under My Applications.</Card>
       ) : (
         <Card className="space-y-4">
           <h2 className="text-base font-semibold text-ink-0">Apply for this project</h2>
           {error && <ErrorBanner message={error} />}
           <form onSubmit={onApply} className="space-y-4">
             <Textarea
-              label="Cover note (optional)"
+              label="Cover note"
               placeholder="Tell the company why you're a great fit..."
-              value={coverNote}
-              onChange={(e) => setCoverNote(e.target.value)}
+              value={motivation}
+              onChange={(e) => setMotivation(e.target.value)}
+              required
             />
             <Button type="submit" loading={applying}>
               Submit application

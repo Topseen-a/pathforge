@@ -56,20 +56,21 @@ export default function AdminUsers() {
       </div>
       <div className="space-y-2">
         {filtered.map((u) => (
-          <Card key={u.id} className="flex items-center justify-between">
-            <div>
+          <Card key={u.id} className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
               <p className="text-sm font-medium text-ink-0">{u.fullName}</p>
-              <p className="text-xs text-ink-3">
+              <p className="truncate text-xs text-ink-3">
                 {u.email} · {u.role}
               </p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-3">
               <StatusBadge status={u.status} />
               <Button
                 size="sm"
                 variant={u.status === "ACTIVE" ? "danger" : "outline"}
                 loading={busyId === u.id}
                 onClick={() => toggleStatus(u)}
+                className="whitespace-nowrap"
               >
                 {u.status === "ACTIVE" ? "Suspend" : "Reactivate"}
               </Button>

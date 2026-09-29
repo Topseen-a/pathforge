@@ -6,15 +6,16 @@ import { PageLoader, StatCard } from "@/components/ui/Misc";
 import { AdminApi, ProjectApi } from "@/lib/resources";
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState<{ users: number; reports: number; projects: number } | null>(null);
+  const [stats, setStats] = useState<{ users: number; reports: number; projects: number; companies: number } | null>(null);
 
   useEffect(() => {
     Promise.all([
       AdminApi.listUsers().catch(() => []),
       AdminApi.listOpenReports().catch(() => []),
       ProjectApi.listPublished().catch(() => []),
-    ]).then(([users, reports, projects]) => {
-      setStats({ users: users.length, reports: reports.length, projects: projects.length });
+      AdminApi.listCompanies().catch(() => []),
+    ]).then(([users, reports, projects, companies]) => {
+      setStats({ users: users.length, reports: reports.length, projects: projects.length, companies: companies.length });
     });
   }, []);
 
@@ -27,7 +28,7 @@ export default function AdminDashboard() {
         <StatCard label="Total users" value={stats.users} icon={<Users size={18} />} />
         <StatCard label="Published projects" value={stats.projects} icon={<Briefcase size={18} />} />
         <StatCard label="Open reports" value={stats.reports} icon={<Flag size={18} />} />
-        <StatCard label="Companies" value="—" icon={<Building2 size={18} />} />
+        <StatCard label="Companies" value={stats.companies} icon={<Building2 size={18} />} />
       </div>
       <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Link to="/app/admin/reports" className="card p-5 hover:border-accent-500/40">

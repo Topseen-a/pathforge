@@ -151,8 +151,8 @@ function TaskCard({ task, projectId, onChanged }: { task: TaskResponse; projectI
                 <p className="font-medium text-ink-0">{s.talentName}</p>
                 {s.content && <p className="mt-1 text-ink-1">{s.content}</p>}
                 {s.fileUrl && (
-                  <a href={s.fileUrl} target="_blank" rel="noreferrer" className="mt-1 block text-accent-600 hover:underline">
-                    {s.fileUrl}
+                  <a href={s.fileUrl} target="_blank" rel="noreferrer" download={s.fileUrl.startsWith("data:")} className="mt-1 block text-accent-600 hover:underline">
+                    {s.fileUrl.startsWith("data:") ? "View attached file" : s.fileUrl}
                   </a>
                 )}
                 <p className="mt-1 text-xs text-ink-3">{s.submittedAt ? new Date(s.submittedAt).toLocaleString() : ""}</p>

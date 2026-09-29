@@ -42,14 +42,14 @@ export default function AdminProjects() {
       ) : (
         <div className="space-y-3">
           {projects.map((exp) => (
-            <Card key={exp.id} className="flex items-center justify-between">
+            <Card key={exp.id} className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm font-medium text-ink-0">{exp.title}</p>
                 <p className="text-xs text-ink-3">{exp.companyName} · {exp.workMode}</p>
               </div>
               <div className="flex items-center gap-3">
                 <StatusBadge status={exp.status} />
-                <Button size="sm" variant="danger" loading={busyId === exp.id} onClick={() => moderate(exp.id)}>
+                <Button size="sm" variant="danger" loading={busyId === exp.id} onClick={() => moderate(exp.id)} className="whitespace-nowrap">
                   Force close
                 </Button>
               </div>

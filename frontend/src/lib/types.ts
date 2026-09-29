@@ -100,7 +100,7 @@ export interface ApplicationResponse {
   talentId: string;
   talentName: string;
   status: ApplicationStatus;
-  coverNote?: string;
+  motivation?: string;
   createdAt?: string;
 }
 
@@ -144,8 +144,10 @@ export interface EvaluationResponse {
   talentId: string;
   talentName: string;
   evaluatorId: string;
+  evaluatorName: string;
+  overallRating: number;
   professionalismRating: number;
-  skillRating: number;
+  qualityRating: number;
   communicationRating: number;
   feedback?: string;
   createdAt?: string;
