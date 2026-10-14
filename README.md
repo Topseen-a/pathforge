@@ -252,4 +252,4 @@ The app is then served at `FRONTEND_URL`. If SMTP isn't configured, you can find
 
 ## Author
 
-PathForge was built by **Temitope Abodunrin**.
+Built by [Temitope](https://github.com/Topseen-a).
